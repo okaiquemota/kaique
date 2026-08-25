@@ -1,46 +1,66 @@
 # Portfólio — Kaique Mota
 
-Carcaça visual do portfólio no conceito **Gravidade Zero** (spatial navigation / infinite canvas),
-em dark mode. **HTML5 + CSS3 puro** — nenhuma biblioteca, nenhum JavaScript.
+Portfólio no conceito **Gravidade Zero** (spatial navigation / infinite canvas),
+em dark mode sobre preto puro.
 
 ```
 index.html
 css/style.css
+js/fisica.js
 ```
 
-Abra o `index.html` direto no navegador. Não precisa de build.
+Abra o `index.html` no navegador. Não precisa de build.
 
-## Como funciona a flutuação
+**Dependências externas:** só as fontes Playfair Display e Caveat, via Google Fonts.
+Se quiser voltar a zero dependências, remova as 3 linhas de `<link>` do `<head>` —
+o CSS já cai para `Georgia` e a cursiva do sistema.
 
-Cada card é montado em duas camadas de propósito:
+## As três camadas de transform
 
-| Camada | Responsabilidade |
-| --- | --- |
-| `.orbe` | `position: absolute` + a animação de flutuar (`@keyframes`) |
-| `.orbe__face` | o visual do card + a escala e o brilho do `:hover` (`transition`) |
+Esta é a decisão que sustenta o resto. Três coisas precisam mover o mesmo card ao
+mesmo tempo, então cada uma tem seu próprio elemento — se duas dividissem o mesmo,
+uma apagaria a outra:
 
-Separar as camadas evita a briga clássica entre o `transform` do `@keyframes` e o `transform`
-do hover — um sobrescreveria o outro se estivessem no mesmo elemento.
+| Elemento | Move o quê | Quem escreve |
+| --- | --- | --- |
+| `.orbe` | a posição na tela | `js/fisica.js` |
+| `.orbe__flutua` | o balanço contínuo | `@keyframes` do CSS |
+| `.orbe__face` | a escala do `:hover` | `transition` do CSS |
 
-São 5 curvas diferentes (`flutuar-a` … `flutuar-e`), com durações de 5s a 9s e `animation-delay`
-negativo em cada card, então nada entra em sincronia e o movimento não fica robótico.
-A amplitude sai do token `--amp`, que os media queries reduzem no mobile — todo o sistema
-encolhe junto sem reescrever keyframe nenhum.
+O balanço são 5 curvas diferentes (`flutuar-a` … `flutuar-e`) com durações de 5s a 9s
+e fase negativa distinta em cada card, para nada entrar em sincronia. A amplitude sai
+do token `--amp`, que os media queries reduzem no mobile — o sistema inteiro encolhe
+sem reescrever keyframe nenhum.
 
-No hover/foco o card usa `animation-play-state: paused` (trava no lugar), sobe de `z-index`,
-cresce e acende o halo da sua cor (`--tom`).
+## A física (`js/fisica.js`)
+
+JavaScript puro, sem biblioteca. Faz três coisas:
+
+- **Deriva** — cada card vagueia sozinho pela página, empurrado por uma corrente
+  aleatória fraca, como tralha boiando na água.
+- **Colisão** — cards batem entre si e nas bordas da tela, com perda de energia.
+- **Arrasto** — segurar e mover leva o card junto; ao soltar, ele sai com a
+  velocidade do arremesso e continua planando.
+
+As posições `top`/`left` do CSS continuam sendo a verdade do layout: a física só
+trabalha em cima delas, em deslocamento. Por isso os breakpoints continuam mandando
+no arranjo inicial, e o `resize` remede tudo.
+
+Constantes de ajuste ficam no topo do arquivo (`ATRITO`, `RESTITUICAO`, `CORRENTE`,
+`VEL_DERIVA`…). Em `prefers-reduced-motion: reduce` a deriva e a corrente são
+desligadas, mas o arrasto continua funcionando.
 
 ## Plugando os modais
 
-Os dois cards de modal já expõem os ganchos pedidos:
+Os dois cards de modal expõem os ganchos:
 
 ```html
-<button class="orbe orbe--passatempo" data-abre="jogos"  aria-haspopup="dialog">…</button>
-<button class="orbe orbe--mural"      data-abre="mural"  aria-haspopup="dialog">…</button>
+<button class="orbe orbe--passatempo" data-abre="jogos" aria-haspopup="dialog">…</button>
+<button class="orbe orbe--mural"      data-abre="mural" aria-haspopup="dialog">…</button>
 ```
 
-São `<button>` (e não `<a href>`) justamente porque abrem um diálogo e não navegam.
-O seu script pode escutar tudo de uma vez:
+São `<button>` (e não `<a href>`) porque abrem um diálogo e não navegam. Escute
+todos de uma vez:
 
 ```js
 document.querySelectorAll('[data-abre]').forEach(el => {
@@ -48,16 +68,30 @@ document.querySelectorAll('[data-abre]').forEach(el => {
 });
 ```
 
+**A física não atrapalha esse clique.** Um toque sem arrasto dispara o `click`
+normalmente; só o clique que nasce de um arrasto é cancelado — senão largar um card
+em cima de outro lugar abriria o modal sem querer. O cancelamento usa um listener em
+fase de captura registrado na carga da página, então ele roda antes do seu handler,
+inclusive se o seu for delegado no `document`.
+
+## Os satélites
+
+A tralha que boia no fundo (filme 35mm, clipes, tampa de lente, café, cabo USB) é
+decorativa e não clicável. O emoji é só ocupante do lugar — para plugar seu PNG
+transparente, ponha um `<img>` dentro do `<span class="satelite">`; o CSS já
+dimensiona sozinho. Cada satélite tem a linha pronta em comentário no HTML.
+
 ## O que ajustar
 
-- **Links**: `index.html` aponta para `github.com/okaiquemota`, `instagram.com/okaiquemota`
-  e `behance.net/okaiquemota` — troque pelos perfis reais.
-- **Posições**: cada card tem seu `top`/`left` no bloco *06. Posições & tempos* do CSS.
-- **Cores**: os acentos ficam em `--ciano`, `--violeta`, `--rosa`, `--azul` no `:root`;
+- **Links**: apontam para `okaiquemota` no GitHub, Instagram e Behance — troque pelos perfis reais.
+- **Posições iniciais**: bloco *08* do CSS.
+- **Cores**: acentos em `--ouro`, `--rosa`, `--azul`, `--ciano`, `--lampada` no `:root`;
   cada card escolhe o seu com `--tom`.
+- **Mural**: não é vidro como os outros — é papel de fichário (régua, margem, grão,
+  furos), no bloco *7.2*.
 
-## Detalhes de acessibilidade
+## Acessibilidade
 
 - `:focus-visible` espelha o hover, então dá pra navegar tudo pelo teclado.
-- `prefers-reduced-motion: reduce` desliga todas as animações e mantém a interação.
-- Há fallback para navegadores sem `color-mix()`.
+- `prefers-reduced-motion: reduce` desliga animações e deriva, mantendo a interação.
+- Fallback para navegadores sem `color-mix()`.

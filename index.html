@@ -70,19 +70,14 @@
 
     <!-- ---------- O CENTRO ---------- -->
     <div class="nucleo">
-      <p class="nucleo__tag">Portf&oacute;lio</p>
-
-      <h1 class="nome">
-        <span class="nome__parte" data-texto="KAIQUE">KAIQUE</span>
-        <span class="nome__parte nome__parte--dois" data-texto="MOTA">MOTA</span>
-      </h1>
-
+      <h1 class="nome">KiQ</h1>
     </div>
 
     <!-- ---------- A ORBITA ---------- -->
     <nav class="orbita" aria-label="Links do portf&oacute;lio">
       <!-- 1. GitHub &middot; 7s &middot; octocat dourado sobre placa de circuito -->
       <a class="orbe orbe--github" href="https://github.com/okaiquemota" target="_blank" rel="noopener noreferrer">
+        <span class="orbe__flutua">
         <span class="orbe__face">
           <span class="orbe__icone" aria-hidden="true">
             <svg viewBox="0 0 48 48" focusable="false" aria-hidden="true">
@@ -111,9 +106,11 @@
             <span class="orbe__meta">C&oacute;digo aberto</span>
           </span>
         </span>
+        </span>
       </a>
       <!-- 2. Instagram &middot; 5s &middot; lente real dentro da moldura do Insta -->
       <a class="orbe orbe--instagram" href="https://www.instagram.com/okaiquemota" target="_blank" rel="noopener noreferrer">
+        <span class="orbe__flutua">
         <span class="orbe__face">
           <span class="orbe__icone" aria-hidden="true">
             <svg viewBox="0 0 48 48" focusable="false" aria-hidden="true">
@@ -156,9 +153,11 @@
             <span class="orbe__meta">Bastidores</span>
           </span>
         </span>
+        </span>
       </a>
       <!-- 3. Behance &middot; 9s -->
       <a class="orbe orbe--behance" href="https://www.behance.net/okaiquemota" target="_blank" rel="noopener noreferrer">
+        <span class="orbe__flutua">
         <span class="orbe__face">
           <span class="orbe__icone" aria-hidden="true">
             <svg viewBox="0 0 48 48" focusable="false" aria-hidden="true">
@@ -184,9 +183,11 @@
             <span class="orbe__meta">Projetos</span>
           </span>
         </span>
+        </span>
       </a>
       <!-- 4. Passatempo &middot; 6s &middot; base com textura de cartucho &middot; gancho: data-abre="jogos" -->
       <button class="orbe orbe--passatempo" type="button" data-abre="jogos" aria-haspopup="dialog">
+        <span class="orbe__flutua">
         <span class="orbe__face">
           <span class="orbe__icone" aria-hidden="true">
             <svg viewBox="0 0 48 48" focusable="false" aria-hidden="true">
@@ -222,9 +223,11 @@
             <span class="orbe__meta">Jogos</span>
           </span>
         </span>
+        </span>
       </button>
       <!-- 5. Mural &middot; 8s &middot; folha de fichario, nao vidro &middot; gancho: data-abre="mural" -->
       <button class="orbe orbe--mural" type="button" data-abre="mural" aria-haspopup="dialog">
+        <span class="orbe__flutua">
         <span class="orbe__face">
           <span class="orbe__icone" aria-hidden="true">
             <svg viewBox="0 0 34 34" focusable="false" aria-hidden="true">
@@ -248,10 +251,16 @@
             <span class="orbe__meta">ideias soltas</span>
           </span>
         </span>
+        </span>
       </button>
 
     </nav>
   </main>
+
+  <!-- Fisica dos cards: deriva livre, colisao e arrasto.
+       Vanilla, sem biblioteca. Nao toca nos [data-abre]: um toque
+       sem arrasto continua disparando o click normalmente. -->
+  <script src="js/fisica.js" defer></script>
 
   <!-- Os scripts de modal entram aqui depois, escutando [data-abre] -->
 </body>

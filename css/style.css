@@ -49,8 +49,8 @@
   --margem:       #d64a42;
 
   /* movimento */
-  --amp:          22px;
-  --amp-x:        10px;
+  --amp:          12px;
+  --amp-x:        6px;
 
   /* tipografia */
   --serifa: "Playfair Display", "Cinzel", Georgia, "Times New Roman", serif;
@@ -223,31 +223,6 @@ body {
   text-align: center;
 }
 
-/* sobrancelha com fios finos dos dois lados */
-.nucleo__tag {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: clamp(.8rem, 2vw, 1.4rem);
-  margin: 0 0 clamp(.9rem, 2vw, 1.4rem);
-  font-size: clamp(.58rem, 1vw, .72rem);
-  font-weight: 500;
-  letter-spacing: .5em;
-  text-indent: .5em;
-  text-transform: uppercase;
-  color: var(--texto-suave);
-}
-
-.nucleo__tag::before,
-.nucleo__tag::after {
-  content: "";
-  height: 1px;
-  width: clamp(28px, 7vw, 84px);
-  background: linear-gradient(90deg, transparent, rgba(219, 231, 255, .38));
-}
-
-.nucleo__tag::after { transform: scaleX(-1); }
-
 .nome {
   margin: 0;
   font-family: var(--serifa);
@@ -255,20 +230,7 @@ body {
   font-size: clamp(2.2rem, 8.5vw, 6rem);
   line-height: .98;
   letter-spacing: .012em;
-  text-transform: uppercase;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 0 clamp(.6rem, 2.4vw, 1.8rem);
-}
-
-.nome__parte {
-  display: inline-block;
-  background: linear-gradient(172deg,
-              #ffffff 6%, var(--gelo) 52%, #aab8de 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  color: #ffffff;              /* branco chapado, sem degradê */
 }
 
 /* ============================================================
@@ -291,10 +253,26 @@ body {
   font: inherit;
   text-align: left;
   text-decoration: none;
-  cursor: pointer;
+  cursor: grab;
+  touch-action: none;          /* o arrasto é nosso, não do navegador */
+  -webkit-user-select: none;
+  user-select: none;
   will-change: transform;
-  animation-timing-function: ease-in-out;
-  animation-iteration-count: infinite;
+}
+
+/* enquanto o dedo/mouse segura o card */
+.orbe.a-arrastar { cursor: grabbing; }
+
+/* ------------------------------------------------------------
+   Três transforms, três donos — é isso que evita briga:
+   .orbe        → posição vinda da física (JS)
+   .orbe__flutua → o balanço em @keyframes (CSS)
+   .orbe__face  → a escala do hover (transition)
+   ------------------------------------------------------------ */
+.orbe__flutua {
+  display: block;
+  animation: var(--curva) var(--dur) ease-in-out var(--fase) infinite;
+  will-change: transform;
 }
 
 .orbe__face {
@@ -359,10 +337,11 @@ body {
 /* --- INTERAÇÃO: trava, cresce, acende, vem pra frente --- */
 .orbe:hover,
 .orbe:focus-visible,
-.orbe:focus-within {
-  animation-play-state: paused;
-  z-index: 40;
-}
+.orbe:focus-within { z-index: 40; }
+
+.orbe:hover .orbe__flutua,
+.orbe:focus-visible .orbe__flutua,
+.orbe:focus-within .orbe__flutua { animation-play-state: paused; }
 
 .orbe:hover .orbe__face,
 .orbe:focus-visible .orbe__face,
@@ -574,11 +553,11 @@ body {
    08. POSIÇÕES & TEMPOS
    Assimetria proposital: nenhum par divide eixo, duração ou fase.
    ============================================================ */
-.orbe--github     { --tom: var(--ouro);    top: 16%; left: 10%; animation-name: flutuar-a; animation-duration: 7s; animation-delay: -1.2s; }
-.orbe--instagram  { --tom: var(--rosa);    top: 8%;  left: 57%; animation-name: flutuar-b; animation-duration: 5s; animation-delay: -.6s; }
-.orbe--mural      { --tom: var(--lampada); top: 28%; left: 78%; animation-name: flutuar-c; animation-duration: 8s; animation-delay: -4.1s; }
-.orbe--behance    { --tom: var(--azul);    top: 66%; left: 7%;  animation-name: flutuar-d; animation-duration: 9s; animation-delay: -3s; }
-.orbe--passatempo { --tom: var(--ciano);   top: 73%; left: 63%; animation-name: flutuar-e; animation-duration: 6s; animation-delay: -2.4s; }
+.orbe--github     { --tom: var(--ouro);    top: 16%; left: 10%; --curva: flutuar-a; --dur: 7s; --fase: -1.2s; }
+.orbe--instagram  { --tom: var(--rosa);    top: 8%;  left: 57%; --curva: flutuar-b; --dur: 5s; --fase: -.6s; }
+.orbe--mural      { --tom: var(--lampada); top: 28%; left: 78%; --curva: flutuar-c; --dur: 8s; --fase: -4.1s; }
+.orbe--behance    { --tom: var(--azul);    top: 66%; left: 7%;  --curva: flutuar-d; --dur: 9s; --fase: -3s; }
+.orbe--passatempo { --tom: var(--ciano);   top: 73%; left: 63%; --curva: flutuar-e; --dur: 6s; --fase: -2.4s; }
 
 /* satélites: mais lentos e mais tortos que os cards */
 .sat--filme  { top: 14%; left: 30%; --tam: 34px; animation-name: boiar-a; animation-duration: 17s; animation-delay: -2s; }
@@ -700,8 +679,6 @@ body {
 
   .nucleo { width: 92vw; }
   .nome   { font-size: clamp(1.9rem, 11vw, 3.1rem); }
-  .nucleo__tag::before,
-  .nucleo__tag::after { width: 26px; }
 
   /* pílulas com largura de conteúdo: o rótulo nunca vaza */
   .orbe {
@@ -776,7 +753,6 @@ body {
   :root { --amp: 9px; --amp-x: 4px; }
 
   .nome { font-size: clamp(1.6rem, 5.5vw, 2.6rem); }
-  .nucleo__tag { font-size: .58rem; }
 
   .orbe { width: auto; max-width: 32vw; }
   .orbe__meta { display: none; }
