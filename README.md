@@ -82,12 +82,15 @@ sobra texto visível, o nome acessível vem do `aria-label` (e o `title` dá o t
 o rótulo dava antes).
 
 Passatempo e Mural continuam cards, porque neles a superfície *é* o conteúdo: um é
-cartucho de videogame, o outro é folha de fichário.
+videogame portátil (o card é o console, com LCD, cruzeta e botões A/B), o outro é
+folha de fichário. Por isso os dois também não viram pílula no celular — perderiam
+a identidade de objeto.
 
 ## Os satélites
 
-A tralha que boia no fundo (filme 35mm, clipes, tampa de lente, café, cabo USB) é
-decorativa e não clicável. O emoji é só ocupante do lugar — para plugar seu PNG
+A tralha que boia no fundo (filme 35mm, clipes, tampa de lente, café, cabo USB e o
+208 branco) é decorativa e não clicável. O carrinho é SVG desenhado à mão — os outros
+são emoji. O emoji é só ocupante do lugar — para plugar seu PNG
 transparente, ponha um `<img>` dentro do `<span class="satelite">`; o CSS já
 dimensiona sozinho. Cada satélite tem a linha pronta em comentário no HTML.
 
@@ -97,6 +100,8 @@ dimensiona sozinho. Cada satélite tem a linha pronta em comentário no HTML.
 - **Posições iniciais**: bloco *08* do CSS.
 - **Cores**: acentos em `--ouro`, `--rosa`, `--azul`, `--ciano`, `--lampada` no `:root`;
   cada card escolhe o seu com `--tom`.
+- **Passatempo**: o console inteiro está no bloco *7.1*; a partida que roda na telinha
+  é o SVG do ícone.
 - **Mural**: não é vidro como os outros — é papel de fichário (régua, margem, grão,
   furos), no bloco *7.2*.
 

@@ -177,6 +177,13 @@ body {
   user-select: none;
 }
 
+.sat--carro {
+  --opa: .92;
+  filter:
+    drop-shadow(0 6px 12px rgba(0, 0, 0, .9))
+    drop-shadow(0 0 18px rgba(200, 220, 255, .22));
+}
+
 .satelite img,
 .satelite svg {
   width: 100%;
@@ -458,48 +465,62 @@ body {
    ============================================================ */
 
 /* ------------------------------------------------------------
-   7.1 PASSATEMPO — o vidro ganha corpo de cartucho antigo:
-   cantos mais duros, nervuras no topo e trilha de contatos
-   dourados na base.
+   7.1 PASSATEMPO — o card É o videogame portátil: corpo de
+   plástico com o canto inferior direito arredondado, tela de
+   LCD ocupando a largura toda e os controles embaixo.
    ------------------------------------------------------------ */
 .orbe--passatempo .orbe__face {
-  border-radius: 14px 14px 8px 8px;
-  padding-top: calc(clamp(1rem, 1.6vw, 1.35rem) + 10px);
-  padding-bottom: calc(clamp(1rem, 1.6vw, 1.35rem) + 8px);
+  border-radius: 16px 16px 32px 16px;   /* a assimetria do console */
+  padding: .7rem .7rem 38px;
+  gap: .55rem;
   background:
-    linear-gradient(158deg, rgba(255,255,255,.1), rgba(255,255,255,.03) 55%, rgba(255,255,255,.015)),
-    linear-gradient(100deg, transparent 30%, rgba(255,255,255,.05) 45%, transparent 60%);
+    linear-gradient(158deg, rgba(255,255,255,.13), rgba(255,255,255,.04) 45%, rgba(255,255,255,.02)),
+    linear-gradient(200deg, #3b4453 0%, #262d39 42%, #161b24 100%);
+  box-shadow:
+    0 0 18px -8px color-mix(in srgb, var(--tom) 55%, transparent),
+    0 20px 44px -26px #000,
+    inset 0 1px 0 rgba(255, 255, 255, .18),
+    inset 0 -3px 8px rgba(0, 0, 0, .55);
 }
 
-/* nervuras de encaixe no topo */
+/* a tela: 4:3, afundada no plástico e acesa por dentro */
+.orbe--passatempo .orbe__icone {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  border-radius: 4px 4px 9px 4px;
+  overflow: hidden;
+  background: #05090c;
+  box-shadow:
+    inset 0 2px 6px rgba(0, 0, 0, .9),
+    0 0 0 1px rgba(255, 255, 255, .06),
+    0 0 14px -2px color-mix(in srgb, var(--tom) 40%, transparent);
+  filter: none;
+}
+
+/* controles: cruzeta à esquerda, A/B à direita — tudo em
+   camadas de background num elemento só */
 .orbe--passatempo .orbe__face::before {
   content: "";
   position: absolute;
-  top: 0; left: 12%; right: 12%;
-  height: 9px;
-  border-radius: 0 0 4px 4px;
-  background:
-    repeating-linear-gradient(90deg,
-      rgba(255, 255, 255, .1) 0 1.5px,
-      transparent 1.5px 5px);
-  box-shadow: inset 0 -1px 0 rgba(0, 0, 0, .4);
+  left: 10%; right: 8%; bottom: 8px;
+  height: 22px;
   pointer-events: none;
+  background:
+    /* cruzeta */
+    linear-gradient(#5a6476, #3b4350) 0 8px / 21px 6px no-repeat,
+    linear-gradient(90deg, #5a6476, #3b4350) 7.5px .5px / 6px 21px no-repeat,
+    /* botões A e B */
+    radial-gradient(circle at 50% 40%, #f79bb0 0 2.4px, #d05070 2.4px 5.2px, transparent 5.4px) right 0 top 9px / 12px 12px no-repeat,
+    radial-gradient(circle at 50% 40%, #f79bb0 0 2.4px, #d05070 2.4px 5.2px, transparent 5.4px) right 13px top 0 / 12px 12px no-repeat,
+    /* grade do alto-falante */
+    repeating-linear-gradient(58deg, rgba(255,255,255,.22) 0 1px, transparent 1px 4px) right 28px bottom 2px / 15px 13px no-repeat;
 }
 
-/* trilha de contatos na base */
-.orbe--passatempo .orbe__texto::after {
-  content: "";
-  position: absolute;
-  bottom: 5px; left: 18%; right: 18%;
-  height: 6px;
-  border-radius: 2px;
-  background:
-    repeating-linear-gradient(90deg,
-      rgba(232, 185, 90, .55) 0 3px,
-      transparent 3px 6px);
-  opacity: .7;
-  pointer-events: none;
-}
+/* o rótulo vira a serigrafia do console */
+.orbe--passatempo .orbe__rotulo { letter-spacing: .01em; }
+
+.orbe--passatempo .orbe__meta { font-size: clamp(.56rem, .74vw, .64rem); }
 
 /* ------------------------------------------------------------
    7.2 MURAL — não é vidro: é uma folha de fichário de verdade,
@@ -605,7 +626,7 @@ body {
 .orbe--instagram  { --tom: var(--rosa);    top: 11%; left: 56%; --curva: flutuar-b; --dur: 5s; --fase: -.6s; }
 .orbe--mural      { --tom: var(--lampada); top: 28%; left: 78%; --curva: flutuar-c; --dur: 8s; --fase: -4.1s; }
 .orbe--behance    { --tom: var(--azul);    top: 64%; left: 13%; --curva: flutuar-d; --dur: 9s; --fase: -3s; }
-.orbe--passatempo { --tom: var(--ciano);   top: 73%; left: 63%; --curva: flutuar-e; --dur: 6s; --fase: -2.4s; }
+.orbe--passatempo { --tom: var(--ciano);   top: 62%; left: 63%; --curva: flutuar-e; --dur: 6s; --fase: -2.4s; }
 
 /* satélites: mais lentos e mais tortos que os cards */
 .sat--filme  { top: 14%; left: 30%; --tam: 34px; animation-name: boiar-a; animation-duration: 17s; animation-delay: -2s; }
@@ -614,6 +635,7 @@ body {
 .sat--cafe   { top: 79%; left: 29%; --tam: 30px; animation-name: boiar-b; animation-duration: 19s; animation-delay: -3s; }
 .sat--usb    { top: 55%; left: 90%; --tam: 30px; animation-name: boiar-a; animation-duration: 15s; animation-delay: -6s; }
 .sat--clipe2 { top: 88%; left: 48%; --tam: 17px; animation-name: boiar-c; animation-duration: 24s; animation-delay: -1s; }
+.sat--carro  { top: 60%; left: 33%; --tam: 58px; animation-name: boiar-a; animation-duration: 22s; animation-delay: -9s; }
 
 /* ============================================================
    09. FÍSICA — @keyframes
@@ -719,6 +741,7 @@ body {
 
   .sat--tampa  { top: 40%; left: 8%; }
   .sat--usb    { top: 58%; left: 86%; }
+  .sat--carro  { top: 56%; left: 26%; --tam: 52px; }
 }
 
 /* --- celulares --- */
@@ -755,9 +778,32 @@ body {
   .orbe__meta { display: none; }
 
   /* cartucho e papel encolhem sem perder a identidade */
-  .orbe--passatempo .orbe__face { padding-top: 12px; padding-bottom: 12px; border-radius: 12px; }
-  .orbe--passatempo .orbe__face::before { height: 6px; }
-  .orbe--passatempo .orbe__texto::after { display: none; }
+  /* o portátil não vira pílula: perderia a identidade de objeto */
+  .orbe--passatempo {
+    width: clamp(98px, 31vw, 128px);
+    max-width: none;
+  }
+
+  .orbe--passatempo .orbe__face {
+    flex-direction: column;
+    align-items: stretch;
+    padding: .5rem .5rem 26px;
+    gap: .4rem;
+    border-radius: 13px 13px 24px 13px;
+  }
+
+  .orbe--passatempo .orbe__icone { width: 100%; height: auto; }
+  .orbe--passatempo .orbe__rotulo { font-size: .74rem; }
+
+  .orbe--passatempo .orbe__face::before {
+    bottom: 7px;
+    height: 14px;
+    background:
+      linear-gradient(#525c6d, #3b4350) 0 5px / 13px 4px no-repeat,
+      linear-gradient(90deg, #525c6d, #3b4350) 4.5px .5px / 4px 13px no-repeat,
+      radial-gradient(circle at 50% 42%, #f4879f 0 1.5px, #d05070 1.5px 3.2px, transparent 3.4px) right 0 top 6px / 8px 8px no-repeat,
+      radial-gradient(circle at 50% 42%, #f4879f 0 1.5px, #d05070 1.5px 3.2px, transparent 3.4px) right 9px top 0 / 8px 8px no-repeat;
+  }
 
   .orbe--mural .orbe__face { padding: .6rem .75rem .6rem 1.6rem; }
   .orbe--mural .orbe__face::before { left: 5px; width: 7px; top: 22%; bottom: 22%; }
@@ -782,6 +828,7 @@ body {
   .sat--clipe,
   .sat--clipe2 { display: none; }
 
+  .sat--carro  { top: 30%; left: 26%; --tam: 46px; }
   .sat--filme  { top: 38%; left: 6%;  --tam: 24px; }
   .sat--tampa  { top: 67%; left: 84%; --tam: 24px; }
   .sat--usb    { top: 34%; left: 82%; --tam: 22px; }
@@ -823,8 +870,15 @@ body {
   .orbe--nu .orbe__face { padding: 0; }
   .orbe--nu .orbe__icone { width: 42px; height: 42px; }
 
-  .orbe--passatempo .orbe__face { padding-top: 12px; padding-bottom: 12px; }
-  .orbe--passatempo .orbe__texto::after { display: none; }
+  .orbe--passatempo { width: clamp(96px, 15vw, 116px); max-width: none; }
+  .orbe--passatempo .orbe__face {
+    flex-direction: column;
+    align-items: stretch;
+    padding: .45rem .45rem 24px;
+    gap: .35rem;
+  }
+  .orbe--passatempo .orbe__icone { width: 100%; height: auto; }
+  .orbe--passatempo .orbe__face::before { bottom: 6px; height: 13px; }
   .orbe--mural .orbe__face { padding-left: 1.7rem; }
   .orbe--mural .orbe__face::before { left: 6px; width: 7px; }
   .orbe--mural .orbe__rotulo { font-size: 1.3rem; }
@@ -837,6 +891,7 @@ body {
   .orbe--passatempo { top: 76%; left: auto; right: 5%; }
 
   .sat--clipe, .sat--clipe2 { display: none; }
+  .sat--carro { top: 20%; left: 30%; --tam: 40px; }
   .sat--filme { top: 12%; left: 36%; --tam: 22px; }
   .sat--tampa { top: 78%; left: 40%; --tam: 22px; }
   .sat--usb   { top: 30%; left: 62%; --tam: 20px; }
