@@ -379,6 +379,54 @@ body {
   border-radius: 22px;
 }
 
+/* ------------------------------------------------------------
+   5.1 ÍCONE SOLTO — GitHub, Instagram e Behance não têm card:
+   é só o ícone do app boiando no vácuo. O esqueleto continua o
+   mesmo (as três camadas de transform seguem valendo), só some
+   a caixa de vidro e o texto.
+   ------------------------------------------------------------ */
+.orbe--nu {
+  width: auto;
+}
+
+.orbe--nu .orbe__face {
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  box-shadow: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+/* sem moldura, o brilho do hover vira um halo atrás do ícone */
+.orbe--nu .orbe__face::after {
+  inset: -26%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 50%,
+              color-mix(in srgb, var(--tom) 34%, transparent), transparent 68%);
+  filter: blur(9px);
+}
+
+.orbe--nu:hover .orbe__face,
+.orbe--nu:focus-visible .orbe__face,
+.orbe--nu:focus-within .orbe__face {
+  border: 0;
+  box-shadow: none;
+  transform: scale(1.18) translateY(-5px);
+}
+
+.orbe--nu:active .orbe__face { transform: scale(1.1) translateY(-2px); }
+
+.orbe--nu:focus-visible { border-radius: 50%; outline-offset: 10px; }
+
+/* solto, o ícone precisa de mais corpo do que tinha dentro do card */
+.orbe--nu .orbe__icone {
+  width: clamp(54px, 5.2vw, 74px);
+  height: clamp(54px, 5.2vw, 74px);
+}
+
+
 /* ============================================================
    06. ÍCONES VOLUMOSOS
    O SVG é a peça inteira (placa, lente, cartucho), então o
@@ -553,10 +601,10 @@ body {
    08. POSIÇÕES & TEMPOS
    Assimetria proposital: nenhum par divide eixo, duração ou fase.
    ============================================================ */
-.orbe--github     { --tom: var(--ouro);    top: 16%; left: 10%; --curva: flutuar-a; --dur: 7s; --fase: -1.2s; }
-.orbe--instagram  { --tom: var(--rosa);    top: 8%;  left: 57%; --curva: flutuar-b; --dur: 5s; --fase: -.6s; }
+.orbe--github     { --tom: var(--ouro);    top: 18%; left: 15%; --curva: flutuar-a; --dur: 7s; --fase: -1.2s; }
+.orbe--instagram  { --tom: var(--rosa);    top: 11%; left: 56%; --curva: flutuar-b; --dur: 5s; --fase: -.6s; }
 .orbe--mural      { --tom: var(--lampada); top: 28%; left: 78%; --curva: flutuar-c; --dur: 8s; --fase: -4.1s; }
-.orbe--behance    { --tom: var(--azul);    top: 66%; left: 7%;  --curva: flutuar-d; --dur: 9s; --fase: -3s; }
+.orbe--behance    { --tom: var(--azul);    top: 64%; left: 13%; --curva: flutuar-d; --dur: 9s; --fase: -3s; }
 .orbe--passatempo { --tom: var(--ciano);   top: 73%; left: 63%; --curva: flutuar-e; --dur: 6s; --fase: -2.4s; }
 
 /* satélites: mais lentos e mais tortos que os cards */
@@ -696,6 +744,9 @@ body {
 
   .orbe__icone { width: 34px; height: 34px; flex: 0 0 auto; }
 
+  .orbe--nu .orbe__face { padding: 0; }
+  .orbe--nu .orbe__icone { width: 46px; height: 46px; }
+
   .orbe__rotulo {
     font-size: .84rem;
     white-space: nowrap;
@@ -744,6 +795,7 @@ body {
   .orbe { max-width: 54vw; }
   .orbe__face { padding: .55rem .68rem; }
   .orbe__icone { width: 30px; height: 30px; }
+  .orbe--nu .orbe__icone { width: 42px; height: 42px; }
   .orbe__rotulo { font-size: .79rem; }
   .orbe--mural .orbe__rotulo { font-size: 1.2rem; }
 }
@@ -767,6 +819,9 @@ body {
   }
 
   .orbe__icone { width: 32px; height: 32px; flex: 0 0 auto; }
+
+  .orbe--nu .orbe__face { padding: 0; }
+  .orbe--nu .orbe__icone { width: 42px; height: 42px; }
 
   .orbe--passatempo .orbe__face { padding-top: 12px; padding-bottom: 12px; }
   .orbe--passatempo .orbe__texto::after { display: none; }
@@ -831,5 +886,7 @@ body {
   }
 
   .orbe__face::after { background: radial-gradient(120% 90% at 50% 0%, rgba(255,255,255,.14), transparent 70%); }
+  .orbe--nu .orbe__face::after { background: radial-gradient(circle at 50% 50%, rgba(255,255,255,.28), transparent 68%); }
+  .orbe--nu:hover .orbe__face { box-shadow: none; }
   .orbe:focus-visible { outline-color: var(--halo); }
 }

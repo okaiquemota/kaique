@@ -74,6 +74,16 @@ em cima de outro lugar abriria o modal sem querer. O cancelamento usa um listene
 fase de captura registrado na carga da página, então ele roda antes do seu handler,
 inclusive se o seu for delegado no `document`.
 
+## Ícone solto vs. card
+
+GitHub, Instagram e Behance usam o modificador `.orbe--nu`: mesmo esqueleto de três
+camadas, mas sem a caixa de vidro e sem texto — é só o ícone do app boiando. Como não
+sobra texto visível, o nome acessível vem do `aria-label` (e o `title` dá o tooltip que
+o rótulo dava antes).
+
+Passatempo e Mural continuam cards, porque neles a superfície *é* o conteúdo: um é
+cartucho de videogame, o outro é folha de fichário.
+
 ## Os satélites
 
 A tralha que boia no fundo (filme 35mm, clipes, tampa de lente, café, cabo USB) é
@@ -83,7 +93,7 @@ dimensiona sozinho. Cada satélite tem a linha pronta em comentário no HTML.
 
 ## O que ajustar
 
-- **Links**: apontam para `okaiquemota` no GitHub, Instagram e Behance — troque pelos perfis reais.
+- **Links**: Instagram em `@kiq.ham`; GitHub e Behance ainda em `okaiquemota` — confirme o Behance.
 - **Posições iniciais**: bloco *08* do CSS.
 - **Cores**: acentos em `--ouro`, `--rosa`, `--azul`, `--ciano`, `--lampada` no `:root`;
   cada card escolhe o seu com `--tom`.
