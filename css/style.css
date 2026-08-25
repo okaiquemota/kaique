@@ -95,18 +95,6 @@ body {
   z-index: 0;
 }
 
-/* --- luz do núcleo: o único brilho do fundo, colado no nome --- */
-.luz-nucleo {
-  position: absolute;
-  top: 50%; left: 50%;
-  width: 120vmin; height: 78vmin;
-  transform: translate(-50%, -50%);
-  background: radial-gradient(ellipse at center,
-              rgba(124, 200, 255, .07) 0%, rgba(124, 200, 255, .025) 38%, transparent 72%);
-  filter: blur(60px);            /* mata qualquer banding e borda de disco */
-  animation: respirar 16s ease-in-out infinite;
-}
-
 /* --- campo de estrelas em 3 camadas (parallax) --- */
 .ceu {
   position: absolute;
@@ -233,8 +221,6 @@ body {
   z-index: 2;
   width: min(88vw, 940px);
   text-align: center;
-  isolation: isolate;
-  animation: nucleo-flutuar 12s ease-in-out infinite;
 }
 
 /* sobrancelha com fios finos dos dois lados */
@@ -266,8 +252,8 @@ body {
   margin: 0;
   font-family: var(--serifa);
   font-weight: 900;
-  font-size: clamp(3rem, 13.5vw, 10rem);
-  line-height: .94;
+  font-size: clamp(2.2rem, 8.5vw, 6rem);
+  line-height: .98;
   letter-spacing: .012em;
   text-transform: uppercase;
   display: flex;
@@ -277,62 +263,12 @@ body {
 }
 
 .nome__parte {
-  position: relative;
   display: inline-block;
   background: linear-gradient(172deg,
-              #ffffff 6%, var(--gelo) 46%, #93a6d6 100%);
+              #ffffff 6%, var(--gelo) 52%, #aab8de 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-}
-
-/* duas cópias borradas por trás = halo em camadas.
-   ::before é o brilho largo, ::after o brilho colado na letra. */
-.nome__parte::before,
-.nome__parte::after {
-  content: attr(data-texto);
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-}
-
-.nome__parte::before {
-  color: var(--halo);
-  filter: blur(34px);
-  opacity: .5;
-  animation: pulsar-glow 7s ease-in-out infinite;
-}
-
-.nome__parte::after {
-  color: #eaf4ff;
-  filter: blur(7px);
-  opacity: .32;
-}
-
-.nome__parte--dois::before {
-  color: #a58cff;
-  animation-delay: -3.5s;
-}
-
-.nucleo__legenda {
-  margin: clamp(1rem, 2.2vw, 1.6rem) 0 0;
-  font-size: clamp(.68rem, 1.3vw, .82rem);
-  letter-spacing: .22em;
-  text-transform: uppercase;
-  color: var(--texto-suave);
-  display: inline-flex;
-  align-items: center;
-  gap: .8em;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-.ponto {
-  width: 4px; height: 4px;
-  border-radius: 50%;
-  background: var(--halo);
-  box-shadow: 0 0 12px var(--halo);
-  animation: cintilar 3s ease-in-out infinite;
 }
 
 /* ============================================================
@@ -701,21 +637,6 @@ body {
   70%      { transform: translate3d(calc(var(--amp-x) * -.7), calc(var(--amp) * -.4), 0) rotate(-10deg); }
 }
 
-@keyframes nucleo-flutuar {
-  0%, 100% { transform: translate(-50%, -50%); }
-  50%      { transform: translate(-50%, calc(-50% - 10px)); }
-}
-
-@keyframes pulsar-glow {
-  0%, 100% { opacity: .38; filter: blur(34px); }
-  50%      { opacity: .66; filter: blur(44px); }
-}
-
-@keyframes respirar {
-  0%, 100% { opacity: .7;  transform: translate(-50%, -50%) scale(1); }
-  50%      { opacity: 1;   transform: translate(-50%, -50%) scale(1.08); }
-}
-
 @keyframes deriva {
   from { transform: translate3d(0, 0, 0); }
   to   { transform: translate3d(-16%, -12%, 0); }
@@ -778,8 +699,7 @@ body {
   :root { --amp: 11px; --amp-x: 5px; }
 
   .nucleo { width: 92vw; }
-  .nome   { font-size: clamp(2.6rem, 16vw, 4.4rem); }
-  .nucleo__legenda { font-size: .62rem; letter-spacing: .16em; }
+  .nome   { font-size: clamp(1.9rem, 11vw, 3.1rem); }
   .nucleo__tag::before,
   .nucleo__tag::after { width: 26px; }
 
@@ -855,8 +775,8 @@ body {
 @media (max-height: 560px) and (orientation: landscape) {
   :root { --amp: 9px; --amp-x: 4px; }
 
-  .nome { font-size: clamp(2.1rem, 7.5vw, 3.6rem); }
-  .nucleo__legenda, .nucleo__tag { font-size: .58rem; }
+  .nome { font-size: clamp(1.6rem, 5.5vw, 2.6rem); }
+  .nucleo__tag { font-size: .58rem; }
 
   .orbe { width: auto; max-width: 32vw; }
   .orbe__meta { display: none; }
