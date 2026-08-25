@@ -423,8 +423,8 @@ body {
 
 /* solto, o ícone precisa de mais corpo do que tinha dentro do card */
 .orbe--nu .orbe__icone {
-  width: clamp(54px, 5.2vw, 74px);
-  height: clamp(54px, 5.2vw, 74px);
+  width: clamp(68px, 6.5vw, 94px);
+  height: clamp(68px, 6.5vw, 94px);
 }
 
 
@@ -465,7 +465,7 @@ body {
    ------------------------------------------------------------ */
 .orbe--passatempo .orbe__face {
   border-radius: 14px 14px 28px 14px;   /* a assimetria do console */
-  padding: .6rem .6rem 34px;
+  padding: .6rem .6rem 46px;
   gap: 0;
   background:
     linear-gradient(158deg, rgba(255,255,255,.13), rgba(255,255,255,.04) 45%, rgba(255,255,255,.02)),
@@ -482,7 +482,8 @@ body {
 
 /* a tela: 4:3, afundada no plástico e acesa por dentro */
 .orbe--passatempo .orbe__icone {
-  width: 100%;
+  width: 76%;                  /* moldura larga de plástico, como num portátil de verdade */
+  margin: 0 auto;
   height: auto;
   aspect-ratio: 4 / 3;
   border-radius: 4px 4px 9px 4px;
@@ -500,18 +501,18 @@ body {
 .orbe--passatempo .orbe__face::before {
   content: "";
   position: absolute;
-  left: 10%; right: 8%; bottom: 8px;
-  height: 22px;
+  left: 9%; right: 7%; bottom: 10px;
+  height: 29px;
   pointer-events: none;
   background:
     /* cruzeta */
-    linear-gradient(#5a6476, #3b4350) 0 8px / 21px 6px no-repeat,
-    linear-gradient(90deg, #5a6476, #3b4350) 7.5px .5px / 6px 21px no-repeat,
+    linear-gradient(#5a6476, #3b4350) 0 10.5px / 28px 8px no-repeat,
+    linear-gradient(90deg, #5a6476, #3b4350) 10px .5px / 8px 28px no-repeat,
     /* botões A e B */
-    radial-gradient(circle at 50% 40%, #f79bb0 0 2.4px, #d05070 2.4px 5.2px, transparent 5.4px) right 0 top 9px / 12px 12px no-repeat,
-    radial-gradient(circle at 50% 40%, #f79bb0 0 2.4px, #d05070 2.4px 5.2px, transparent 5.4px) right 13px top 0 / 12px 12px no-repeat,
+    radial-gradient(circle at 50% 40%, #f79bb0 0 3px, #d05070 3px 6.6px, transparent 6.8px) right 0 top 12px / 15px 15px no-repeat,
+    radial-gradient(circle at 50% 40%, #f79bb0 0 3px, #d05070 3px 6.6px, transparent 6.8px) right 16px top 0 / 15px 15px no-repeat,
     /* grade do alto-falante */
-    repeating-linear-gradient(58deg, rgba(255,255,255,.22) 0 1px, transparent 1px 4px) right 28px bottom 2px / 15px 13px no-repeat;
+    repeating-linear-gradient(58deg, rgba(255,255,255,.22) 0 1px, transparent 1px 4px) right 35px bottom 2px / 17px 17px no-repeat;
 }
 
 
@@ -760,7 +761,7 @@ body {
   .orbe__icone { width: 34px; height: 34px; flex: 0 0 auto; }
 
   .orbe--nu .orbe__face { padding: 0; }
-  .orbe--nu .orbe__icone { width: 46px; height: 46px; }
+  .orbe--nu .orbe__icone { width: 58px; height: 58px; }
 
   .orbe__rotulo {
     font-size: .84rem;
@@ -779,21 +780,22 @@ body {
   .orbe--passatempo .orbe__face {
     flex-direction: column;
     align-items: stretch;
-    padding: .5rem .5rem 26px;
-    gap: .4rem;
+    padding: .45rem .45rem 32px;
+    gap: 0;
     border-radius: 13px 13px 24px 13px;
   }
 
-  .orbe--passatempo .orbe__icone { width: 100%; height: auto; }
+  .orbe--passatempo .orbe__icone { width: 78%; margin: 0 auto; height: auto; }
 
   .orbe--passatempo .orbe__face::before {
     bottom: 7px;
     height: 14px;
+    height: 20px;
     background:
-      linear-gradient(#525c6d, #3b4350) 0 5px / 13px 4px no-repeat,
-      linear-gradient(90deg, #525c6d, #3b4350) 4.5px .5px / 4px 13px no-repeat,
-      radial-gradient(circle at 50% 42%, #f4879f 0 1.5px, #d05070 1.5px 3.2px, transparent 3.4px) right 0 top 6px / 8px 8px no-repeat,
-      radial-gradient(circle at 50% 42%, #f4879f 0 1.5px, #d05070 1.5px 3.2px, transparent 3.4px) right 9px top 0 / 8px 8px no-repeat;
+      linear-gradient(#525c6d, #3b4350) 0 7px / 19px 6px no-repeat,
+      linear-gradient(90deg, #525c6d, #3b4350) 6.5px .5px / 6px 19px no-repeat,
+      radial-gradient(circle at 50% 42%, #f4879f 0 2px, #d05070 2px 4.4px, transparent 4.6px) right 0 top 8px / 10px 10px no-repeat,
+      radial-gradient(circle at 50% 42%, #f4879f 0 2px, #d05070 2px 4.4px, transparent 4.6px) right 11px top 0 / 10px 10px no-repeat;
   }
 
   .orbe--mural .orbe__face { padding: .6rem .75rem .6rem 1.6rem; }
@@ -831,7 +833,7 @@ body {
   .orbe { max-width: 54vw; }
   .orbe__face { padding: .55rem .68rem; }
   .orbe__icone { width: 30px; height: 30px; }
-  .orbe--nu .orbe__icone { width: 42px; height: 42px; }
+  .orbe--nu .orbe__icone { width: 52px; height: 52px; }
   .orbe__rotulo { font-size: .79rem; }
   .orbe--mural .orbe__rotulo { font-size: 1.2rem; }
 }
@@ -857,17 +859,17 @@ body {
   .orbe__icone { width: 32px; height: 32px; flex: 0 0 auto; }
 
   .orbe--nu .orbe__face { padding: 0; }
-  .orbe--nu .orbe__icone { width: 42px; height: 42px; }
+  .orbe--nu .orbe__icone { width: 50px; height: 50px; }
 
   .orbe--passatempo { width: clamp(84px, 13vw, 104px); max-width: none; }
   .orbe--passatempo .orbe__face {
     flex-direction: column;
     align-items: stretch;
-    padding: .45rem .45rem 24px;
-    gap: .35rem;
+    padding: .4rem .4rem 29px;
+    gap: 0;
   }
-  .orbe--passatempo .orbe__icone { width: 100%; height: auto; }
-  .orbe--passatempo .orbe__face::before { bottom: 6px; height: 13px; }
+  .orbe--passatempo .orbe__icone { width: 78%; margin: 0 auto; height: auto; }
+  .orbe--passatempo .orbe__face::before { bottom: 7px; height: 19px; }
   .orbe--mural .orbe__face { padding-left: 1.7rem; }
   .orbe--mural .orbe__face::before { left: 6px; width: 7px; }
   .orbe--mural .orbe__rotulo { font-size: 1.3rem; }
