@@ -1,49 +1,61 @@
 /* ============================================================
    KAIQUE MOTA — Portfólio "Gravidade Zero"
-   HTML5 + CSS3 puro. Sem bibliotecas, sem JS.
+   HTML5 + CSS3. Sem JS, sem framework.
+   Única dependência externa: Playfair Display + Caveat (Google
+   Fonts), pedidas no briefing. Há fallback serifado/manuscrito.
    ------------------------------------------------------------
-   Sumário:
-   01. Tokens & Reset
-   02. Cosmos (fundo, estrelas, aros)
-   03. Espaço (palco)
-   04. Núcleo (nome central)
-   05. Orbes (cards flutuantes)
-   06. Posições & tempos (a assimetria)
-   07. Física (@keyframes)
-   08. Responsividade
-   09. Acessibilidade
+   01. Tokens & reset
+   02. Cosmos (vácuo, estrelas, aros, satélites)
+   03. Espaço
+   04. Núcleo (o nome)
+   05. Orbes — base de vidro
+   06. Ícones volumosos
+   07. Skins físicas (cartucho, papel de fichário)
+   08. Posições & tempos
+   09. Física (@keyframes)
+   10. Responsivo
+   11. Acessibilidade
    ============================================================ */
-
 
 /* ============================================================
    01. TOKENS & RESET
    ============================================================ */
 :root {
-  /* superfícies */
-  --fundo:        #05060a;
-  --fundo-alto:   #0a0d16;
-  --vidro:        rgba(255, 255, 255, .045);
-  --vidro-alto:   rgba(255, 255, 255, .085);
-  --borda:        rgba(255, 255, 255, .10);
+  /* o vácuo é preto puro — nada tinge esse fundo */
+  --vacuo:        #000000;
 
-  /* texto */
-  --texto:        #eaeefb;
-  --texto-suave:  #9aa4c4;
+  --texto:        #f0f2fa;
+  --texto-suave:  #8f99b8;
 
-  /* acentos */
-  --ciano:        #5ef2ff;
-  --violeta:      #a78bfa;
+  /* luz */
+  --gelo:         #dbe7ff;
+  --halo:         #7cc8ff;
+
+  /* acentos por objeto */
+  --ouro:         #e8b95a;
   --rosa:         #ff6ec7;
   --azul:         #6d8bff;
+  --ciano:        #5ef2ff;
+  --lampada:      #ffe6c0;
 
-  /* movimento — amplitude global do flutuar (reduzida no mobile) */
+  /* vidro */
+  --vidro:        rgba(255, 255, 255, .04);
+  --vidro-alto:   rgba(255, 255, 255, .085);
+
+  /* papel do mural */
+  --papel:        #f6f1e4;
+  --tinta:        #26314e;
+  --regua:        #7896c8;
+  --margem:       #d64a42;
+
+  /* movimento */
   --amp:          22px;
   --amp-x:        10px;
 
   /* tipografia */
-  --display: "Space Grotesk", "Archivo Black", "Helvetica Neue",
-             Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  --ui: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --serifa: "Playfair Display", "Cinzel", Georgia, "Times New Roman", serif;
+  --mao:    "Caveat", "Segoe Script", "Bradley Hand", cursive;
+  --ui:     system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
 *,
@@ -59,8 +71,8 @@ body {
   margin: 0;
   min-height: 100vh;
   min-height: 100dvh;
-  overflow: hidden;                 /* o espaço não rola: ele flutua */
-  background: var(--fundo);
+  overflow: hidden;
+  background: var(--vacuo);
   color: var(--texto);
   font-family: var(--ui);
   -webkit-font-smoothing: antialiased;
@@ -68,48 +80,34 @@ body {
 }
 
 ::selection {
-  background: rgba(94, 242, 255, .28);
+  background: rgba(124, 200, 255, .3);
   color: #fff;
 }
 
-
 /* ============================================================
-   02. COSMOS — camadas de profundidade
+   02. COSMOS
    ============================================================ */
 .cosmos {
   position: fixed;
   inset: 0;
   overflow: hidden;
-  pointer-events: none;
+  pointer-events: none;      /* nada aqui é clicável */
   z-index: 0;
 }
 
-/* --- nebulosas: manchas de luz que respiram --- */
-.nebulosa {
+/* --- luz do núcleo: o único brilho do fundo, colado no nome --- */
+.luz-nucleo {
   position: absolute;
-  border-radius: 50%;
-  filter: blur(90px);
-  opacity: .38;
-  will-change: transform, opacity;
+  top: 50%; left: 50%;
+  width: 120vmin; height: 78vmin;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(ellipse at center,
+              rgba(124, 200, 255, .07) 0%, rgba(124, 200, 255, .025) 38%, transparent 72%);
+  filter: blur(60px);            /* mata qualquer banding e borda de disco */
+  animation: respirar 16s ease-in-out infinite;
 }
 
-.nebulosa--ciano {
-  width: 62vmax; height: 62vmax;
-  top: -22vmax; left: -16vmax;
-  background: radial-gradient(circle at 50% 50%,
-              rgba(94, 242, 255, .55), rgba(94, 242, 255, 0) 68%);
-  animation: respirar 18s ease-in-out infinite;
-}
-
-.nebulosa--violeta {
-  width: 70vmax; height: 70vmax;
-  bottom: -30vmax; right: -20vmax;
-  background: radial-gradient(circle at 50% 50%,
-              rgba(167, 139, 250, .5), rgba(255, 110, 199, .18) 45%, rgba(0, 0, 0, 0) 70%);
-  animation: respirar 24s ease-in-out infinite reverse;
-}
-
-/* --- campo de estrelas em 3 camadas (parallax lento) --- */
+/* --- campo de estrelas em 3 camadas (parallax) --- */
 .ceu {
   position: absolute;
   top: -25%; left: -25%;
@@ -142,53 +140,79 @@ body {
 
 .ceu--perto {
   background-image:
-    radial-gradient(2.2px 2.2px at 60% 28%, rgba(255,255,255,1),      transparent 62%),
-    radial-gradient(2px   2px   at 22% 58%, rgba(94, 242, 255, .95),  transparent 62%),
-    radial-gradient(2px   2px   at 90% 90%, rgba(167, 139, 250, .95), transparent 62%),
+    radial-gradient(2.2px 2.2px at 60% 28%, rgba(255,255,255,1),     transparent 62%),
+    radial-gradient(2px   2px   at 22% 58%, rgba(124, 200, 255, .95), transparent 62%),
+    radial-gradient(2px   2px   at 90% 90%, rgba(232, 185, 90, .8),   transparent 62%),
     radial-gradient(1.8px 1.8px at 45% 76%, rgba(255,255,255,.8),     transparent 62%);
   background-size: 540px 540px;
   animation: deriva 62s linear infinite, cintilar 6s ease-in-out infinite;
 }
 
-/* --- aros de órbita: elipses giratórias --- */
+/* --- aros de órbita --- */
 .aro {
   position: absolute;
   top: 50%; left: 50%;
   border-radius: 50%;
-  border: 1px dashed rgba(255, 255, 255, .055);
+  border: 1px dashed rgba(255, 255, 255, .05);
   will-change: transform;
 }
 
-.aro--um {
-  width: 78vmin; height: 78vmin;
-  animation: girar 90s linear infinite;
+.aro--um   { width: 78vmin;  height: 78vmin;  animation: girar 90s linear infinite; }
+.aro--dois { width: 122vmin; height: 122vmin; border-style: solid;
+             border-color: rgba(124, 200, 255, .045);
+             animation: girar-plano 140s linear infinite reverse; }
+.aro--tres { width: 160vmin; height: 160vmin;
+             border-color: rgba(232, 185, 90, .04);
+             animation: girar 210s linear infinite; }
+
+/* ------------------------------------------------------------
+   SATÉLITES — tralha pessoal boiando no vácuo.
+   Cada um é um <span> dimensionado por --tam. Para trocar o
+   emoji pelo seu PNG, é só pôr um <img> dentro do span: o CSS
+   abaixo já cuida do resto, sem tocar em mais nada.
+   ------------------------------------------------------------ */
+.satelite {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  width: var(--tam);
+  height: var(--tam);
+  font-size: calc(var(--tam) * .86);
+  line-height: 1;
+  opacity: var(--opa, .72);
+  filter:
+    drop-shadow(0 5px 9px rgba(0, 0, 0, .8))
+    drop-shadow(0 0 16px rgba(124, 200, 255, .3));
+  will-change: transform;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  user-select: none;
 }
 
-.aro--dois {
-  width: 122vmin; height: 122vmin;
-  border-style: solid;
-  border-color: rgba(94, 242, 255, .05);
-  animation: girar-plano 140s linear infinite reverse;
+.satelite img,
+.satelite svg {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
 }
 
-.aro--tres {
-  width: 160vmin; height: 160vmin;
-  border-color: rgba(167, 139, 250, .05);
-  animation: girar 210s linear infinite;
+/* profundidade de campo: o que está "longe" desfoca e some */
+.satelite--longe {
+  filter: blur(1.5px) drop-shadow(0 4px 8px rgba(0, 0, 0, .8));
+  opacity: .42;
 }
 
-/* --- vinheta: escurece as bordas e dá foco ao centro --- */
+/* --- vinheta: só apaga as estrelas nas bordas, o preto segue preto --- */
 .vinheta {
   position: absolute;
   inset: 0;
-  background:
-    radial-gradient(ellipse 75% 65% at 50% 50%,
-      rgba(5, 6, 10, 0) 38%, rgba(5, 6, 10, .42) 78%, rgba(5, 6, 10, .82) 100%);
+  background: radial-gradient(ellipse 78% 68% at 50% 50%,
+              rgba(0, 0, 0, 0) 42%, rgba(0, 0, 0, .7) 80%, #000 100%);
 }
 
-
 /* ============================================================
-   03. ESPAÇO — o palco de posicionamento absoluto
+   03. ESPAÇO
    ============================================================ */
 .espaco {
   position: relative;
@@ -199,109 +223,131 @@ body {
   overflow: hidden;
 }
 
-
 /* ============================================================
-   04. NÚCLEO — o nome no centro exato
+   04. NÚCLEO — o nome
    ============================================================ */
 .nucleo {
   position: absolute;
-  top: 50%;
-  left: 50%;
+  top: 50%; left: 50%;
   transform: translate(-50%, -50%);
   z-index: 2;
-  width: min(88vw, 900px);
+  width: min(88vw, 940px);
   text-align: center;
-  isolation: isolate;               /* prende o glow ::before neste contexto */
+  isolation: isolate;
   animation: nucleo-flutuar 12s ease-in-out infinite;
 }
 
+/* sobrancelha com fios finos dos dois lados */
 .nucleo__tag {
-  margin: 0 0 clamp(.6rem, 1.4vw, 1.1rem);
-  font-size: clamp(.62rem, 1.1vw, .78rem);
-  font-weight: 600;
-  letter-spacing: .42em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(.8rem, 2vw, 1.4rem);
+  margin: 0 0 clamp(.9rem, 2vw, 1.4rem);
+  font-size: clamp(.58rem, 1vw, .72rem);
+  font-weight: 500;
+  letter-spacing: .5em;
+  text-indent: .5em;
   text-transform: uppercase;
   color: var(--texto-suave);
-  opacity: .8;
 }
+
+.nucleo__tag::before,
+.nucleo__tag::after {
+  content: "";
+  height: 1px;
+  width: clamp(28px, 7vw, 84px);
+  background: linear-gradient(90deg, transparent, rgba(219, 231, 255, .38));
+}
+
+.nucleo__tag::after { transform: scaleX(-1); }
 
 .nome {
   margin: 0;
-  font-family: var(--display);
+  font-family: var(--serifa);
   font-weight: 900;
-  font-size: clamp(2.9rem, 12.5vw, 9.5rem);
-  line-height: .92;
-  letter-spacing: -.035em;
+  font-size: clamp(3rem, 13.5vw, 10rem);
+  line-height: .94;
+  letter-spacing: .012em;
   text-transform: uppercase;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 0 clamp(.5rem, 2.2vw, 1.6rem);
+  gap: 0 clamp(.6rem, 2.4vw, 1.8rem);
 }
 
 .nome__parte {
   position: relative;
   display: inline-block;
-  background: linear-gradient(170deg, #ffffff 8%, #d6e2ff 42%, #8fa0da 100%);
+  background: linear-gradient(172deg,
+              #ffffff 6%, var(--gelo) 46%, #93a6d6 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 }
 
-/* cópia borrada por trás = glow suave, sem perder o gradiente do texto */
-.nome__parte::before {
+/* duas cópias borradas por trás = halo em camadas.
+   ::before é o brilho largo, ::after o brilho colado na letra. */
+.nome__parte::before,
+.nome__parte::after {
   content: attr(data-texto);
   position: absolute;
   inset: 0;
   z-index: -1;
-  color: var(--ciano);
-  filter: blur(26px);
+}
+
+.nome__parte::before {
+  color: var(--halo);
+  filter: blur(34px);
   opacity: .5;
   animation: pulsar-glow 7s ease-in-out infinite;
 }
 
+.nome__parte::after {
+  color: #eaf4ff;
+  filter: blur(7px);
+  opacity: .32;
+}
+
 .nome__parte--dois::before {
-  color: var(--violeta);
+  color: #a58cff;
   animation-delay: -3.5s;
 }
 
 .nucleo__legenda {
-  margin: clamp(.9rem, 2vw, 1.5rem) 0 0;
-  font-size: clamp(.72rem, 1.4vw, .9rem);
-  letter-spacing: .16em;
+  margin: clamp(1rem, 2.2vw, 1.6rem) 0 0;
+  font-size: clamp(.68rem, 1.3vw, .82rem);
+  letter-spacing: .22em;
   text-transform: uppercase;
   color: var(--texto-suave);
   display: inline-flex;
   align-items: center;
-  gap: .7em;
+  gap: .8em;
   flex-wrap: wrap;
   justify-content: center;
 }
 
 .ponto {
-  width: 5px; height: 5px;
+  width: 4px; height: 4px;
   border-radius: 50%;
-  background: var(--ciano);
-  box-shadow: 0 0 12px var(--ciano);
+  background: var(--halo);
+  box-shadow: 0 0 12px var(--halo);
   animation: cintilar 3s ease-in-out infinite;
 }
 
-
 /* ============================================================
-   05. ORBES — os cards flutuantes
+   05. ORBES — base de vidro
    ------------------------------------------------------------
-   Arquitetura em 2 camadas, de propósito:
-   .orbe       → posição + animação de flutuar (não é tocada no hover)
-   .orbe__face → escala + brilho no hover (transition própria)
-   Assim o transform do hover nunca briga com o do @keyframes.
+   Duas camadas de propósito:
+   .orbe       → posição + @keyframes de flutuar
+   .orbe__face → visual + escala/brilho do hover
+   Sem isso, o transform do hover brigaria com o do keyframe.
    ============================================================ */
-.orbita { position: static; }
-
 .orbe {
   position: absolute;
   z-index: 3;
   display: block;
-  width: clamp(140px, 12.5vw, 186px);
+  width: clamp(152px, 13.5vw, 202px);
   padding: 0;
   border: 0;
   background: none;
@@ -311,7 +357,6 @@ body {
   text-decoration: none;
   cursor: pointer;
   will-change: transform;
-  animation-name: flutuar-a;
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
 }
@@ -320,17 +365,18 @@ body {
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: clamp(.7rem, 1.4vw, 1rem);
-  padding: clamp(.95rem, 1.5vw, 1.25rem);
+  gap: clamp(.75rem, 1.5vw, 1.05rem);
+  padding: clamp(1rem, 1.6vw, 1.35rem);
   border-radius: 20px;
-  border: 1px solid var(--borda);
-  background:
-    linear-gradient(158deg, var(--vidro-alto), var(--vidro) 55%, rgba(255,255,255,.02));
+  border: 1px solid color-mix(in srgb, var(--tom) 24%, transparent);
+  background: linear-gradient(158deg, var(--vidro-alto), var(--vidro) 55%, rgba(255,255,255,.02));
   -webkit-backdrop-filter: blur(14px) saturate(130%);
   backdrop-filter: blur(14px) saturate(130%);
+  /* a borda de neon já acesa em repouso */
   box-shadow:
-    0 18px 40px -22px rgba(0, 0, 0, .9),
-    inset 0 1px 0 rgba(255, 255, 255, .07);
+    0 0 18px -8px color-mix(in srgb, var(--tom) 55%, transparent),
+    0 20px 44px -26px #000,
+    inset 0 1px 0 rgba(255, 255, 255, .08);
   transition:
     transform .45s cubic-bezier(.2, .9, .25, 1.1),
     border-color .45s ease,
@@ -339,7 +385,7 @@ body {
   will-change: transform;
 }
 
-/* halo colorido que só acende no hover/foco */
+/* halo que acende no hover */
 .orbe__face::after {
   content: "";
   position: absolute;
@@ -348,74 +394,50 @@ body {
   opacity: 0;
   pointer-events: none;
   background: radial-gradient(120% 90% at 50% 0%,
-              color-mix(in srgb, var(--tom) 22%, transparent), transparent 70%);
+              color-mix(in srgb, var(--tom) 20%, transparent), transparent 70%);
   transition: opacity .45s ease;
-}
-
-.orbe__icone {
-  display: grid;
-  place-items: center;
-  width: clamp(38px, 3.4vw, 44px);
-  height: clamp(38px, 3.4vw, 44px);
-  border-radius: 13px;
-  border: 1px solid var(--borda);
-  background: rgba(255, 255, 255, .04);
-  color: var(--tom);
-  transition: transform .45s cubic-bezier(.2, .9, .25, 1.1),
-              box-shadow .45s ease,
-              background .45s ease;
-}
-
-.orbe__icone svg {
-  width: 55%;
-  height: 55%;
-  display: block;
-  font-family: var(--display);      /* usado pelo <text> do Behance */
 }
 
 .orbe__texto {
   display: flex;
   flex-direction: column;
-  gap: .22em;
+  gap: .25em;
   min-width: 0;
 }
 
 .orbe__rotulo {
-  font-size: clamp(.92rem, 1.2vw, 1.02rem);
+  font-size: clamp(.95rem, 1.25vw, 1.06rem);
   font-weight: 650;
   letter-spacing: -.01em;
   color: var(--texto);
 }
 
 .orbe__meta {
-  font-size: clamp(.66rem, .85vw, .74rem);
-  letter-spacing: .12em;
+  font-size: clamp(.62rem, .82vw, .7rem);
+  letter-spacing: .14em;
   text-transform: uppercase;
   color: var(--texto-suave);
   transition: color .45s ease;
 }
 
-/* --- INTERAÇÃO: trava, cresce, acende e vem pra frente --- */
+/* --- INTERAÇÃO: trava, cresce, acende, vem pra frente --- */
 .orbe:hover,
 .orbe:focus-visible,
 .orbe:focus-within {
-  animation-play-state: paused;     /* o card "trava" no lugar */
+  animation-play-state: paused;
   z-index: 40;
 }
 
 .orbe:hover .orbe__face,
 .orbe:focus-visible .orbe__face,
 .orbe:focus-within .orbe__face {
-  transform: scale(1.14) translateY(-6px);
-  border-color: color-mix(in srgb, var(--tom) 55%, transparent);
-  background: linear-gradient(158deg,
-              color-mix(in srgb, var(--tom) 14%, var(--vidro-alto)),
-              var(--vidro) 60%);
+  transform: scale(1.13) translateY(-6px);
+  border-color: color-mix(in srgb, var(--tom) 62%, transparent);
   box-shadow:
-    0 0 0 1px color-mix(in srgb, var(--tom) 30%, transparent),
-    0 28px 60px -20px color-mix(in srgb, var(--tom) 45%, transparent),
-    0 10px 30px -18px rgba(0, 0, 0, .9),
-    inset 0 1px 0 rgba(255, 255, 255, .12);
+    0 0 0 1px color-mix(in srgb, var(--tom) 32%, transparent),
+    0 0 34px -6px color-mix(in srgb, var(--tom) 65%, transparent),
+    0 30px 60px -22px #000,
+    inset 0 1px 0 rgba(255, 255, 255, .14);
 }
 
 .orbe:hover .orbe__face::after,
@@ -425,15 +447,13 @@ body {
 .orbe:hover .orbe__icone,
 .orbe:focus-visible .orbe__icone,
 .orbe:focus-within .orbe__icone {
-  transform: scale(1.06) rotate(-4deg);
-  background: color-mix(in srgb, var(--tom) 16%, transparent);
-  box-shadow: 0 0 22px -4px color-mix(in srgb, var(--tom) 60%, transparent);
+  transform: scale(1.07) rotate(-3deg);
 }
 
 .orbe:hover .orbe__meta,
 .orbe:focus-visible .orbe__meta,
 .orbe:focus-within .orbe__meta {
-  color: color-mix(in srgb, var(--tom) 70%, var(--texto));
+  color: color-mix(in srgb, var(--tom) 72%, var(--texto));
 }
 
 .orbe:active .orbe__face { transform: scale(1.06) translateY(-2px); }
@@ -444,58 +464,198 @@ body {
   border-radius: 22px;
 }
 
-
 /* ============================================================
-   06. POSIÇÕES & TEMPOS
-   Assimetria proposital: nenhum par compartilha eixo, duração
-   ou fase — é isso que mata a sensação de "robô".
+   06. ÍCONES VOLUMOSOS
+   O SVG é a peça inteira (placa, lente, cartucho), então o
+   contêiner não tem moldura própria — só tamanho e sombra.
    ============================================================ */
-.orbe--github {
-  --tom: #b9c6ff;
-  top: 17%; left: 11%;
-  animation-name: flutuar-a;
-  animation-duration: 7s;
-  animation-delay: -1.2s;
+.orbe__icone {
+  display: block;
+  width: clamp(46px, 4.2vw, 58px);
+  height: clamp(46px, 4.2vw, 58px);
+  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, .75));
+  transition: transform .45s cubic-bezier(.2, .9, .25, 1.1),
+              filter .45s ease;
 }
 
-.orbe--instagram {
-  --tom: var(--rosa);
-  top: 9%; left: 58%;
-  animation-name: flutuar-b;
-  animation-duration: 5s;
-  animation-delay: -.6s;
+.orbe__icone svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: visible;
 }
 
-.orbe--mural {
-  --tom: var(--violeta);
-  top: 29%; left: 79%;
-  animation-name: flutuar-c;
-  animation-duration: 8s;
-  animation-delay: -4.1s;
-}
-
-.orbe--behance {
-  --tom: var(--azul);
-  top: 66%; left: 8%;
-  animation-name: flutuar-d;
-  animation-duration: 9s;
-  animation-delay: -3s;
-}
-
-.orbe--passatempo {
-  --tom: var(--ciano);
-  top: 74%; left: 64%;
-  animation-name: flutuar-e;
-  animation-duration: 6s;
-  animation-delay: -2.4s;
-}
-
+.orbe--github:hover     .orbe__icone { filter: drop-shadow(0 6px 12px rgba(0,0,0,.75)) drop-shadow(0 0 16px rgba(232, 185, 90, .55)); }
+.orbe--instagram:hover  .orbe__icone { filter: drop-shadow(0 6px 12px rgba(0,0,0,.75)) drop-shadow(0 0 16px rgba(255, 110, 199, .5)); }
+.orbe--behance:hover    .orbe__icone { filter: drop-shadow(0 6px 12px rgba(0,0,0,.75)) drop-shadow(0 0 16px rgba(109, 139, 255, .5)); }
+.orbe--passatempo:hover .orbe__icone { filter: drop-shadow(0 6px 12px rgba(0,0,0,.75)) drop-shadow(0 0 16px rgba(94, 242, 255, .5)); }
 
 /* ============================================================
-   07. FÍSICA — @keyframes
-   Cada curva mistura translateY + um translateX mínimo + rotate
-   leve. A amplitude vem de var(--amp), então o mobile só troca
-   o token e todo o sistema encolhe junto.
+   07. SKINS FÍSICAS
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   7.1 PASSATEMPO — o vidro ganha corpo de cartucho antigo:
+   cantos mais duros, nervuras no topo e trilha de contatos
+   dourados na base.
+   ------------------------------------------------------------ */
+.orbe--passatempo .orbe__face {
+  border-radius: 14px 14px 8px 8px;
+  padding-top: calc(clamp(1rem, 1.6vw, 1.35rem) + 10px);
+  padding-bottom: calc(clamp(1rem, 1.6vw, 1.35rem) + 8px);
+  background:
+    linear-gradient(158deg, rgba(255,255,255,.1), rgba(255,255,255,.03) 55%, rgba(255,255,255,.015)),
+    linear-gradient(100deg, transparent 30%, rgba(255,255,255,.05) 45%, transparent 60%);
+}
+
+/* nervuras de encaixe no topo */
+.orbe--passatempo .orbe__face::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 12%; right: 12%;
+  height: 9px;
+  border-radius: 0 0 4px 4px;
+  background:
+    repeating-linear-gradient(90deg,
+      rgba(255, 255, 255, .1) 0 1.5px,
+      transparent 1.5px 5px);
+  box-shadow: inset 0 -1px 0 rgba(0, 0, 0, .4);
+  pointer-events: none;
+}
+
+/* trilha de contatos na base */
+.orbe--passatempo .orbe__texto::after {
+  content: "";
+  position: absolute;
+  bottom: 5px; left: 18%; right: 18%;
+  height: 6px;
+  border-radius: 2px;
+  background:
+    repeating-linear-gradient(90deg,
+      rgba(232, 185, 90, .55) 0 3px,
+      transparent 3px 6px);
+  opacity: .7;
+  pointer-events: none;
+}
+
+/* ------------------------------------------------------------
+   7.2 MURAL — não é vidro: é uma folha de fichário de verdade,
+   com régua azul, margem vermelha, grão de papel e furos de
+   fichário. Continua flutuando e continua sendo iluminada
+   pelo vácuo (a luz vira reflexo quente no papel).
+   ------------------------------------------------------------ */
+.orbe--mural .orbe__face {
+  --grao: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23g)' opacity='.35'/%3E%3C/svg%3E");
+
+  border-radius: 3px 10px 4px 6px;      /* folha arrancada, sem simetria */
+  border: 1px solid rgba(255, 255, 255, .5);
+  padding: 1.15rem .95rem 1rem 2.4rem;  /* espaço para a margem vermelha */
+  transform: rotate(-2.4deg);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+
+  background:
+    var(--grao),
+    /* margem vermelha */
+    linear-gradient(90deg,
+      transparent 0 26px, rgba(214, 74, 66, .6) 26px 27.5px, transparent 27.5px),
+    /* régua azul */
+    repeating-linear-gradient(180deg,
+      transparent 0 19px, rgba(120, 150, 200, .42) 19px 20px),
+    /* brilho do vácuo batendo no papel */
+    linear-gradient(152deg, #fffdf6 0%, var(--papel) 55%, #e4dcc8 100%);
+  background-blend-mode: multiply, normal, normal, normal;
+
+  box-shadow:
+    0 0 26px -6px rgba(255, 230, 192, .45),
+    0 22px 40px -24px #000,
+    inset 0 0 30px rgba(190, 170, 130, .3);
+}
+
+/* furos de fichário na borda esquerda */
+.orbe--mural .orbe__face::before {
+  content: "";
+  position: absolute;
+  top: 16%; bottom: 16%; left: 8px;
+  width: 9px;
+  background:
+    radial-gradient(circle at 50% 12%, rgba(0,0,0,.6) 0 3.6px, transparent 4.2px),
+    radial-gradient(circle at 50% 50%, rgba(0,0,0,.6) 0 3.6px, transparent 4.2px),
+    radial-gradient(circle at 50% 88%, rgba(0,0,0,.6) 0 3.6px, transparent 4.2px);
+  pointer-events: none;
+}
+
+/* o halo de hover no papel é luz quente, não neon */
+.orbe--mural .orbe__face::after {
+  background: radial-gradient(120% 90% at 50% 0%, rgba(255, 214, 150, .35), transparent 70%);
+  mix-blend-mode: multiply;
+}
+
+.orbe--mural .orbe__rotulo {
+  font-family: var(--mao);
+  font-size: clamp(1.5rem, 2.1vw, 1.85rem);
+  font-weight: 600;
+  line-height: .95;
+  letter-spacing: 0;
+  color: var(--tinta);
+}
+
+.orbe--mural .orbe__meta {
+  font-family: var(--mao);
+  font-size: clamp(.9rem, 1.1vw, 1.02rem);
+  letter-spacing: .02em;
+  text-transform: none;
+  color: rgba(38, 49, 78, .62);
+}
+
+.orbe--mural:hover .orbe__meta,
+.orbe--mural:focus-visible .orbe__meta,
+.orbe--mural:focus-within .orbe__meta { color: rgba(38, 49, 78, .8); }
+
+/* o percevejo mora no canto da folha, fora do fluxo */
+.orbe--mural .orbe__icone {
+  position: absolute;
+  top: -13px; right: 16px;
+  width: 34px; height: 34px;
+  filter: drop-shadow(-3px 6px 5px rgba(0, 0, 0, .55));
+}
+
+/* o hover do mural mantém a inclinação da folha */
+.orbe--mural:hover .orbe__face,
+.orbe--mural:focus-visible .orbe__face,
+.orbe--mural:focus-within .orbe__face {
+  transform: rotate(-1deg) scale(1.13) translateY(-6px);
+  border-color: rgba(255, 255, 255, .8);
+  box-shadow:
+    0 0 40px -4px rgba(255, 230, 192, .6),
+    0 30px 56px -22px #000,
+    inset 0 0 30px rgba(190, 170, 130, .25);
+}
+
+.orbe--mural:active .orbe__face { transform: rotate(-1.8deg) scale(1.06) translateY(-2px); }
+
+/* ============================================================
+   08. POSIÇÕES & TEMPOS
+   Assimetria proposital: nenhum par divide eixo, duração ou fase.
+   ============================================================ */
+.orbe--github     { --tom: var(--ouro);    top: 16%; left: 10%; animation-name: flutuar-a; animation-duration: 7s; animation-delay: -1.2s; }
+.orbe--instagram  { --tom: var(--rosa);    top: 8%;  left: 57%; animation-name: flutuar-b; animation-duration: 5s; animation-delay: -.6s; }
+.orbe--mural      { --tom: var(--lampada); top: 28%; left: 78%; animation-name: flutuar-c; animation-duration: 8s; animation-delay: -4.1s; }
+.orbe--behance    { --tom: var(--azul);    top: 66%; left: 7%;  animation-name: flutuar-d; animation-duration: 9s; animation-delay: -3s; }
+.orbe--passatempo { --tom: var(--ciano);   top: 73%; left: 63%; animation-name: flutuar-e; animation-duration: 6s; animation-delay: -2.4s; }
+
+/* satélites: mais lentos e mais tortos que os cards */
+.sat--filme  { top: 14%; left: 30%; --tam: 34px; animation-name: boiar-a; animation-duration: 17s; animation-delay: -2s; }
+.sat--clipe  { top: 25%; left: 41%; --tam: 22px; animation-name: boiar-b; animation-duration: 13s; animation-delay: -5s; }
+.sat--tampa  { top: 45%; left: 12%; --tam: 34px; animation-name: boiar-c; animation-duration: 21s; animation-delay: -8s; }
+.sat--cafe   { top: 79%; left: 29%; --tam: 30px; animation-name: boiar-b; animation-duration: 19s; animation-delay: -3s; }
+.sat--usb    { top: 55%; left: 90%; --tam: 30px; animation-name: boiar-a; animation-duration: 15s; animation-delay: -6s; }
+.sat--clipe2 { top: 88%; left: 48%; --tam: 17px; animation-name: boiar-c; animation-duration: 24s; animation-delay: -1s; }
+
+/* ============================================================
+   09. FÍSICA — @keyframes
+   Amplitude vem de --amp: o mobile só troca o token e todo o
+   sistema encolhe junto, sem reescrever keyframe nenhum.
    ============================================================ */
 @keyframes flutuar-a {
   0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); }
@@ -524,20 +684,36 @@ body {
   50%      { transform: translate3d(calc(var(--amp-x) * .55), calc(var(--amp) * -.85), 0) rotate(-3deg); }
 }
 
-/* o núcleo também flutua, mas quase imperceptível */
+/* objetos soltos giram bem mais que os cards */
+@keyframes boiar-a {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(-8deg); }
+  50%      { transform: translate3d(calc(var(--amp-x) * -.9), calc(var(--amp) * -1.3), 0) rotate(14deg); }
+}
+
+@keyframes boiar-b {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(12deg); }
+  45%      { transform: translate3d(calc(var(--amp-x) * 1.1), calc(var(--amp) * -.9), 0) rotate(-16deg); }
+}
+
+@keyframes boiar-c {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); }
+  35%      { transform: translate3d(calc(var(--amp-x) * .8), calc(var(--amp) * -1.1), 0) rotate(22deg); }
+  70%      { transform: translate3d(calc(var(--amp-x) * -.7), calc(var(--amp) * -.4), 0) rotate(-10deg); }
+}
+
 @keyframes nucleo-flutuar {
   0%, 100% { transform: translate(-50%, -50%); }
   50%      { transform: translate(-50%, calc(-50% - 10px)); }
 }
 
 @keyframes pulsar-glow {
-  0%, 100% { opacity: .38; filter: blur(26px); }
-  50%      { opacity: .68; filter: blur(34px); }
+  0%, 100% { opacity: .38; filter: blur(34px); }
+  50%      { opacity: .66; filter: blur(44px); }
 }
 
 @keyframes respirar {
-  0%, 100% { transform: translate3d(0, 0, 0) scale(1);    opacity: .32; }
-  50%      { transform: translate3d(3%, 4%, 0) scale(1.12); opacity: .46; }
+  0%, 100% { opacity: .7;  transform: translate(-50%, -50%) scale(1); }
+  50%      { opacity: 1;   transform: translate(-50%, -50%) scale(1.08); }
 }
 
 @keyframes deriva {
@@ -555,43 +731,46 @@ body {
   to   { transform: translate(-50%, -50%) rotate(360deg); }
 }
 
-/* elipse inclinada: parece um plano orbital visto de lado */
 @keyframes girar-plano {
   from { transform: translate(-50%, -50%) rotate(0deg) scaleY(.52); }
   to   { transform: translate(-50%, -50%) rotate(360deg) scaleY(.52); }
 }
 
-
 /* ============================================================
-   08. RESPONSIVIDADE
-   Regra: em tela pequena os orbes se aproximam do nome, mas
-   continuam flutuando e nunca saem da viewport.
+   10. RESPONSIVO
+   Regra: em tela pequena tudo se aproxima do nome, mas continua
+   flutuando e nunca sai da viewport.
    ============================================================ */
 
 /* --- laptops menores --- */
 @media (max-width: 1180px) {
   :root { --amp: 18px; --amp-x: 8px; }
 
-  .orbe { width: clamp(132px, 15vw, 168px); }
-  .orbe--github     { top: 16%; left: 7%; }
-  .orbe--instagram  { top: 8%;  left: 60%; }
-  .orbe--mural      { top: 30%; left: 76%; }
-  .orbe--behance    { top: 68%; left: 6%; }
-  .orbe--passatempo { top: 75%; left: 62%; }
+  .orbe { width: clamp(142px, 16vw, 178px); }
+  .orbe--github     { top: 15%; left: 6%; }
+  .orbe--instagram  { top: 7%;  left: 59%; }
+  .orbe--mural      { top: 29%; left: 75%; }
+  .orbe--behance    { top: 68%; left: 5%; }
+  .orbe--passatempo { top: 74%; left: 61%; }
+
+  .sat--usb { left: 88%; }
 }
 
 /* --- tablets --- */
 @media (max-width: 860px) {
   :root { --amp: 14px; --amp-x: 6px; }
 
-  .orbe { width: clamp(118px, 21vw, 150px); }
-  .orbe__face { border-radius: 18px; gap: .65rem; }
+  .orbe { width: clamp(126px, 22vw, 158px); }
+  .orbe__face { border-radius: 18px; gap: .7rem; }
 
   .orbe--github     { top: 11%; left: 5%; }
   .orbe--instagram  { top: 6%;  left: auto; right: 5%; }
   .orbe--mural      { top: 26%; left: auto; right: 4%; }
   .orbe--behance    { top: 74%; left: 5%; }
   .orbe--passatempo { top: 83%; left: auto; right: 6%; }
+
+  .sat--tampa  { top: 40%; left: 8%; }
+  .sat--usb    { top: 58%; left: 86%; }
 }
 
 /* --- celulares --- */
@@ -599,70 +778,87 @@ body {
   :root { --amp: 11px; --amp-x: 5px; }
 
   .nucleo { width: 92vw; }
-  .nome   { font-size: clamp(2.4rem, 15vw, 4.2rem); }
+  .nome   { font-size: clamp(2.6rem, 16vw, 4.4rem); }
+  .nucleo__legenda { font-size: .62rem; letter-spacing: .16em; }
+  .nucleo__tag::before,
+  .nucleo__tag::after { width: 26px; }
 
-  /* a pílula passa a ter a largura do conteúdo: o rótulo nunca vaza */
+  /* pílulas com largura de conteúdo: o rótulo nunca vaza */
   .orbe {
     width: auto;
-    max-width: 46vw;
+    max-width: 48vw;
   }
 
   .orbe__face {
     flex-direction: row;
     align-items: center;
     gap: .6rem;
-    padding: .6rem .7rem;
+    padding: .6rem .75rem;
     border-radius: 16px;
   }
 
-  .orbe__icone {
-    width: 32px;
-    height: 32px;
-    border-radius: 10px;
-    flex: 0 0 auto;
-  }
+  .orbe__icone { width: 34px; height: 34px; flex: 0 0 auto; }
 
   .orbe__rotulo {
-    font-size: .82rem;
+    font-size: .84rem;
     white-space: nowrap;
   }
 
-  .orbe__meta { display: none; }     /* só rótulo: cabe melhor e continua legível */
+  .orbe__meta { display: none; }
 
-  .nucleo__legenda { font-size: .66rem; letter-spacing: .12em; }
+  /* cartucho e papel encolhem sem perder a identidade */
+  .orbe--passatempo .orbe__face { padding-top: 12px; padding-bottom: 12px; border-radius: 12px; }
+  .orbe--passatempo .orbe__face::before { height: 6px; }
+  .orbe--passatempo .orbe__texto::after { display: none; }
 
-  /* agrupados em volta do nome, sem tocar a faixa central.
-     Os da direita são ancorados por `right` — assim nunca vazam. */
+  .orbe--mural .orbe__face { padding: .6rem .75rem .6rem 1.6rem; }
+  .orbe--mural .orbe__face::before { left: 5px; width: 7px; top: 22%; bottom: 22%; }
+  .orbe--mural .orbe__rotulo { font-size: 1.32rem; }
+  .orbe--mural .orbe__icone { top: -10px; right: 10px; width: 26px; height: 26px; }
+
   .orbe--github     { top: 9%;  left: 4%; }
   .orbe--instagram  { top: 5%;  left: auto; right: 4%; }
-  .orbe--mural      { top: 22%; left: auto; right: 7%; }
+  .orbe--mural      { top: 21%; left: auto; right: 7%; }
   .orbe--behance    { top: 72%; left: 4%; }
   .orbe--passatempo { top: 80%; left: auto; right: 4%; }
 
-  /* hover/toque mais contido pra não estourar a borda da tela */
   .orbe:hover .orbe__face,
   .orbe:focus-visible .orbe__face,
-  .orbe:focus-within .orbe__face { transform: scale(1.08) translateY(-4px); }
+  .orbe:focus-within .orbe__face { transform: scale(1.07) translateY(-4px); }
+
+  .orbe--mural:hover .orbe__face,
+  .orbe--mural:focus-visible .orbe__face,
+  .orbe--mural:focus-within .orbe__face { transform: rotate(-1.4deg) scale(1.07) translateY(-4px); }
+
+  /* menos tralha no vácuo: só o que cabe sem virar poluição */
+  .sat--clipe,
+  .sat--clipe2 { display: none; }
+
+  .sat--filme  { top: 38%; left: 6%;  --tam: 24px; }
+  .sat--tampa  { top: 67%; left: 84%; --tam: 24px; }
+  .sat--usb    { top: 34%; left: 82%; --tam: 22px; }
+  .sat--cafe   { top: 66%; left: 10%; --tam: 22px; }
 
   .aro--tres { display: none; }
 }
 
 /* --- telas muito estreitas --- */
 @media (max-width: 380px) {
-  .orbe { max-width: 52vw; }
-  .orbe__face { padding: .55rem .65rem; }
-  .orbe__icone { width: 28px; height: 28px; border-radius: 9px; }
-  .orbe__rotulo { font-size: .78rem; }
+  .orbe { max-width: 54vw; }
+  .orbe__face { padding: .55rem .68rem; }
+  .orbe__icone { width: 30px; height: 30px; }
+  .orbe__rotulo { font-size: .79rem; }
+  .orbe--mural .orbe__rotulo { font-size: 1.2rem; }
 }
 
-/* --- celular deitado / telas baixas --- */
+/* --- celular deitado --- */
 @media (max-height: 560px) and (orientation: landscape) {
   :root { --amp: 9px; --amp-x: 4px; }
 
-  .nome { font-size: clamp(2rem, 7vw, 3.4rem); }
-  .nucleo__legenda, .nucleo__tag { font-size: .6rem; }
+  .nome { font-size: clamp(2.1rem, 7.5vw, 3.6rem); }
+  .nucleo__legenda, .nucleo__tag { font-size: .58rem; }
 
-  .orbe { width: auto; max-width: 30vw; }
+  .orbe { width: auto; max-width: 32vw; }
   .orbe__meta { display: none; }
   .orbe__rotulo { white-space: nowrap; }
 
@@ -670,22 +866,34 @@ body {
     flex-direction: row;
     align-items: center;
     gap: .55rem;
-    padding: .55rem .7rem;
+    padding: .58rem .75rem;
     border-radius: 14px;
   }
 
-  .orbe__icone { width: 30px; height: 30px; border-radius: 9px; flex: 0 0 auto; }
+  .orbe__icone { width: 32px; height: 32px; flex: 0 0 auto; }
 
-  .orbe--github     { top: 9%;  left: 3%; }
-  .orbe--instagram  { top: 6%;  left: auto; right: 3%; }
-  .orbe--mural      { top: 44%; left: auto; right: 2%; }
+  .orbe--passatempo .orbe__face { padding-top: 12px; padding-bottom: 12px; }
+  .orbe--passatempo .orbe__texto::after { display: none; }
+  .orbe--mural .orbe__face { padding-left: 1.7rem; }
+  .orbe--mural .orbe__face::before { left: 6px; width: 7px; }
+  .orbe--mural .orbe__rotulo { font-size: 1.3rem; }
+  .orbe--mural .orbe__icone { top: -9px; right: 10px; width: 24px; height: 24px; }
+
+  .orbe--github     { top: 8%;  left: 3%; }
+  .orbe--instagram  { top: 5%;  left: auto; right: 3%; }
+  .orbe--mural      { top: 43%; left: auto; right: 2%; }
   .orbe--behance    { top: 70%; left: 3%; }
   .orbe--passatempo { top: 76%; left: auto; right: 5%; }
+
+  .sat--clipe, .sat--clipe2 { display: none; }
+  .sat--filme { top: 12%; left: 36%; --tam: 22px; }
+  .sat--tampa { top: 78%; left: 40%; --tam: 22px; }
+  .sat--usb   { top: 30%; left: 62%; --tam: 20px; }
+  .sat--cafe  { top: 82%; left: 62%; --tam: 20px; }
 }
 
-
 /* ============================================================
-   09. ACESSIBILIDADE
+   11. ACESSIBILIDADE
    ============================================================ */
 @media (prefers-reduced-motion: reduce) {
   *,
@@ -696,31 +904,36 @@ body {
   }
 
   .nucleo { transform: translate(-50%, -50%); }
+  .orbe--mural .orbe__face { transform: rotate(-2.4deg); }
 
-  /* sem animação, o hover ainda responde — só que direto */
   .orbe:hover .orbe__face,
-  .orbe:focus-visible .orbe__face { transform: scale(1.06); }
+  .orbe:focus-visible .orbe__face { transform: scale(1.05); }
+
+  .orbe--mural:hover .orbe__face,
+  .orbe--mural:focus-visible .orbe__face { transform: rotate(-2.4deg) scale(1.05); }
 }
 
-/* fallback para navegadores sem color-mix(): mantém contraste e brilho */
+/* fallback para navegadores sem color-mix() */
 @supports not (color: color-mix(in srgb, red 50%, blue)) {
+  .orbe__face {
+    border-color: rgba(255, 255, 255, .14);
+    box-shadow:
+      0 0 18px -8px rgba(255, 255, 255, .3),
+      0 20px 44px -26px #000,
+      inset 0 1px 0 rgba(255, 255, 255, .08);
+  }
+
   .orbe:hover .orbe__face,
   .orbe:focus-visible .orbe__face,
   .orbe:focus-within .orbe__face {
-    border-color: rgba(255, 255, 255, .38);
-    background: linear-gradient(158deg, rgba(255,255,255,.13), var(--vidro) 60%);
+    border-color: rgba(255, 255, 255, .45);
     box-shadow:
-      0 0 0 1px rgba(255, 255, 255, .18),
-      0 28px 60px -20px rgba(120, 170, 255, .35),
-      inset 0 1px 0 rgba(255, 255, 255, .12);
+      0 0 0 1px rgba(255, 255, 255, .2),
+      0 0 34px -6px rgba(255, 255, 255, .4),
+      0 30px 60px -22px #000,
+      inset 0 1px 0 rgba(255, 255, 255, .14);
   }
 
-  .orbe:hover .orbe__icone,
-  .orbe:focus-visible .orbe__icone,
-  .orbe:focus-within .orbe__icone {
-    background: rgba(255, 255, 255, .12);
-    box-shadow: 0 0 22px -4px rgba(255, 255, 255, .45);
-  }
-
-  .orbe:focus-visible { outline-color: var(--ciano); }
+  .orbe__face::after { background: radial-gradient(120% 90% at 50% 0%, rgba(255,255,255,.14), transparent 70%); }
+  .orbe:focus-visible { outline-color: var(--halo); }
 }
