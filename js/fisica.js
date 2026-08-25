@@ -130,6 +130,17 @@
 
     el.addEventListener('pointerdown', function (e) {
       if (e.button > 0) return;                    // só botão principal
+
+      /* Sem isto o arraste quebra no desktop: o navegador entende que
+         você está arrastando um link, dispara o drag-and-drop nativo e
+         manda pointercancel — o rastreamento morre, percorrido fica 0 e
+         o clique de saída acaba navegando. preventDefault aqui mata os
+         eventos de mouse de compatibilidade (é deles que o arraste
+         nativo nasce) e mantém o click, que é quem a gente filtra
+         depois. No toque isso não acontece, daí só o desktop sofria. */
+      e.preventDefault();
+      if (el.focus) el.focus({ preventScroll: true });
+
       c.arrastando = true;
       c.ponteiro = e.pointerId;
       c.percorrido = 0;

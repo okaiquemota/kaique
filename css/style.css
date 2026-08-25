@@ -262,6 +262,7 @@ body {
   text-decoration: none;
   cursor: grab;
   touch-action: none;          /* o arrasto é nosso, não do navegador */
+  -webkit-user-drag: none;     /* idem: nada de drag-and-drop nativo */
   -webkit-user-select: none;
   user-select: none;
   will-change: transform;
@@ -343,16 +344,13 @@ body {
 
 /* --- INTERAÇÃO: trava, cresce, acende, vem pra frente --- */
 .orbe:hover,
-.orbe:focus-visible,
-.orbe:focus-within { z-index: 40; }
+.orbe:focus-visible { z-index: 40; }
 
 .orbe:hover .orbe__flutua,
-.orbe:focus-visible .orbe__flutua,
-.orbe:focus-within .orbe__flutua { animation-play-state: paused; }
+.orbe:focus-visible .orbe__flutua .orbe__flutua { animation-play-state: paused; }
 
 .orbe:hover .orbe__face,
-.orbe:focus-visible .orbe__face,
-.orbe:focus-within .orbe__face {
+.orbe:focus-visible .orbe__face .orbe__face {
   transform: scale(1.13) translateY(-6px);
   border-color: color-mix(in srgb, var(--tom) 62%, transparent);
   box-shadow:
@@ -363,18 +361,15 @@ body {
 }
 
 .orbe:hover .orbe__face::after,
-.orbe:focus-visible .orbe__face::after,
-.orbe:focus-within .orbe__face::after { opacity: 1; }
+.orbe:focus-visible .orbe__face::after .orbe__face::after { opacity: 1; }
 
 .orbe:hover .orbe__icone,
-.orbe:focus-visible .orbe__icone,
-.orbe:focus-within .orbe__icone {
+.orbe:focus-visible .orbe__icone .orbe__icone {
   transform: scale(1.07) rotate(-3deg);
 }
 
 .orbe:hover .orbe__meta,
-.orbe:focus-visible .orbe__meta,
-.orbe:focus-within .orbe__meta {
+.orbe:focus-visible .orbe__meta .orbe__meta {
   color: color-mix(in srgb, var(--tom) 72%, var(--texto));
 }
 
@@ -416,8 +411,7 @@ body {
 }
 
 .orbe--nu:hover .orbe__face,
-.orbe--nu:focus-visible .orbe__face,
-.orbe--nu:focus-within .orbe__face {
+.orbe--nu:focus-visible .orbe__face .orbe__face {
   border: 0;
   box-shadow: none;
   transform: scale(1.18) translateY(-5px);
@@ -470,9 +464,9 @@ body {
    LCD ocupando a largura toda e os controles embaixo.
    ------------------------------------------------------------ */
 .orbe--passatempo .orbe__face {
-  border-radius: 16px 16px 32px 16px;   /* a assimetria do console */
-  padding: .7rem .7rem 38px;
-  gap: .55rem;
+  border-radius: 14px 14px 28px 14px;   /* a assimetria do console */
+  padding: .6rem .6rem 34px;
+  gap: 0;
   background:
     linear-gradient(158deg, rgba(255,255,255,.13), rgba(255,255,255,.04) 45%, rgba(255,255,255,.02)),
     linear-gradient(200deg, #3b4453 0%, #262d39 42%, #161b24 100%);
@@ -482,6 +476,9 @@ body {
     inset 0 1px 0 rgba(255, 255, 255, .18),
     inset 0 -3px 8px rgba(0, 0, 0, .55);
 }
+
+/* sem rótulo, o console encolhe: sobra só tela e controles */
+.orbe--passatempo { width: clamp(116px, 10.5vw, 156px); }
 
 /* a tela: 4:3, afundada no plástico e acesa por dentro */
 .orbe--passatempo .orbe__icone {
@@ -517,10 +514,7 @@ body {
     repeating-linear-gradient(58deg, rgba(255,255,255,.22) 0 1px, transparent 1px 4px) right 28px bottom 2px / 15px 13px no-repeat;
 }
 
-/* o rótulo vira a serigrafia do console */
-.orbe--passatempo .orbe__rotulo { letter-spacing: .01em; }
 
-.orbe--passatempo .orbe__meta { font-size: clamp(.56rem, .74vw, .64rem); }
 
 /* ------------------------------------------------------------
    7.2 MURAL — não é vidro: é uma folha de fichário de verdade,
@@ -593,8 +587,7 @@ body {
 }
 
 .orbe--mural:hover .orbe__meta,
-.orbe--mural:focus-visible .orbe__meta,
-.orbe--mural:focus-within .orbe__meta { color: rgba(38, 49, 78, .8); }
+.orbe--mural:focus-visible .orbe__meta .orbe__meta { color: rgba(38, 49, 78, .8); }
 
 /* o percevejo mora no canto da folha, fora do fluxo */
 .orbe--mural .orbe__icone {
@@ -606,8 +599,7 @@ body {
 
 /* o hover do mural mantém a inclinação da folha */
 .orbe--mural:hover .orbe__face,
-.orbe--mural:focus-visible .orbe__face,
-.orbe--mural:focus-within .orbe__face {
+.orbe--mural:focus-visible .orbe__face .orbe__face {
   transform: rotate(-1deg) scale(1.13) translateY(-6px);
   border-color: rgba(255, 255, 255, .8);
   box-shadow:
@@ -626,7 +618,7 @@ body {
 .orbe--instagram  { --tom: var(--rosa);    top: 11%; left: 56%; --curva: flutuar-b; --dur: 5s; --fase: -.6s; }
 .orbe--mural      { --tom: var(--lampada); top: 28%; left: 78%; --curva: flutuar-c; --dur: 8s; --fase: -4.1s; }
 .orbe--behance    { --tom: var(--azul);    top: 64%; left: 13%; --curva: flutuar-d; --dur: 9s; --fase: -3s; }
-.orbe--passatempo { --tom: var(--ciano);   top: 62%; left: 63%; --curva: flutuar-e; --dur: 6s; --fase: -2.4s; }
+.orbe--passatempo { --tom: var(--ciano);   top: 64%; left: 64%; --curva: flutuar-e; --dur: 6s; --fase: -2.4s; }
 
 /* satélites: mais lentos e mais tortos que os cards */
 .sat--filme  { top: 14%; left: 30%; --tam: 34px; animation-name: boiar-a; animation-duration: 17s; animation-delay: -2s; }
@@ -780,7 +772,7 @@ body {
   /* cartucho e papel encolhem sem perder a identidade */
   /* o portátil não vira pílula: perderia a identidade de objeto */
   .orbe--passatempo {
-    width: clamp(98px, 31vw, 128px);
+    width: clamp(86px, 26vw, 112px);
     max-width: none;
   }
 
@@ -793,7 +785,6 @@ body {
   }
 
   .orbe--passatempo .orbe__icone { width: 100%; height: auto; }
-  .orbe--passatempo .orbe__rotulo { font-size: .74rem; }
 
   .orbe--passatempo .orbe__face::before {
     bottom: 7px;
@@ -817,12 +808,10 @@ body {
   .orbe--passatempo { top: 80%; left: auto; right: 4%; }
 
   .orbe:hover .orbe__face,
-  .orbe:focus-visible .orbe__face,
-  .orbe:focus-within .orbe__face { transform: scale(1.07) translateY(-4px); }
+  .orbe:focus-visible .orbe__face .orbe__face { transform: scale(1.07) translateY(-4px); }
 
   .orbe--mural:hover .orbe__face,
-  .orbe--mural:focus-visible .orbe__face,
-  .orbe--mural:focus-within .orbe__face { transform: rotate(-1.4deg) scale(1.07) translateY(-4px); }
+  .orbe--mural:focus-visible .orbe__face .orbe__face { transform: rotate(-1.4deg) scale(1.07) translateY(-4px); }
 
   /* menos tralha no vácuo: só o que cabe sem virar poluição */
   .sat--clipe,
@@ -870,7 +859,7 @@ body {
   .orbe--nu .orbe__face { padding: 0; }
   .orbe--nu .orbe__icone { width: 42px; height: 42px; }
 
-  .orbe--passatempo { width: clamp(96px, 15vw, 116px); max-width: none; }
+  .orbe--passatempo { width: clamp(84px, 13vw, 104px); max-width: none; }
   .orbe--passatempo .orbe__face {
     flex-direction: column;
     align-items: stretch;
@@ -930,8 +919,7 @@ body {
   }
 
   .orbe:hover .orbe__face,
-  .orbe:focus-visible .orbe__face,
-  .orbe:focus-within .orbe__face {
+  .orbe:focus-visible .orbe__face {
     border-color: rgba(255, 255, 255, .45);
     box-shadow:
       0 0 0 1px rgba(255, 255, 255, .2),

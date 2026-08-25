@@ -68,6 +68,15 @@ document.querySelectorAll('[data-abre]').forEach(el => {
 });
 ```
 
+### O arraste e o link
+
+No desktop, apertar e puxar um `<a>` faz o navegador iniciar o **drag-and-drop nativo
+de link** — ele manda `pointercancel`, o rastreamento morre e o clique de saída acaba
+navegando. No toque isso não existe, então o bug era só de mouse. A defesa está em três
+camadas: `e.preventDefault()` no `pointerdown` (mata os eventos de mouse de
+compatibilidade, que é de onde o arraste nativo nasce), `draggable="false"` nos links e
+`-webkit-user-drag: none` no CSS.
+
 **A física não atrapalha esse clique.** Um toque sem arrasto dispara o `click`
 normalmente; só o clique que nasce de um arrasto é cancelado — senão largar um card
 em cima de outro lugar abriria o modal sem querer. O cancelamento usa um listener em
@@ -84,7 +93,8 @@ o rótulo dava antes).
 Passatempo e Mural continuam cards, porque neles a superfície *é* o conteúdo: um é
 videogame portátil (o card é o console, com LCD, cruzeta e botões A/B), o outro é
 folha de fichário. Por isso os dois também não viram pílula no celular — perderiam
-a identidade de objeto.
+a identidade de objeto. O console também não leva rótulo: a peça já se explica, e o
+nome acessível vem do `aria-label`.
 
 ## Os satélites
 
