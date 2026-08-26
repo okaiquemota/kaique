@@ -472,20 +472,29 @@ body {
 /* ============================================================
    08. POSIÇÕES, TONS & TEMPOS
    ------------------------------------------------------------
+   TODA regra daqui declara `left` E `right`, mesmo quando um dos
+   dois é `auto`. Não é redundância: os breakpoints se empilham, e
+   uma peça que troca de lado num deles herdava metade da posição
+   do anterior. Com `left` e `right` ao mesmo tempo, um elemento
+   absoluto de largura automática estica de uma borda à outra —
+   foi o que aconteceu com o Movcode no celular (placa de 71px
+   dentro de uma caixa de 189px, e o anel de foco desenhado em
+   volta da caixa) e com o Instagram no celular deitado.
+   ------------------------------------------------------------
    --tom é a cor da placa daquele objeto: a mesma que está dentro
    do SVG. É ela que o anel de seleção e o anel de foco assumem,
    então cada peça acende na própria cor.
 
    Assimetria proposital: nenhum par divide eixo, duração ou fase.
    ============================================================ */
-.orbe--github     { --tom: var(--creme);    top: 13%; left: 12%; --curva: flutuar-a; --dur: 7s;   --fase: -1.2s; }
-.orbe--instagram  { --tom: var(--magenta);  top: 8%;  left: 47%; --curva: flutuar-b; --dur: 5s;   --fase: -.6s; }
-.orbe--mural      { --tom: var(--coral);    top: 22%; left: 76%; --curva: flutuar-c; --dur: 8s;   --fase: -4.1s; }
-.orbe--kiwi       { --tom: var(--verde);    top: 45%; left: 5%;  --curva: flutuar-d; --dur: 10s;  --fase: -6.2s; }
-.orbe--estrela    { --tom: var(--laranja);  top: 44%; left: 85%; --curva: flutuar-b; --dur: 6.5s; --fase: -5.4s; }
-.orbe--behance    { --tom: var(--azulao);   top: 70%; left: 17%; --curva: flutuar-d; --dur: 9s;   --fase: -3s; }
-.orbe--passatempo { --tom: var(--creme);    top: 69%; left: 57%; --curva: flutuar-e; --dur: 6s;   --fase: -2.4s; }
-.orbe--movcode    { --tom: var(--limao);    top: 76%; left: 82%; --curva: flutuar-c; --dur: 7.5s; --fase: -2.8s; }
+.orbe--github     { --tom: var(--creme);    top: 13%; left: 12%; right: auto; --curva: flutuar-a; --dur: 7s;   --fase: -1.2s; }
+.orbe--instagram  { --tom: var(--magenta);  top: 8%;  left: 47%; right: auto; --curva: flutuar-b; --dur: 5s;   --fase: -.6s; }
+.orbe--mural      { --tom: var(--coral);    top: 22%; left: 76%; right: auto; --curva: flutuar-c; --dur: 8s;   --fase: -4.1s; }
+.orbe--kiwi       { --tom: var(--verde);    top: 45%; left: 5%; right: auto;  --curva: flutuar-d; --dur: 10s;  --fase: -6.2s; }
+.orbe--estrela    { --tom: var(--laranja);  top: 44%; left: 85%; right: auto; --curva: flutuar-b; --dur: 6.5s; --fase: -5.4s; }
+.orbe--behance    { --tom: var(--azulao);   top: 70%; left: 17%; right: auto; --curva: flutuar-d; --dur: 9s;   --fase: -3s; }
+.orbe--passatempo { --tom: var(--creme);    top: 69%; left: 57%; right: auto; --curva: flutuar-e; --dur: 6s;   --fase: -2.4s; }
+.orbe--movcode    { --tom: var(--limao);    top: 76%; left: 82%; right: auto; --curva: flutuar-c; --dur: 7.5s; --fase: -2.8s; }
 
 /* ============================================================
    09. FÍSICA — @keyframes
@@ -556,14 +565,14 @@ body {
   :root { --amp: 18px; --amp-x: 8px; }
 
   .orbe { width: clamp(164px, 18.5vw, 206px); }
-  .orbe--github     { top: 12%; left: 6%; }
-  .orbe--instagram  { top: 6%;  left: 46%; }
-  .orbe--mural      { top: 24%; left: 73%; }
-  .orbe--kiwi       { top: 46%; left: 3%; }
-  .orbe--estrela    { top: 44%; left: 87%; }
-  .orbe--behance    { top: 72%; left: 12%; }
-  .orbe--passatempo { top: 71%; left: 56%; }
-  .orbe--movcode    { top: 78%; left: 80%; }
+  .orbe--github     { top: 12%; left: 6%; right: auto; }
+  .orbe--instagram  { top: 6%;  left: 46%; right: auto; }
+  .orbe--mural      { top: 24%; left: 73%; right: auto; }
+  .orbe--kiwi       { top: 46%; left: 3%; right: auto; }
+  .orbe--estrela    { top: 44%; left: 87%; right: auto; }
+  .orbe--behance    { top: 72%; left: 12%; right: auto; }
+  .orbe--passatempo { top: 71%; left: 56%; right: auto; }
+  .orbe--movcode    { top: 78%; left: 80%; right: auto; }
 
 }
 
@@ -574,12 +583,12 @@ body {
   .orbe { width: clamp(146px, 25vw, 182px); }
   .orbe__face { border-radius: 16px; gap: .7rem; }
 
-  .orbe--github     { top: 9%;  left: 5%; }
+  .orbe--github     { top: 9%;  left: 5%; right: auto; }
   .orbe--instagram  { top: 5%;  left: auto; right: 6%; }
   .orbe--mural      { top: 21%; left: auto; right: 4%; }
-  .orbe--kiwi       { top: 40%; left: 4%; }
+  .orbe--kiwi       { top: 40%; left: 4%; right: auto; }
   .orbe--estrela    { top: 38%; left: auto; right: 7%; }
-  .orbe--behance    { top: 72%; left: 6%; }
+  .orbe--behance    { top: 72%; left: 6%; right: auto; }
   .orbe--passatempo { top: 82%; left: auto; right: 6%; }
   .orbe--movcode    { top: 56%; left: auto; right: 6%; }
 
@@ -629,14 +638,14 @@ body {
   .orbe--mural .orbe__face { padding-right: 1.7rem; }
   .orbe--mural .orbe__icone { top: -12px; right: 5px; width: 28px; height: 28px; }
 
-  .orbe--github     { top: 7%;  left: 4%; }
+  .orbe--github     { top: 7%;  left: 4%; right: auto; }
   .orbe--instagram  { top: 4%;  left: auto; right: 5%; }
   .orbe--mural      { top: 18%; left: auto; right: 6%; }
-  .orbe--kiwi       { top: 33%; left: 4%; }
+  .orbe--kiwi       { top: 33%; left: 4%; right: auto; }
   .orbe--estrela    { top: 31%; left: auto; right: 8%; }
-  .orbe--behance    { top: 74%; left: 4%; }
+  .orbe--behance    { top: 74%; left: 4%; right: auto; }
   .orbe--passatempo { top: 81%; left: auto; right: 4%; }
-  .orbe--movcode    { top: 60%; left: 5%; }
+  .orbe--movcode    { top: 60%; left: 5%; right: auto; }
 
   .orbe:hover .orbe__face,
   .orbe:focus-visible .orbe__face .orbe__face { transform: scale(1.07) translateY(-4px); }
@@ -685,14 +694,14 @@ body {
   .orbe--mural .orbe__face { padding-right: 1.6rem; }
   .orbe--mural .orbe__icone { top: -11px; right: 5px; width: 27px; height: 27px; }
 
-  .orbe--github     { top: 7%;  left: 3%; }
-  .orbe--instagram  { top: 5%;  left: 30%; }
+  .orbe--github     { top: 7%;  left: 3%; right: auto; }
+  .orbe--instagram  { top: 5%;  left: 30%; right: auto; }
   .orbe--mural      { top: 8%;  left: auto; right: 3%; }
-  .orbe--kiwi       { top: 44%; left: 2%; }
+  .orbe--kiwi       { top: 44%; left: 2%; right: auto; }
   .orbe--estrela    { top: 42%; left: auto; right: 3%; }
-  .orbe--behance    { top: 72%; left: 8%; }
+  .orbe--behance    { top: 72%; left: 8%; right: auto; }
   .orbe--passatempo { top: 74%; left: auto; right: 8%; }
-  .orbe--movcode    { top: 24%; left: 66%; }
+  .orbe--movcode    { top: 24%; left: 66%; right: auto; }
 
 }
 
@@ -758,6 +767,13 @@ body {
   font-size: .62rem;
   font-weight: 700;
   line-height: 1.4;
+}
+
+/* Onde não há cursor também não há tecla: no celular a chave é o
+   único jeito de ligar a gravidade, e mostrar o atalho de teclado
+   ao lado dela é instrução para um teclado que não existe. */
+@media (hover: none) {
+  .chave-g kbd { display: none; }
 }
 
 /* com a gravidade ligada a chave vira placa magenta: acesa e
@@ -833,8 +849,8 @@ body {
   position: fixed;
   inset: 0;
   z-index: 80;
-  display: grid;
-  place-items: start center;
+  display: flex;
+  justify-content: center;
   padding: clamp(1rem, 3vh, 2.4rem) clamp(.75rem, 2vw, 1.5rem);
   overflow-y: auto;
   overscroll-behavior: contain;
@@ -858,6 +874,15 @@ body {
 /* a folha: o objeto que sai de dentro do objeto da capa */
 .painel__folha {
   position: relative;
+
+  /* `margin: auto` num item de flex centraliza nos dois eixos, e é
+     por isso que ele está aqui em vez de um `align-items: center`
+     no pai: quando a folha é mais alta que a tela, a sobra vertical
+     fica negativa e a margem automática vira zero por especificação
+     — a folha encosta no topo e o começo dela continua alcançável.
+     Centralizar pelo pai cortaria o topo, sem rolagem que resolva. */
+  margin: auto;
+
   width: min(100%, 1120px);
   /* Sem isto o painel transborda: o trilho do carrossel tem quase
      1900px de conteúdo, e item de grid não encolhe abaixo do próprio
