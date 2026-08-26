@@ -32,13 +32,13 @@ Na prática:
 
   | token | cor | onde manda |
   | --- | --- | --- |
-  | `--magenta` | `#ff2d87` | Instagram, botão de ação, seleção de texto |
+  | `--magenta` | `#ff2d87` | Instagram, botão de ação, 1º do ranking, seleção |
   | `--laranja` | `#ff6a13` | @imnotkiq, Fuga 208 |
-  | `--coral` | `#ff9a76` | Cobrinha |
-  | `--creme` | `#ece2d0` | GitHub, Passatempo, papel do Mural, Flick |
-  | `--vermelho` | `#ff3b2f` | percevejo e margem do Mural |
-  | `--limao` | `#d4ff3f` | Kiwi Voador |
-  | `--azulao` | `#2b5cff` | Behance, Movcode |
+  | `--coral` | `#ff9a76` | Mural, Cobrinha, 2º do ranking |
+  | `--creme` | `#ece2d0` | GitHub, Passatempo, Flick, papel do Mural por dentro |
+  | `--vermelho` | `#ff3b2f` | percevejo do Mural, contador no limite |
+  | `--limao` | `#d4ff3f` | Movcode, Kiwi Voador |
+  | `--azulao` | `#2b5cff` | Behance, Movcode (o jogo) |
   | `--verde` | `#6ca029` | A Loja do Kiwi — é o verde da marca, sem retoque |
 
 - **`--tom` é a cor da placa daquele objeto**, e é ela que os anéis de foco e de
@@ -196,18 +196,28 @@ inclusive se o seu for delegado no `document`.
 
 ## Ícone solto vs. card
 
-GitHub, Instagram, Behance, Kiwi, @imnotkiq e Passatempo usam o modificador
-`.orbe--nu`: mesmo esqueleto de três camadas, mas sem caixa e sem texto — a placa
-de cor mora dentro do próprio SVG. Como não sobra texto visível, o nome acessível
-vem do `aria-label` (e o `title` dá o tooltip que o rótulo dava antes).
+GitHub, Instagram, Behance, Kiwi, @imnotkiq, Movcode e Passatempo usam o
+modificador `.orbe--nu`: mesmo esqueleto de três camadas, mas sem caixa e sem
+texto — a placa de cor mora dentro do próprio SVG. Como não sobra texto visível, o
+nome acessível vem do `aria-label` (e o `title` dá o tooltip que o rótulo dava
+antes).
 
 O `border-radius: 25%` da `.orbe--nu .orbe__face` não pinta nada: ele existe só
 para o anel de seleção acompanhar o canto arredondado do ícone, e por isso repete
 o mesmo `rx` que os SVGs usam. O Passatempo é a exceção deitada — o controle não é
 quadrado, então o raio dele é fixo em px.
 
-O Mural continua card, porque nele a superfície *é* o conteúdo: é folha de
-fichário, e por isso ele não vira pílula no celular.
+O Mural é o único card com rótulo, e ele é a mesma placa dos outros — um
+retângulo de cor cheia, sem borda e sem textura. Já foi folha de fichário, com
+régua, margem, furos e papel torto; do lado de sete placas retas, era a única peça
+que se explicava por textura em vez de cor. O que diz que ali é recado agora é o
+percevejo espetado na borda de cima, com a cabeça para fora, contra o vácuo.
+
+**O ícone do Movcode é provisório.** Não tenho a marca deles, então o desenho é a
+metáfora que o próprio site já usa: o jogo de mesmo nome no Passatempo empilha
+interface bloco por bloco, e o ícone são esses blocos. Para trocar pela logo de
+verdade basta substituir o `<g>` de dentro do SVG — a placa, o `rx` e o resto do
+esqueleto seguem valendo.
 
 ## O que ajustar
 
@@ -242,3 +252,22 @@ o escopo `.painel` e as três raízes viram o próprio `.painel`.
 ```
 node tools/gera-painel.mjs
 ```
+
+## O carrossel e o `?v=`
+
+Duas coisas que já quebraram a página e são fáceis de quebrar de novo.
+
+**Quem rola é o `.trilho`, não a `.janela`.** O carrossel inteiro do
+`js/jogos.js` — setas, bolinhas, teclado, arrasto com o mouse — está escrito em
+cima de `trilho.scrollLeft` e `trilho.scrollTo()`. Sem `overflow-x` no `.trilho`
+ele não é contêiner de rolagem: o `scrollLeft` fica preso em 0, nada anda, e não
+há erro nenhum no console para avisar.
+
+Na mesma linha, o estado da bolinha é o `aria-current` que o JS escreve — não uma
+classe. Um estado só, que o leitor de tela e o CSS leem juntos; com dois, o visual
+podia discordar do que era anunciado, e foi o que aconteceu.
+
+**Os `<link>` e `<script>` carregam com `?v=N`.** É um site estático em cache de
+CDN: sem a versão na URL, o navegador de quem já visitou continua com o CSS antigo
+e a página aparece meio nova e meio velha — ícone novo com tipografia velha, por
+exemplo. Ao mexer em `css/` ou `js/`, **suba o número nos três HTML**.

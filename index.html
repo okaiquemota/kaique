@@ -16,8 +16,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Caveat:wght@500;600&display=swap">
 
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/painel.css">
+  <link rel="stylesheet" href="css/style.css?v=3">
+  <link rel="stylesheet" href="css/painel.css?v=3">
 </head>
 <body>
 
@@ -153,7 +153,29 @@
         </span>
         </span>
       </a>
-      <!-- 6. Passatempo &middot; 6s &middot; placa creme, controle preto &middot; gancho: data-abre="jogos" -->
+      <!-- 6. Movcode &middot; 7.5s &middot; placa limao, torre preta
+           A marca e a propria metafora do Movcode aqui do site: o jogo
+           de mesmo nome empilha interface bloco por bloco. Se a Movcode
+           tiver logo propria, e so trocar o <g> de dentro: a placa,
+           o tamanho e o resto do esqueleto seguem valendo. -->
+      <a class="orbe orbe--nu orbe--movcode" href="https://movcode.com.br" target="_blank" rel="noopener noreferrer"
+         draggable="false" aria-label="Movcode" title="Movcode &middot; dois cliques para abrir">
+        <span class="orbe__flutua">
+        <span class="orbe__face">
+          <span class="orbe__icone" aria-hidden="true">
+            <svg viewBox="0 0 48 48" focusable="false" aria-hidden="true">
+              <rect width="48" height="48" rx="12" fill="#d4ff3f"/>
+              <g fill="#111111">
+                <rect x="9"  y="30" width="29" height="7" rx="2"/>
+                <rect x="12" y="21" width="25" height="7" rx="2"/>
+                <rect x="16" y="12" width="20" height="7" rx="2"/>
+              </g>
+            </svg>
+          </span>
+        </span>
+        </span>
+      </a>
+      <!-- 7. Passatempo &middot; 6s &middot; placa creme, controle preto &middot; gancho: data-abre="jogos" -->
       <button class="orbe orbe--nu orbe--passatempo" type="button" data-abre="jogos" aria-haspopup="dialog" aria-label="Passatempo" title="Passatempo &middot; dois cliques para abrir">
         <span class="orbe__flutua">
         <span class="orbe__face">
@@ -195,15 +217,17 @@
         </span>
         </span>
       </button>
-      <!-- 7. Mural &middot; 8s &middot; folha de fichario chapada &middot; gancho: data-abre="mural" -->
+      <!-- 8. Mural &middot; 8s &middot; placa coral com percevejo &middot; gancho: data-abre="mural" -->
       <button class="orbe orbe--mural" type="button" data-abre="mural" aria-haspopup="dialog" title="Mural &middot; dois cliques para abrir">
         <span class="orbe__flutua">
         <span class="orbe__face">
           <span class="orbe__icone" aria-hidden="true">
-            <!-- percevejo: um circulo cheio e uma agulha reta -->
+            <!-- Percevejo: uma cabeca cheia e uma agulha reta. A agulha
+                 entra na placa e a cabeca fica de fora, entao ela e
+                 desenhada mais comprida do que parece caber. -->
             <svg viewBox="0 0 34 34" focusable="false" aria-hidden="true">
-              <path d="M17 18 L22.5 30" stroke="#111111" stroke-width="2.4" stroke-linecap="round"/>
-              <circle cx="17" cy="13" r="9" fill="#ff3b2f"/>
+              <path d="M17 16 L23 32" stroke="#111111" stroke-width="2.8" stroke-linecap="round"/>
+              <circle cx="17" cy="11" r="8.5" fill="#ff3b2f"/>
             </svg>
           </span>
           <span class="orbe__texto">
@@ -229,10 +253,10 @@
        sem arrasto continua disparando o click normalmente. -->
   <!-- Os painéis são as páginas de verdade, embutidas: por isso os
        mesmos scripts delas rodam aqui. -->
-  <script src="js/kiq.js" defer></script>
-  <script src="js/jogos.js" defer></script>
-  <script src="js/mural.js" defer></script>
-  <script src="js/fisica.js" defer></script>
+  <script src="js/kiq.js?v=3" defer></script>
+  <script src="js/jogos.js?v=3" defer></script>
+  <script src="js/mural.js?v=3" defer></script>
+  <script src="js/fisica.js?v=3" defer></script>
 
 
     <!-- Passatempo: o mesmo conteudo de jogos.html, aqui como modal -->

@@ -121,26 +121,36 @@ const Placar = {
   }
 };
 
-/* Desenha o quadro de um jogo. Sem API, o bloco fica escondido. */
+/* Uma linha de recado dentro da lista: serve para o ranking
+   vazio e para o ranking que nao carregou. */
+function recado(alvo, texto){
+  const li = document.createElement('li');
+  li.className = 'sem-rank';
+  li.textContent = texto;
+  alvo.append(li);
+}
+
+/* Desenha o quadro de um jogo.
+
+   Sem API o bloco fica escondido, porque sem servidor nao existe
+   ranking coletivo nenhum para mostrar. Mas com API e rede ruim o
+   bloco FICA: sumir com o quadro faz parecer que o jogo nao tem
+   ranking, quando o que houve foi uma requisicao que falhou. Um
+   diz "ainda nao existe", o outro diz "nao consegui buscar", e os
+   dois precisam caber na tela. */
 async function ranking(jogo, lista){
   const caixa = document.getElementById(jogo + '-rank');
   const alvo  = document.getElementById(jogo + '-lista');
   if (!caixa || !alvo) return;
   if (!API){ caixa.hidden = true; return; }
 
-  const topo = lista || await Placar.topo(jogo);
-  if (!topo){ caixa.hidden = true; return; }
-
   caixa.hidden = false;
+
+  const topo = lista || await Placar.topo(jogo);
   alvo.textContent = '';
 
-  if (!topo.length){
-    const vazio = document.createElement('li');
-    vazio.className = 'sem-rank';
-    vazio.textContent = 'ninguém jogou ainda';
-    alvo.append(vazio);
-    return;
-  }
+  if (!topo){ recado(alvo, 'ranking indisponível agora'); return; }
+  if (!topo.length){ recado(alvo, 'ninguém jogou ainda — começa você'); return; }
 
   const eu = (() => { try { return localStorage.getItem('kiq:apelido') || ''; } catch { return ''; } })();
   topo.forEach((linha, i) => {
@@ -149,7 +159,9 @@ async function ranking(jogo, lista){
     const pos = document.createElement('b');
     pos.textContent = String(i + 1);
     const quem = document.createElement('span');
-    quem.textContent = linha.nome;          // textContent: nome vem de fora
+    /* quem nao escreveu apelido entrou no placar com nome vazio, e
+       uma linha sem nome parece linha quebrada */
+    quem.textContent = linha.nome || 'anônimo';   // textContent: nome vem de fora
     const pts = document.createElement('i');
     pts.textContent = String(linha.pontos);
     item.append(pos, quem, pts);

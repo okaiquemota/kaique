@@ -54,11 +54,6 @@
   /* a tinta que vai por cima das placas claras */
   --tinta:        #111111;
 
-  /* papel do mural: creme chapado, régua e margem em traço sólido */
-  --papel:        var(--creme);
-  --regua:        #9fb4d6;
-  --margem:       var(--vermelho);
-
   /* movimento */
   --amp:          17px;
   --amp-x:        9px;
@@ -341,11 +336,6 @@ body {
   box-shadow: 0 0 0 5px var(--vacuo), 0 0 0 8px var(--tom);
 }
 
-/* o papel mantém a inclinação da folha ao ser marcado */
-.orbe--mural.esta-selecionado .orbe__face {
-  transform: rotate(-2.4deg) scale(1.06);
-}
-
 /* nenhum contorno ao clicar: o anel é só para quem navega pelo teclado.
    :focus pega qualquer foco; :focus-visible vem depois e reacende o anel
    no caso do teclado (mesma especificidade, ganha a última regra). */
@@ -440,69 +430,34 @@ body {
 .orbe--passatempo:focus-visible { border-radius: 22px; }
 
 /* ------------------------------------------------------------
-   7.2 MURAL — não é vidro: é uma folha de fichário de verdade,
-   com régua azul, margem vermelha, grão de papel e furos de
-   fichário. Continua flutuando e continua sendo iluminada
-   pelo vácuo (a luz vira reflexo quente no papel).
+   7.2 MURAL — é uma placa como as outras.
+   ------------------------------------------------------------
+   Era folha de fichário: régua azul, margem vermelha, furos e
+   papel torto. Bonito, e fora do sistema — do lado de sete placas
+   retas, era a única peça que se explicava por textura em vez de
+   cor. Agora é o mesmo retângulo de cor cheia dos cartuchos do
+   Passatempo, e quem diz que ali é recado é o percevejo espetado
+   no canto.
+
+   Sobra pouca regra aqui de propósito: a placa já vem da base, em
+   `.orbe__face`. O que este bloco faz é dar o rótulo maior e
+   pendurar o percevejo.
    ------------------------------------------------------------ */
-.orbe--mural .orbe__face {
-  border-radius: 3px 10px 4px 6px;      /* folha arrancada, sem simetria */
-  border: 0;
-  padding: 1.15rem .95rem 1rem 2.4rem;  /* espaço para a margem vermelha */
-  transform: rotate(-2.4deg);
-
-  /* Papel também é cor chapada: creme sólido, margem e régua em
-     traço cheio. Saíram o grão, o degradê de luz e a sombra
-     interna — o que dizia "papel" ali era a textura; agora quem
-     diz é o desenho da pauta. */
-  background:
-    linear-gradient(90deg,
-      transparent 0 26px, var(--margem) 26px 27.5px, transparent 27.5px),
-    repeating-linear-gradient(180deg,
-      transparent 0 19px, var(--regua) 19px 20px),
-    var(--papel);
-}
-
-/* furos de fichário na borda esquerda — três buracos pretos, do
-   tamanho exato do vácuo que aparece por eles. O raio é token
-   porque a pílula do celular é baixa demais para o furo cheio:
-   ele encostaria nas duas bordas e viraria uma faixa. */
-.orbe--mural .orbe__face::before {
-  content: "";
-  --furo: 4px;
-  position: absolute;
-  top: 16%; bottom: 16%; left: 8px;
-  width: 9px;
-  background:
-    radial-gradient(circle at 50% 12%, var(--vacuo) 0 var(--furo), transparent var(--furo)),
-    radial-gradient(circle at 50% 50%, var(--vacuo) 0 var(--furo), transparent var(--furo)),
-    radial-gradient(circle at 50% 88%, var(--vacuo) 0 var(--furo), transparent var(--furo));
-  pointer-events: none;
-}
-
-/* O rótulo do card é display pesado como todo rótulo da página; a
-   letra de mão fica para o conteúdo do Mural, lá dentro, onde ela
-   é o próprio recado e não a etiqueta do objeto. */
 .orbe--mural .orbe__rotulo {
   font-size: clamp(1.5rem, 2.1vw, 1.9rem);
 }
 
-.orbe--mural .orbe__meta { opacity: .5; }
+.orbe--mural .orbe__meta { opacity: .55; }
 
-/* o percevejo mora no canto da folha, fora do fluxo */
+/* O percevejo espeta a placa pela borda de cima: metade da cabeça
+   fica para fora, contra o vácuo, que é onde o vermelho acende.
+   Ele é grande de propósito — em 34px virava um respingo de tinta
+   no canto, e é ele que diz que a placa é um recado pregado. */
 .orbe--mural .orbe__icone {
   position: absolute;
-  top: -13px; right: 16px;
-  width: 34px; height: 34px;
+  top: -19px; right: 20px;
+  width: 46px; height: 46px;
 }
-
-/* o hover do mural mantém a inclinação da folha */
-.orbe--mural:hover .orbe__face,
-.orbe--mural:focus-visible .orbe__face .orbe__face {
-  transform: rotate(-1deg) scale(1.13) translateY(-6px);
-}
-
-.orbe--mural:active .orbe__face { transform: rotate(-1.8deg) scale(1.06) translateY(-2px); }
 
 /* ============================================================
    08. POSIÇÕES, TONS & TEMPOS
@@ -511,18 +466,16 @@ body {
    do SVG. É ela que o anel de seleção e o anel de foco assumem,
    então cada peça acende na própria cor.
 
-   O Mural é a exceção, e de propósito: a placa dele é creme, e um
-   anel creme em volta de papel creme não acende nada. Ele acende
-   no vermelho do percevejo, que é cor dele do mesmo jeito.
    Assimetria proposital: nenhum par divide eixo, duração ou fase.
    ============================================================ */
 .orbe--github     { --tom: var(--creme);    top: 13%; left: 12%; --curva: flutuar-a; --dur: 7s;   --fase: -1.2s; }
 .orbe--instagram  { --tom: var(--magenta);  top: 8%;  left: 47%; --curva: flutuar-b; --dur: 5s;   --fase: -.6s; }
-.orbe--mural      { --tom: var(--vermelho); top: 22%; left: 76%; --curva: flutuar-c; --dur: 8s;   --fase: -4.1s; }
+.orbe--mural      { --tom: var(--coral);    top: 22%; left: 76%; --curva: flutuar-c; --dur: 8s;   --fase: -4.1s; }
 .orbe--kiwi       { --tom: var(--verde);    top: 45%; left: 5%;  --curva: flutuar-d; --dur: 10s;  --fase: -6.2s; }
 .orbe--estrela    { --tom: var(--laranja);  top: 44%; left: 85%; --curva: flutuar-b; --dur: 6.5s; --fase: -5.4s; }
 .orbe--behance    { --tom: var(--azulao);   top: 70%; left: 17%; --curva: flutuar-d; --dur: 9s;   --fase: -3s; }
 .orbe--passatempo { --tom: var(--creme);    top: 69%; left: 57%; --curva: flutuar-e; --dur: 6s;   --fase: -2.4s; }
+.orbe--movcode    { --tom: var(--limao);    top: 76%; left: 82%; --curva: flutuar-c; --dur: 7.5s; --fase: -2.8s; }
 
 /* ============================================================
    09. FÍSICA — @keyframes
@@ -600,6 +553,7 @@ body {
   .orbe--estrela    { top: 44%; left: 87%; }
   .orbe--behance    { top: 72%; left: 12%; }
   .orbe--passatempo { top: 71%; left: 56%; }
+  .orbe--movcode    { top: 78%; left: 80%; }
 
 }
 
@@ -617,6 +571,7 @@ body {
   .orbe--estrela    { top: 38%; left: auto; right: 7%; }
   .orbe--behance    { top: 72%; left: 6%; }
   .orbe--passatempo { top: 82%; left: auto; right: 6%; }
+  .orbe--movcode    { top: 56%; left: auto; right: 6%; }
 
 }
 
@@ -626,6 +581,7 @@ body {
 
   .nucleo { width: 92vw; }
   .nome   { font-size: clamp(2.6rem, 17vw, 4.6rem); }
+  .nucleo__sub { font-size: .58rem; letter-spacing: .22em; }
 
   /* pílulas com largura de conteúdo: o rótulo nunca vaza */
   .orbe {
@@ -656,24 +612,20 @@ body {
   /* o controle é deitado: precisa de mais largura que os ícones */
   .orbe--passatempo .orbe__icone { width: 124px; height: auto; }
 
-  .orbe--mural .orbe__face { padding: .6rem .75rem .6rem 1.6rem; }
-  .orbe--mural .orbe__face::before { --furo: 3px; left: 5px; width: 7px; top: 22%; bottom: 22%; }
   .orbe--mural .orbe__rotulo { font-size: 1.24rem; }
-  .orbe--mural .orbe__icone { top: -10px; right: 10px; width: 26px; height: 26px; }
+  .orbe--mural .orbe__icone { top: -13px; right: 12px; width: 32px; height: 32px; }
 
   .orbe--github     { top: 7%;  left: 4%; }
   .orbe--instagram  { top: 4%;  left: auto; right: 5%; }
   .orbe--mural      { top: 18%; left: auto; right: 6%; }
   .orbe--kiwi       { top: 33%; left: 4%; }
   .orbe--estrela    { top: 31%; left: auto; right: 8%; }
-  .orbe--behance    { top: 71%; left: 4%; }
+  .orbe--behance    { top: 74%; left: 4%; }
   .orbe--passatempo { top: 81%; left: auto; right: 4%; }
+  .orbe--movcode    { top: 60%; left: 5%; }
 
   .orbe:hover .orbe__face,
   .orbe:focus-visible .orbe__face .orbe__face { transform: scale(1.07) translateY(-4px); }
-
-  .orbe--mural:hover .orbe__face,
-  .orbe--mural:focus-visible .orbe__face .orbe__face { transform: rotate(-1.4deg) scale(1.07) translateY(-4px); }
 
   /* menos tralha no vácuo: só o que cabe sem virar poluição */
 
@@ -715,10 +667,8 @@ body {
   .orbe--nu .orbe__icone { width: 58px; height: 58px; }
 
   .orbe--passatempo .orbe__icone { width: 112px; height: auto; }
-  .orbe--mural .orbe__face { padding-left: 1.7rem; }
-  .orbe--mural .orbe__face::before { --furo: 3px; left: 6px; width: 7px; }
   .orbe--mural .orbe__rotulo { font-size: 1.22rem; }
-  .orbe--mural .orbe__icone { top: -9px; right: 10px; width: 24px; height: 24px; }
+  .orbe--mural .orbe__icone { top: -12px; right: 11px; width: 30px; height: 30px; }
 
   .orbe--github     { top: 7%;  left: 3%; }
   .orbe--instagram  { top: 5%;  left: 30%; }
@@ -727,6 +677,7 @@ body {
   .orbe--estrela    { top: 42%; left: auto; right: 3%; }
   .orbe--behance    { top: 72%; left: 8%; }
   .orbe--passatempo { top: 74%; left: auto; right: 8%; }
+  .orbe--movcode    { top: 24%; left: 66%; }
 
 }
 
@@ -742,13 +693,9 @@ body {
   }
 
   .nucleo { transform: translate(-50%, -50%); }
-  .orbe--mural .orbe__face { transform: rotate(-2.4deg); }
 
   .orbe:hover .orbe__face,
   .orbe:focus-visible .orbe__face { transform: scale(1.05); }
-
-  .orbe--mural:hover .orbe__face,
-  .orbe--mural:focus-visible .orbe__face { transform: rotate(-2.4deg) scale(1.05); }
 }
 
 /* ============================================================
