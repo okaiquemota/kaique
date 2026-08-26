@@ -849,3 +849,106 @@ body {
   :root.gravidade .chave-g,
   :root.gravidade .chave-g kbd { border-color: rgba(94, 242, 255, .45); }
 }
+
+
+/* ============================================================
+   13. PAINÉIS — Passatempo e Mural sobre a capa
+   ------------------------------------------------------------
+   Não é outra aba: o espaço continua atrás, e fechar devolve a
+   pessoa exatamente onde estava. O conteúdo é o mesmo das
+   páginas com endereço próprio; quem monta é o build.
+
+   Por que `visibility` e não `hidden`: o carrossel dos jogos se
+   mede na carga, e um elemento com `hidden` não tem largura
+   nenhuma — ele mediria zero e o trilho nasceria quebrado. Com
+   visibility o layout existe, só não é pintado.
+   ============================================================ */
+.painel {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: grid;
+  place-items: start center;
+  padding: clamp(1rem, 3vh, 2.4rem) clamp(.75rem, 2vw, 1.5rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+
+  background: rgba(10, 10, 10, .72);
+  -webkit-backdrop-filter: blur(14px) saturate(120%);
+  backdrop-filter: blur(14px) saturate(120%);
+
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity .3s ease, visibility .3s;
+}
+
+.painel.aberto {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+/* a folha: o objeto que sai de dentro do objeto da capa */
+.painel__folha {
+  position: relative;
+  width: min(100%, 1120px);
+  /* Sem isto o painel transborda: o trilho do carrossel tem quase
+     1900px de conteúdo, e item de grid não encolhe abaixo do próprio
+     conteúdo por padrão. É a .janela que corta, não a folha. */
+  min-width: 0;
+  padding: clamp(1.4rem, 4vw, 2.6rem) clamp(1rem, 3vw, 2.4rem) clamp(2.4rem, 6vw, 4rem);
+  border: 1px solid rgba(255, 255, 255, .1);
+  border-radius: 20px;
+  background: linear-gradient(180deg, #202022, var(--vacuo) 60%);
+  box-shadow: 0 40px 90px -40px #000;
+  transform: translateY(14px) scale(.985);
+  transition: transform .35s cubic-bezier(.2, .9, .25, 1.05);
+}
+
+.painel.aberto .painel__folha { transform: none; }
+
+.painel__fechar {
+  position: absolute;
+  top: clamp(.7rem, 2vw, 1.1rem);
+  right: clamp(.7rem, 2vw, 1.1rem);
+  z-index: 2;
+  width: 40px; height: 40px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, .12);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, .04);
+  color: var(--texto-suave);
+  font: inherit;
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: color .25s ease, border-color .25s ease, background .25s ease;
+}
+
+.painel__fechar:hover {
+  color: var(--texto);
+  border-color: rgba(255, 255, 255, .3);
+  background: rgba(255, 255, 255, .09);
+}
+
+/* Dentro da folha o conteúdo não precisa da largura de página inteira.
+   A especificidade é dobrada porque a folha das páginas é carregada
+   depois desta e ganharia por ordem com peso igual. */
+.painel .painel__folha .play,
+.painel .painel__folha .mural {
+  width: 100%;
+  margin: 0;
+  min-width: 0;
+}
+
+.painel .painel__folha .janela { overflow: hidden; }
+
+/* a capa não rola atrás do painel aberto */
+:root.com-painel,
+:root.com-painel body { overflow: hidden; }
+
+@media (prefers-reduced-motion: reduce) {
+  .painel__folha { transform: none; }
+}

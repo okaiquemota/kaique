@@ -63,6 +63,64 @@ var VEL_MIN       = 20 * brisa;   // piso: em gravidade zero nada para
   var PARA_DE_QUICAR = 46;    // px/s
   var caindo = false;
 
+  /* --- os painéis ------------------------------------------------
+     Passatempo e Mural são telas sobre a capa, não outra aba: o espaço
+     continua atrás, e fechar devolve a pessoa exatamente onde estava.
+     O conteúdo é o mesmo das páginas com endereço próprio — quem monta
+     é o build, para as duas versões nunca desencontrarem.
+     ------------------------------------------------------------ */
+  var painelAberto = null;
+  var quemAbriu = null;
+
+  function abrirPainel(nome, origem) {
+    var painel = document.getElementById('painel-' + nome);
+    if (!painel) return false;
+
+    fecharPainel();
+    painelAberto = painel;
+    quemAbriu = origem || null;
+    painel.classList.add('aberto');
+    document.documentElement.classList.add('com-painel');
+
+    /* O carrossel se mede na carga, e ali o painel ainda não tinha
+       tamanho na tela. Um resize avisa o jogos.js para medir de novo
+       agora que há largura de verdade. */
+    try { window.dispatchEvent(new Event('resize')); } catch (erro) {}
+
+    var foco = painel.querySelector('[data-fecha-painel]');
+    if (foco) foco.focus({ preventScroll: true });
+    return true;
+  }
+
+  function fecharPainel() {
+    if (!painelAberto) return;
+
+    // uma partida não fica rodando escondida atrás da capa
+    var jogo = painelAberto.querySelector('.tela[open]');
+    if (jogo) { try { jogo.close(); } catch (erro) {} }
+
+    painelAberto.classList.remove('aberto');
+    document.documentElement.classList.remove('com-painel');
+    painelAberto = null;
+
+    if (quemAbriu) { try { quemAbriu.focus({ preventScroll: true }); } catch (erro) {} }
+    quemAbriu = null;
+  }
+
+  document.addEventListener('click', function (e) {
+    if (!painelAberto) return;
+    // o X, ou o vácuo em volta da folha
+    if (e.target.closest && e.target.closest('[data-fecha-painel]')) { fecharPainel(); return; }
+    if (e.target === painelAberto) fecharPainel();
+  });
+
+  window.addEventListener('keydown', function (e) {
+    if (e.key !== 'Escape' || !painelAberto) return;
+    // Esc dentro de um jogo fecha o jogo; o painel só depois
+    if (painelAberto.querySelector('.tela[open]')) return;
+    fecharPainel();
+  });
+
   /* No celular a gravidade não precisa apontar para baixo: aponta para
      onde o aparelho estiver inclinado. beta é o tombo para frente/trás,
      gamma o tombo para os lados — o seno de cada um dá direto a
@@ -222,62 +280,19 @@ var VEL_MIN       = 20 * brisa;   // piso: em gravidade zero nada para
     if (!el.hasAttribute('tabindex')) el.setAttribute('tabindex', '0');
   });
 
-  /* As páginas de casa (Passatempo e Mural) abrem em janela própria,
-     não em aba: são coisas para usar ao lado do portfólio, não para
-     substituí-lo. Quem marca isso é o data-abre, que só elas têm. */
-  /* Dentro do iframe de outra pessoa (a prévia do Claude, um embed),
-     janela própria não é nossa para abrir: ou o sandbox recusa, ou —
-     pior — devolve uma janela que nunca carrega nada. Nos dois casos o
-     código dava a abertura por feita e nunca caía para o link, e o
-     duplo clique não fazia nada. Enquadrado, quem navega é o host. */
-  var enquadrado = (function () {
-    try { return window.self !== window.top; } catch (erro) { return true; }
-  })();
-
-  function janelinha(c) {
-    if (enquadrado) return null;
-
-    var largura = Math.min(1120, Math.max(360, (screen.availWidth || 1280) - 80));
-    var altura  = Math.min(860,  Math.max(420, (screen.availHeight || 800) - 80));
-    var esq = Math.round(((screen.availWidth  || 1280) - largura) / 2);
-    var topo = Math.round(((screen.availHeight || 800) - altura) / 2);
-
-    var janela;
-    try {
-      janela = window.open(
-        c.destino,
-        'kiq-' + c.el.dataset.abre,
-        'popup=yes,width=' + largura + ',height=' + altura +
-        ',left=' + esq + ',top=' + topo + ',resizable=yes,scrollbars=yes'
-      );
-    } catch (erro) {
-      return null;
-    }
-
-    // bloqueador que devolve janela já fechada também conta como recusa
-    if (!janela || janela.closed) return null;
-    return janela;
-  }
-
   /* Ativação de verdade: devolve o href, dispara um click e tira o
      href de novo. O dispatch é síncrono, então quando o click()
      retorna quem tinha de ler o href já leu. */
   function ativar(c) {
     var el = c.el;
 
-    if (c.destino && el.dataset.abre) {
+    if (el.dataset.abre) {
       /* Primeiro o click, para um eventual script de modal ter a
          primeira palavra: se ele chamar preventDefault, quem manda é
-         ele e a janela não abre. Sem href no elemento, esse click não
-         navega sozinho nem é pego pelo interceptador do visualizador. */
+         ele e o painel não abre. */
       var aviso = new MouseEvent('click', { bubbles: true, cancelable: true });
       if (!el.dispatchEvent(aviso)) return;
-
-      var janela = janelinha(c);
-      /* Bloqueador de pop-up, ou um iframe sem allow-popups, devolvem
-         null. Aí segue pelo caminho normal — melhor abrir em aba do
-         que não abrir nada. */
-      if (janela) { try { janela.focus(); } catch (erro) {} return; }
+      if (abrirPainel(el.dataset.abre, el)) return;
     }
 
     if (c.destino) {

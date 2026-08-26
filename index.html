@@ -15,6 +15,7 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Caveat:wght@500;600&display=swap">
 
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/painel.css">
 </head>
 <body>
 
@@ -175,7 +176,7 @@
         </span>
       </a>
       <!-- 4. Passatempo &middot; 6s &middot; o card e o console &middot; gancho: data-abre="jogos" -->
-      <a class="orbe orbe--nu orbe--passatempo" href="jogos.html" data-abre="jogos" draggable="false" aria-label="Passatempo" title="Passatempo &middot; dois cliques para abrir">
+      <button class="orbe orbe--nu orbe--passatempo" type="button" data-abre="jogos" aria-haspopup="dialog" aria-label="Passatempo" title="Passatempo &middot; dois cliques para abrir">
         <span class="orbe__flutua">
         <span class="orbe__face">
           <span class="orbe__icone" aria-hidden="true">
@@ -251,9 +252,9 @@
           </span>
         </span>
         </span>
-      </a>
+      </button>
       <!-- 5. Mural &middot; 8s &middot; folha de fichario, nao vidro &middot; gancho: data-abre="mural" -->
-      <a class="orbe orbe--mural" href="mural.html" data-abre="mural" draggable="false" title="Mural &middot; dois cliques para abrir">
+      <button class="orbe orbe--mural" type="button" data-abre="mural" aria-haspopup="dialog" title="Mural &middot; dois cliques para abrir">
         <span class="orbe__flutua">
         <span class="orbe__face">
           <span class="orbe__icone" aria-hidden="true">
@@ -279,7 +280,7 @@
           </span>
         </span>
         </span>
-      </a>
+      </button>
 
     </nav>
 
@@ -294,7 +295,346 @@
   <!-- Fisica dos cards: deriva livre, colisao e arrasto.
        Vanilla, sem biblioteca. Nao toca nos [data-abre]: um toque
        sem arrasto continua disparando o click normalmente. -->
+  <!-- Os painéis são as páginas de verdade, embutidas: por isso os
+       mesmos scripts delas rodam aqui. -->
+  <script src="js/kiq.js" defer></script>
+  <script src="js/jogos.js" defer></script>
+  <script src="js/mural.js" defer></script>
   <script src="js/fisica.js" defer></script>
+
+
+    <!-- Passatempo: o mesmo conteudo de jogos.html, aqui como modal -->
+    <div class="painel" id="painel-jogos" role="dialog" aria-modal="true" aria-label="Passatempo">
+      <div class="painel__folha" role="document">
+        <button class="painel__fechar" type="button" data-fecha-painel aria-label="Fechar">&times;</button>
+
+<section class="play" id="jogos">
+
+  <header class="play-top">
+    <h1 class="play-title">Passa<span class="b">tempo</span></h1>
+    <span class="play-sub">seis joguinhos &middot; recorde seu, ranking de todos</span>
+
+    <label class="apelido" id="apelido-campo" hidden>
+      <span class="vis-oculto">Como você aparece no ranking</span>
+      <input id="apelido" maxlength="24" placeholder="como você aparece" autocomplete="off">
+    </label>
+  </header>
+
+  <div class="carrossel" id="carrossel" data-esq="0" data-dir="1">
+    <div class="janela">
+      <div class="trilho" id="trilho" role="group" aria-label="Jogos: arraste para os lados">
+
+        <div class="vaga">
+          <div class="peca">
+            <button class="cartucho" type="button" data-abre="genio" style="--c:var(--roxo)">
+              <span class="cartucho-topo">
+                <span class="cartucho-nome">Gênio</span>
+                <span class="cartucho-rec">Recorde <b data-rec="genio">0</b></span>
+              </span>
+              <span class="cartucho-sub">repete a sequência de luzes sem errar</span>
+              <span class="cartucho-pe">
+                <span>Jogar</span>
+                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 3.4 20.6 12 6 20.6z"/></svg>
+              </span>
+            </button>
+          </div>
+        </div>
+
+        <div class="vaga">
+          <div class="peca">
+            <button class="cartucho" type="button" data-abre="cobrinha" style="--c:var(--rosa)">
+              <span class="cartucho-topo">
+                <span class="cartucho-nome">Cobrinha</span>
+                <span class="cartucho-rec">Recorde <b data-rec="cobrinha">0</b></span>
+              </span>
+              <span class="cartucho-sub">come, cresce, acelera, não bate na parede</span>
+              <span class="cartucho-pe">
+                <span>Jogar</span>
+                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 3.4 20.6 12 6 20.6z"/></svg>
+              </span>
+            </button>
+          </div>
+        </div>
+
+        <div class="vaga">
+          <div class="peca">
+            <button class="cartucho" type="button" data-abre="corrida" style="--c:var(--amarelo)">
+              <span class="cartucho-topo">
+                <span class="cartucho-nome">Fuga 208</span>
+                <span class="cartucho-rec">Recorde <b data-rec="corrida">0</b></span>
+              </span>
+              <span class="cartucho-sub">desvia dos cones com o possante</span>
+              <span class="cartucho-pe">
+                <span>Jogar</span>
+                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 3.4 20.6 12 6 20.6z"/></svg>
+              </span>
+            </button>
+          </div>
+        </div>
+
+        <div class="vaga">
+          <div class="peca">
+            <button class="cartucho" type="button" data-abre="mira" style="--c:var(--lilas)">
+              <span class="cartucho-topo">
+                <span class="cartucho-nome">Flick</span>
+                <span class="cartucho-rec">Recorde <b data-rec="mira">0</b></span>
+              </span>
+              <span class="cartucho-sub">treino de mira: acerta antes de sumir</span>
+              <span class="cartucho-pe">
+                <span>Jogar</span>
+                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 3.4 20.6 12 6 20.6z"/></svg>
+              </span>
+            </button>
+          </div>
+        </div>
+
+        <div class="vaga">
+          <div class="peca">
+            <button class="cartucho" type="button" data-abre="kiwi" style="--c:var(--verde)">
+              <span class="cartucho-topo">
+                <span class="cartucho-nome">Kiwi Voador</span>
+                <span class="cartucho-rec">Recorde <b data-rec="kiwi">0</b></span>
+              </span>
+              <span class="cartucho-sub">ajude as entregas da loja a decolarem</span>
+              <span class="cartucho-pe">
+                <span>Jogar</span>
+                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 3.4 20.6 12 6 20.6z"/></svg>
+              </span>
+            </button>
+          </div>
+        </div>
+
+        <div class="vaga">
+          <div class="peca">
+            <button class="cartucho" type="button" data-abre="stack" style="--c:var(--azul)">
+              <span class="cartucho-topo">
+                <span class="cartucho-nome">Movcode</span>
+                <span class="cartucho-rec">Recorde <b data-rec="stack">0</b></span>
+              </span>
+              <span class="cartucho-sub">empilha a interface bloco por bloco</span>
+              <span class="cartucho-pe">
+                <span>Jogar</span>
+                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 3.4 20.6 12 6 20.6z"/></svg>
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="carrossel-pe">
+      <div class="pontos" id="pontos" role="tablist" aria-label="Ir para um jogo"></div>
+      <div class="carrossel-setas">
+        <button class="carrossel-seta" type="button" data-anda="-1" aria-label="Jogo anterior">&larr;</button>
+        <button class="carrossel-seta" type="button" data-anda="1" aria-label="Próximo jogo">&rarr;</button>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+      </div><dialog class="tela" id="tela-genio">
+  <div class="game" id="genio">
+
+    <button class="fechar" type="button" data-fecha aria-label="Fechar o jogo">&times;</button>
+
+    <h3 class="game-nome">Gênio <span>repete a sequência</span></h3>
+
+    <div class="hud">
+      <span class="chip"><b>Rodada</b><i id="rodada">0</i></span>
+      <span class="chip"><b>Recorde</b><i id="recorde">0</i></span>
+      <button class="som" id="som" type="button" aria-pressed="true">Som ligado</button>
+    </div>
+
+    <div class="pads">
+      <button class="pad" type="button" style="--c:var(--roxo)"    aria-label="Botão 1"></button>
+      <button class="pad" type="button" style="--c:var(--rosa)"    aria-label="Botão 2"></button>
+      <button class="pad" type="button" style="--c:var(--amarelo)" aria-label="Botão 3"></button>
+      <button class="pad" type="button" style="--c:var(--lilas)"   aria-label="Botão 4"></button>
+    </div>
+
+    <p class="msg" id="msg" role="status" aria-live="polite">Aperta começar.</p>
+
+    <button class="btn" id="comecar" type="button">Começar</button>
+
+    <div class="rank" id="genio-rank" hidden>
+      <h4>Ranking</h4>
+      <ol id="genio-lista"></ol>
+    </div>
+
+  </div>
+</dialog><dialog class="tela" id="tela-cobrinha">
+  <div class="game" id="cobrinha">
+
+    <button class="fechar" type="button" data-fecha aria-label="Fechar o jogo">&times;</button>
+
+    <h3 class="game-nome">Cobrinha <span>não bate na parede</span></h3>
+
+    <div class="hud">
+      <span class="chip"><b>Pontos</b><i id="c-pontos">0</i></span>
+      <span class="chip"><b>Recorde</b><i id="c-recorde">0</i></span>
+    </div>
+
+    <canvas id="c-tela" width="380" height="380" role="img"
+            aria-label="Tabuleiro da cobrinha"></canvas>
+
+    <div class="dpad" id="c-dpad">
+      <button class="seta" type="button" data-dir="cima"  aria-label="Cima">&uarr;</button>
+      <button class="seta" type="button" data-dir="esq"   aria-label="Esquerda">&larr;</button>
+      <button class="seta" type="button" data-dir="baixo" aria-label="Baixo">&darr;</button>
+      <button class="seta" type="button" data-dir="dir"   aria-label="Direita">&rarr;</button>
+    </div>
+
+    <p class="msg" id="c-msg" role="status" aria-live="polite">Setas do teclado, ou deslize o dedo.</p>
+
+    <button class="btn" id="c-comecar" type="button">Começar</button>
+
+    <div class="rank" id="cobrinha-rank" hidden>
+      <h4>Ranking</h4>
+      <ol id="cobrinha-lista"></ol>
+    </div>
+
+  </div>
+</dialog><dialog class="tela" id="tela-corrida">
+  <div class="game" id="corrida">
+
+    <button class="fechar" type="button" data-fecha aria-label="Fechar o jogo">&times;</button>
+
+    <h3 class="game-nome">Fuga 208 <span>pé na tábua</span></h3>
+
+    <div class="hud">
+      <span class="chip"><b>Pontos</b><i id="r-pontos">0</i></span>
+      <span class="chip"><b>Recorde</b><i id="r-recorde">0</i></span>
+    </div>
+
+    <canvas id="r-tela" width="380" height="380" role="img"
+            aria-label="Pista de corrida"></canvas>
+
+    <div class="dpad" id="r-dpad" style="grid-template-columns: repeat(2, 64px); grid-template-rows: 54px; gap: 14px;">
+      <button class="seta" type="button" data-dir="esq" style="grid-column: 1; grid-row: 1;" aria-label="Esquerda">&larr;</button>
+      <button class="seta" type="button" data-dir="dir" style="grid-column: 2; grid-row: 1;" aria-label="Direita">&rarr;</button>
+    </div>
+
+    <p class="msg" id="r-msg" role="status" aria-live="polite">Setas do teclado, ou toque nas laterais.</p>
+
+    <button class="btn" id="r-comecar" type="button">Começar</button>
+
+    <div class="rank" id="corrida-rank" hidden>
+      <h4>Ranking</h4>
+      <ol id="corrida-lista"></ol>
+    </div>
+
+  </div>
+</dialog><dialog class="tela" id="tela-mira">
+  <div class="game" id="mira">
+
+    <button class="fechar" type="button" data-fecha aria-label="Fechar o jogo">&times;</button>
+
+    <h3 class="game-nome">Flick <span>reflexo em dia</span></h3>
+
+    <div class="hud">
+      <span class="chip"><b>Alvos</b><i id="a-pontos">0</i></span>
+      <span class="chip"><b>Recorde</b><i id="a-recorde">0</i></span>
+    </div>
+
+    <!-- O "cursor: crosshair" deixa o mouse com a mira clássica de FPS -->
+    <canvas id="a-tela" width="380" height="380" role="img"
+            aria-label="Área de treino de mira" style="cursor: crosshair;"></canvas>
+
+    <p class="msg" id="a-msg" role="status" aria-live="polite">Clica no alvo. Errou ou demorou, morre.</p>
+
+    <button class="btn" id="a-comecar" type="button">Começar</button>
+
+    <div class="rank" id="mira-rank" hidden>
+      <h4>Ranking</h4>
+      <ol id="mira-lista"></ol>
+    </div>
+
+  </div>
+</dialog><dialog class="tela" id="tela-kiwi">
+  <div class="game" id="kiwi">
+
+    <button class="fechar" type="button" data-fecha aria-label="Fechar o jogo">&times;</button>
+
+    <h3 class="game-nome">Kiwi Voador <span>loja do kiwi</span></h3>
+
+    <div class="hud">
+      <span class="chip"><b>Pontos</b><i id="k-pontos">0</i></span>
+      <span class="chip"><b>Recorde</b><i id="k-recorde">0</i></span>
+    </div>
+
+    <canvas id="k-tela" width="380" height="380" role="img"
+            aria-label="Céu do Flappy Kiwi"></canvas>
+
+    <p class="msg" id="k-msg" role="status" aria-live="polite">Espaço, seta pra cima ou toque na tela para pular.</p>
+
+    <button class="btn" id="k-comecar" type="button">Começar</button>
+
+    <div class="rank" id="kiwi-rank" hidden>
+      <h4>Ranking</h4>
+      <ol id="kiwi-lista"></ol>
+    </div>
+
+  </div>
+</dialog><dialog class="tela" id="tela-stack">
+  <div class="game" id="stack">
+
+    <button class="fechar" type="button" data-fecha aria-label="Fechar o jogo">&times;</button>
+
+    <h3 class="game-nome">Movcode <span>stack de UI</span></h3>
+
+    <div class="hud">
+      <span class="chip"><b>Andares</b><i id="s-pontos">0</i></span>
+      <span class="chip"><b>Recorde</b><i id="s-recorde">0</i></span>
+    </div>
+
+    <!-- Canvas do jogo -->
+    <canvas id="s-tela" width="380" height="380" role="img"
+            aria-label="Torre de interface"></canvas>
+
+    <p class="msg" id="s-msg" role="status" aria-live="polite">Clique, toque ou aperte espaço para soltar.</p>
+
+    <button class="btn" id="s-comecar" type="button">Começar</button>
+
+    <div class="rank" id="stack-rank" hidden>
+      <h4>Ranking</h4>
+      <ol id="stack-lista"></ol>
+    </div>
+
+  </div>
+</dialog>
+    </div>
+    <!-- Mural: o mesmo conteudo de mural.html, aqui como modal -->
+    <div class="painel" id="painel-mural" role="dialog" aria-modal="true" aria-label="Mural">
+      <div class="painel__folha" role="document">
+        <button class="painel__fechar" type="button" data-fecha-painel aria-label="Fechar">&times;</button>
+
+<section class="mural" id="mural">
+
+  <header class="play-top">
+    <h1 class="play-title">Mu<span class="b">ral</span></h1>
+    <span class="play-sub">cola um recado aí</span>
+  </header>
+
+  <form class="compor" id="compor" autocomplete="off">
+    <label class="vis-oculto" for="m-texto">Recado</label>
+    <textarea id="m-texto" name="texto" rows="4" maxlength="180"
+              placeholder="escreve aqui…" required></textarea>
+    <div class="compor-pe">
+      <label class="vis-oculto" for="m-nome">Seu nome</label>
+      <input id="m-nome" name="nome" maxlength="24" placeholder="seu nome (opcional)">
+      <span class="conta" id="m-conta" aria-hidden="true">180</span>
+    </div>
+    <button class="btn btn--peq" type="submit">Colar</button>
+  </form>
+
+  <div class="notas" id="notas"></div>
+  <p class="vazio" id="m-vazio">Nada colado ainda. Começa você.</p>
+
+</section>
+
+      </div>
+    </div>
 
   <!-- Os scripts de modal entram aqui depois, escutando [data-abre] -->
 </body>
