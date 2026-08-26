@@ -1,16 +1,23 @@
 /* ============================================================
    KAIQUE MOTA — Portfólio "Gravidade Zero"
    HTML5 + CSS3. Sem JS, sem framework.
-   Única dependência externa: Playfair Display + Caveat (Google
-   Fonts), pedidas no briefing. Há fallback serifado/manuscrito.
+   ------------------------------------------------------------
+   O visual é chapado: cor sólida, forma sólida, contraste alto.
+   Nada de degradê, vidro, bisel ou brilho — o que separa uma
+   peça da outra é a cor, não a luz. Preto puro no fundo, e cada
+   objeto é uma placa de cor com o desenho vazado em branco ou
+   preto por cima.
+   ------------------------------------------------------------
+   Dependência externa: Anton + Caveat (Google Fonts), com
+   fallback de sistema em ambas.
    ------------------------------------------------------------
    01. Tokens & reset
-   02. Cosmos (vácuo, estrelas, aros, satélites)
+   02. Cosmos (vácuo, estrelas, aros)
    03. Espaço
    04. Núcleo (o nome)
-   05. Orbes — base de vidro
-   06. Ícones volumosos
-   07. Skins físicas (cartucho, papel de fichário)
+   05. Orbes — base chapada
+   06. Ícones (placas de cor)
+   07. Skins (controle, papel de fichário)
    08. Posições & tempos
    09. Física (@keyframes)
    10. Responsivo
@@ -21,40 +28,43 @@
    01. TOKENS & RESET
    ============================================================ */
 :root {
-  /* o fundo do vácuo */
-  --vacuo:        #181818;
+  /* o fundo do vácuo: preto puro, sem nuance nenhuma */
+  --vacuo:        #000000;
+  --carvao:       #0d0d0d;   /* superfície erguida: painéis, telas */
+  --grafite:      #1a1a1a;   /* chips e botões secundários */
+  --linha:        #2a2a2a;   /* contorno, quando precisa de um */
 
-  --texto:        #f0f2fa;
-  --texto-suave:  #8f99b8;
+  --texto:        #ffffff;
+  --texto-suave:  #8a8a8a;
 
-  /* luz */
-  --gelo:         #dbe7ff;
-  --halo:         #7cc8ff;
+  /* ------------------------------------------------------------
+     A PALETA CHAPADA
+     Sete cores sólidas e nada além disso. Cada objeto da página
+     é uma delas, inteira — nunca uma mistura, nunca um degradê.
+     ------------------------------------------------------------ */
+  --magenta:      #ff2d87;
+  --laranja:      #ff6a13;
+  --coral:        #ff9a76;
+  --creme:        #ece2d0;
+  --vermelho:     #ff3b2f;
+  --limao:        #d4ff3f;
+  --azulao:       #2b5cff;
+  --verde:        #6ca029;   /* o verde da Loja do Kiwi, sem retoque */
 
-  /* acentos por objeto */
-  --ouro:         #e8b95a;
-  --rosa:         #ff6ec7;
-  --azul:         #6d8bff;
-  --ciano:        #5ef2ff;
-  --verde:        #8cc63f;
-  --lampada:      #ffe6c0;
+  /* a tinta que vai por cima das placas claras */
+  --tinta:        #111111;
 
-  /* vidro */
-  --vidro:        rgba(255, 255, 255, .04);
-  --vidro-alto:   rgba(255, 255, 255, .085);
-
-  /* papel do mural */
-  --papel:        #f6f1e4;
-  --tinta:        #26314e;
-  --regua:        #7896c8;
-  --margem:       #d64a42;
+  /* papel do mural: creme chapado, régua e margem em traço sólido */
+  --papel:        var(--creme);
+  --regua:        #9fb4d6;
+  --margem:       var(--vermelho);
 
   /* movimento */
   --amp:          17px;
   --amp-x:        9px;
 
-  /* tipografia */
-  --serifa: "Playfair Display", "Cinzel", Georgia, "Times New Roman", serif;
+  /* tipografia — display pesado em caixa alta, UI do sistema */
+  --titulo: "Anton", "Archivo Black", "Haettenschweiler", Impact, sans-serif;
   --mao:    "Caveat", "Segoe Script", "Bradley Hand", cursive;
   --ui:     system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
@@ -81,12 +91,16 @@ body {
 }
 
 ::selection {
-  background: rgba(124, 200, 255, .3);
+  background: var(--magenta);
   color: #fff;
 }
 
 /* ============================================================
    02. COSMOS
+   ------------------------------------------------------------
+   O vácuo não é atmosfera: é preto liso. O que sobra aqui são
+   pontos brancos e três circunferências de 1px — formas, não
+   luz. Nada de vinheta, nada de halo colorido.
    ============================================================ */
 .cosmos {
   position: fixed;
@@ -106,35 +120,37 @@ body {
 
 .ceu--longe {
   background-image:
-    radial-gradient(1.1px 1.1px at 18% 22%, rgba(255,255,255,.75), transparent 62%),
-    radial-gradient(1px   1px   at 72% 14%, rgba(255,255,255,.6),  transparent 62%),
-    radial-gradient(1.1px 1.1px at 41% 68%, rgba(255,255,255,.7),  transparent 62%),
-    radial-gradient(1px   1px   at 88% 79%, rgba(255,255,255,.55), transparent 62%),
-    radial-gradient(1px   1px   at 57% 45%, rgba(255,255,255,.5),  transparent 62%),
-    radial-gradient(1px   1px   at 8%  52%, rgba(255,255,255,.45), transparent 62%);
+    radial-gradient(1.2px 1.2px at 18% 22%, #fff 100%, transparent 0),
+    radial-gradient(1.2px 1.2px at 72% 14%, #fff 100%, transparent 0),
+    radial-gradient(1.2px 1.2px at 41% 68%, #fff 100%, transparent 0),
+    radial-gradient(1.2px 1.2px at 88% 79%, #fff 100%, transparent 0),
+    radial-gradient(1.2px 1.2px at 57% 45%, #fff 100%, transparent 0),
+    radial-gradient(1.2px 1.2px at 8%  52%, #fff 100%, transparent 0);
   background-size: 230px 230px;
+  opacity: .3;
   animation: deriva 150s linear infinite;
 }
 
 .ceu--meio {
   background-image:
-    radial-gradient(1.5px 1.5px at 30% 40%, rgba(214, 232, 255, .95), transparent 62%),
-    radial-gradient(1.4px 1.4px at 80% 62%, rgba(255,255,255,.85),    transparent 62%),
-    radial-gradient(1.3px 1.3px at 12% 86%, rgba(190, 214, 255, .85), transparent 62%),
-    radial-gradient(1.3px 1.3px at 64% 18%, rgba(255,255,255,.7),     transparent 62%);
+    radial-gradient(1.6px 1.6px at 30% 40%, #fff 100%, transparent 0),
+    radial-gradient(1.6px 1.6px at 80% 62%, #fff 100%, transparent 0),
+    radial-gradient(1.6px 1.6px at 12% 86%, #fff 100%, transparent 0),
+    radial-gradient(1.6px 1.6px at 64% 18%, #fff 100%, transparent 0);
   background-size: 340px 340px;
   animation: deriva 95s linear infinite reverse;
-  opacity: .85;
+  opacity: .45;
 }
 
 .ceu--perto {
   background-image:
-    radial-gradient(2.2px 2.2px at 60% 28%, rgba(255,255,255,1),     transparent 62%),
-    radial-gradient(2px   2px   at 22% 58%, rgba(124, 200, 255, .95), transparent 62%),
-    radial-gradient(2px   2px   at 90% 90%, rgba(232, 185, 90, .8),   transparent 62%),
-    radial-gradient(1.8px 1.8px at 45% 76%, rgba(255,255,255,.8),     transparent 62%);
+    radial-gradient(2.2px 2.2px at 60% 28%, #fff 100%, transparent 0),
+    radial-gradient(2.2px 2.2px at 22% 58%, var(--magenta) 100%, transparent 0),
+    radial-gradient(2.2px 2.2px at 90% 90%, var(--laranja) 100%, transparent 0),
+    radial-gradient(2.2px 2.2px at 45% 76%, #fff 100%, transparent 0);
   background-size: 540px 540px;
-  animation: deriva 62s linear infinite, cintilar 6s ease-in-out infinite;
+  opacity: .75;
+  animation: deriva 62s linear infinite;
 }
 
 /* --- aros de órbita --- */
@@ -142,25 +158,15 @@ body {
   position: absolute;
   top: 50%; left: 50%;
   border-radius: 50%;
-  border: 1px dashed rgba(255, 255, 255, .05);
+  border: 1px solid rgba(255, 255, 255, .06);
   will-change: transform;
 }
 
 .aro--um   { width: 78vmin;  height: 78vmin;  animation: girar 90s linear infinite; }
-.aro--dois { width: 122vmin; height: 122vmin; border-style: solid;
-             border-color: rgba(124, 200, 255, .045);
+.aro--dois { width: 122vmin; height: 122vmin;
              animation: girar-plano 140s linear infinite reverse; }
 .aro--tres { width: 160vmin; height: 160vmin;
-             border-color: rgba(232, 185, 90, .04);
              animation: girar 210s linear infinite; }
-
-/* --- vinheta: só apaga as estrelas nas bordas, o preto segue preto --- */
-.vinheta {
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(ellipse 78% 68% at 50% 50%,
-              rgba(24, 24, 24, 0) 42%, rgba(24, 24, 24, .72) 80%, var(--vacuo) 100%);
-}
 
 /* ============================================================
    03. ESPAÇO
@@ -188,20 +194,36 @@ body {
 
 .nome {
   margin: 0;
-  font-family: var(--serifa);
-  font-weight: 900;
-  font-size: clamp(2.2rem, 8.5vw, 6rem);
-  line-height: .98;
-  letter-spacing: .012em;
-  color: #ffffff;              /* branco chapado, sem degradê */
+  font-family: var(--titulo);
+  font-weight: 400;            /* Anton só tem um peso, e ele já é pesado */
+  font-size: clamp(3.4rem, 15vw, 11rem);
+  line-height: .84;
+  letter-spacing: -.025em;     /* display pesado pede aperto, não folga */
+  text-transform: uppercase;
+  color: #ffffff;
+}
+
+/* a linha de apoio: a mesma frase da meta description, no formato
+   que o resto da página usa para rótulo — caixa alta, espaçada. */
+.nucleo__sub {
+  display: block;
+  /* a folga é grande porque o line-height do nome é menor que a
+     altura real do glifo: a perna do Q desce para fora da caixa,
+     e é ela que decide onde esta linha pode começar */
+  margin: clamp(1.5rem, 3.4vw, 2.6rem) 0 0;
+  font-size: clamp(.6rem, 1.1vw, .78rem);
+  font-weight: 600;
+  letter-spacing: .34em;
+  text-transform: uppercase;
+  color: var(--texto-suave);
 }
 
 /* ============================================================
-   05. ORBES — base de vidro
+   05. ORBES — base chapada
    ------------------------------------------------------------
    Duas camadas de propósito:
    .orbe       → posição + @keyframes de flutuar
-   .orbe__face → visual + escala/brilho do hover
+   .orbe__face → visual + escala do hover
    Sem isso, o transform do hover brigaria com o do keyframe.
    ============================================================ */
 .orbe {
@@ -245,19 +267,12 @@ body {
   flex-direction: column;
   gap: clamp(.75rem, 1.5vw, 1.05rem);
   padding: clamp(1rem, 1.6vw, 1.35rem);
-  border-radius: 20px;
-  border: 1px solid color-mix(in srgb, var(--tom) 24%, transparent);
-  background: linear-gradient(158deg, var(--vidro-alto), var(--vidro) 55%, rgba(255,255,255,.02));
-  -webkit-backdrop-filter: blur(14px) saturate(130%);
-  backdrop-filter: blur(14px) saturate(130%);
-  box-shadow:
-    0 20px 44px -26px #000,
-    inset 0 1px 0 rgba(255, 255, 255, .08);
+  border-radius: 18px;
+  border: 0;
+  background: var(--tom);      /* a placa é a cor inteira, sem camada */
   transition:
-    transform .45s cubic-bezier(.2, .9, .25, 1.1),
-    border-color .45s ease,
-    box-shadow .45s ease,
-    background .45s ease;
+    transform .3s cubic-bezier(.2, .9, .25, 1.1),
+    box-shadow .3s ease;
   will-change: transform;
 }
 
@@ -269,18 +284,22 @@ body {
 }
 
 .orbe__rotulo {
-  font-size: clamp(.95rem, 1.25vw, 1.06rem);
-  font-weight: 650;
+  font-family: var(--titulo);
+  font-weight: 400;
+  font-size: clamp(1.35rem, 1.9vw, 1.7rem);
+  line-height: .9;
   letter-spacing: -.01em;
-  color: var(--texto);
+  text-transform: uppercase;
+  color: var(--tinta);
 }
 
 .orbe__meta {
-  font-size: clamp(.62rem, .82vw, .7rem);
-  letter-spacing: .14em;
+  font-size: clamp(.6rem, .8vw, .68rem);
+  font-weight: 600;
+  letter-spacing: .18em;
   text-transform: uppercase;
-  color: var(--texto-suave);
-  transition: color .45s ease;
+  color: var(--tinta);
+  opacity: .55;                /* opacidade, não outra cor: a placa é uma só */
 }
 
 /* --- INTERAÇÃO: trava, cresce, acende, vem pra frente --- */
@@ -293,21 +312,15 @@ body {
 .orbe:hover .orbe__face,
 .orbe:focus-visible .orbe__face .orbe__face {
   transform: scale(1.13) translateY(-6px);
-  border-color: rgba(255, 255, 255, .22);
-  box-shadow:
-    0 30px 60px -22px #000,
-    inset 0 1px 0 rgba(255, 255, 255, .14);
 }
 
 .orbe:hover .orbe__icone,
 .orbe:focus-visible .orbe__icone .orbe__icone {
-  transform: scale(1.07) rotate(-3deg);
+  transform: rotate(-4deg);
 }
 
 .orbe:hover .orbe__meta,
-.orbe:focus-visible .orbe__meta .orbe__meta {
-  color: color-mix(in srgb, var(--tom) 72%, var(--texto));
-}
+.orbe:focus-visible .orbe__meta .orbe__meta { opacity: .85; }
 
 .orbe:active .orbe__face { transform: scale(1.06) translateY(-2px); }
 
@@ -319,17 +332,18 @@ body {
    ------------------------------------------------------------ */
 .orbe.esta-selecionado { z-index: 30; }
 
+/* O anel é um box-shadow e não um outline porque precisa acompanhar
+   o transform e o raio da própria face — inclusive a folha torta do
+   Mural. O primeiro anel é da cor do vácuo: é ele que abre a fresta
+   preta entre a placa e o traço, e sem essa fresta o anel vira borda. */
 .orbe.esta-selecionado .orbe__face {
   transform: scale(1.06);
-  border-color: rgba(255, 255, 255, .2);
+  box-shadow: 0 0 0 5px var(--vacuo), 0 0 0 8px var(--tom);
 }
-
-.orbe--nu.esta-selecionado .orbe__face { border: 0; }
 
 /* o papel mantém a inclinação da folha ao ser marcado */
 .orbe--mural.esta-selecionado .orbe__face {
   transform: rotate(-2.4deg) scale(1.06);
-  border-color: rgba(255, 255, 255, .7);
 }
 
 /* nenhum contorno ao clicar: o anel é só para quem navega pelo teclado.
@@ -338,7 +352,7 @@ body {
 .orbe:focus { outline: none; }
 
 .orbe:focus-visible {
-  outline: 2px solid color-mix(in srgb, var(--tom) 80%, transparent);
+  outline: 3px solid var(--tom);
   outline-offset: 8px;
   border-radius: 22px;
 }
@@ -358,26 +372,25 @@ body {
                                   virou um retângulo vazando à direita. */
 }
 
+/* A placa de cor mora dentro do SVG, então aqui a face é só a
+   caixa: sem fundo, sem recheio. O raio existe só para o anel de
+   seleção acompanhar o canto arredondado do ícone (25% do lado,
+   o mesmo rx que os SVGs usam). */
 .orbe--nu .orbe__face {
   padding: 0;
   border: 0;
-  border-radius: 50%;
+  border-radius: 25%;
   background: none;
-  box-shadow: none;
-  -webkit-backdrop-filter: none;
-  backdrop-filter: none;
 }
 
 .orbe--nu:hover .orbe__face,
 .orbe--nu:focus-visible .orbe__face .orbe__face {
-  border: 0;
-  box-shadow: none;
   transform: scale(1.18) translateY(-5px);
 }
 
 .orbe--nu:active .orbe__face { transform: scale(1.1) translateY(-2px); }
 
-.orbe--nu:focus-visible { border-radius: 50%; outline-offset: 10px; }
+.orbe--nu:focus-visible { border-radius: 26px; outline-offset: 10px; }
 
 /* solto, o ícone precisa de mais corpo do que tinha dentro do card */
 .orbe--nu .orbe__icone {
@@ -386,17 +399,18 @@ body {
 }
 
 /* ============================================================
-   06. ÍCONES VOLUMOSOS
-   O SVG é a peça inteira (placa, lente, cartucho), então o
-   contêiner não tem moldura própria — só tamanho e sombra.
+   06. ÍCONES — placas de cor
+   ------------------------------------------------------------
+   Cada SVG é a peça inteira: uma placa de cor sólida com o
+   desenho vazado por cima, em branco ou preto. Sem degradê, sem
+   contorno translúcido, sem sombra — o que destaca a peça do
+   vácuo é a própria cor. Por isso o contêiner só dá tamanho.
    ============================================================ */
 .orbe__icone {
   display: block;
   width: clamp(46px, 4.2vw, 58px);
   height: clamp(46px, 4.2vw, 58px);
-  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, .75));
-  transition: transform .45s cubic-bezier(.2, .9, .25, 1.1),
-              filter .45s ease;
+  transition: transform .3s cubic-bezier(.2, .9, .25, 1.1);
 }
 
 .orbe__icone svg {
@@ -411,16 +425,19 @@ body {
    ============================================================ */
 
 /* ------------------------------------------------------------
-   7.1 PASSATEMPO — é o controle de SNES, sem caixa de vidro: a
-   peça inteira é o SVG, então ele só precisa de tamanho. A
-   proporção vem do viewBox e é deitada, ao contrário dos ícones
-   soltos, que são quadrados.
+   7.1 PASSATEMPO — a peça inteira é o SVG (placa creme, controle
+   preto), então ele só precisa de tamanho. A proporção vem do
+   viewBox e é deitada, ao contrário das outras placas, que são
+   quadradas — por isso o raio do anel de seleção é fixo aqui.
    ------------------------------------------------------------ */
 .orbe--passatempo .orbe__icone {
   width: clamp(142px, 13.8vw, 206px);
   height: auto;
   aspect-ratio: 160 / 80;
 }
+
+.orbe--passatempo .orbe__face { border-radius: 16px; }
+.orbe--passatempo:focus-visible { border-radius: 22px; }
 
 /* ------------------------------------------------------------
    7.2 MURAL — não é vidro: é uma folha de fichário de verdade,
@@ -429,98 +446,83 @@ body {
    pelo vácuo (a luz vira reflexo quente no papel).
    ------------------------------------------------------------ */
 .orbe--mural .orbe__face {
-  --grao: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23g)' opacity='.35'/%3E%3C/svg%3E");
-
   border-radius: 3px 10px 4px 6px;      /* folha arrancada, sem simetria */
-  border: 1px solid rgba(255, 255, 255, .5);
+  border: 0;
   padding: 1.15rem .95rem 1rem 2.4rem;  /* espaço para a margem vermelha */
   transform: rotate(-2.4deg);
-  -webkit-backdrop-filter: none;
-  backdrop-filter: none;
 
+  /* Papel também é cor chapada: creme sólido, margem e régua em
+     traço cheio. Saíram o grão, o degradê de luz e a sombra
+     interna — o que dizia "papel" ali era a textura; agora quem
+     diz é o desenho da pauta. */
   background:
-    var(--grao),
-    /* margem vermelha */
     linear-gradient(90deg,
-      transparent 0 26px, rgba(214, 74, 66, .6) 26px 27.5px, transparent 27.5px),
-    /* régua azul */
+      transparent 0 26px, var(--margem) 26px 27.5px, transparent 27.5px),
     repeating-linear-gradient(180deg,
-      transparent 0 19px, rgba(120, 150, 200, .42) 19px 20px),
-    /* brilho do vácuo batendo no papel */
-    linear-gradient(152deg, #fffdf6 0%, var(--papel) 55%, #e4dcc8 100%);
-  background-blend-mode: multiply, normal, normal, normal;
-
-  box-shadow:
-    0 22px 40px -24px #000,
-    inset 0 0 30px rgba(190, 170, 130, .3);
+      transparent 0 19px, var(--regua) 19px 20px),
+    var(--papel);
 }
 
-/* furos de fichário na borda esquerda */
+/* furos de fichário na borda esquerda — três buracos pretos, do
+   tamanho exato do vácuo que aparece por eles. O raio é token
+   porque a pílula do celular é baixa demais para o furo cheio:
+   ele encostaria nas duas bordas e viraria uma faixa. */
 .orbe--mural .orbe__face::before {
   content: "";
+  --furo: 4px;
   position: absolute;
   top: 16%; bottom: 16%; left: 8px;
   width: 9px;
   background:
-    radial-gradient(circle at 50% 12%, rgba(0,0,0,.6) 0 3.6px, transparent 4.2px),
-    radial-gradient(circle at 50% 50%, rgba(0,0,0,.6) 0 3.6px, transparent 4.2px),
-    radial-gradient(circle at 50% 88%, rgba(0,0,0,.6) 0 3.6px, transparent 4.2px);
+    radial-gradient(circle at 50% 12%, var(--vacuo) 0 var(--furo), transparent var(--furo)),
+    radial-gradient(circle at 50% 50%, var(--vacuo) 0 var(--furo), transparent var(--furo)),
+    radial-gradient(circle at 50% 88%, var(--vacuo) 0 var(--furo), transparent var(--furo));
   pointer-events: none;
 }
 
+/* O rótulo do card é display pesado como todo rótulo da página; a
+   letra de mão fica para o conteúdo do Mural, lá dentro, onde ela
+   é o próprio recado e não a etiqueta do objeto. */
 .orbe--mural .orbe__rotulo {
-  font-family: var(--mao);
-  font-size: clamp(1.5rem, 2.1vw, 1.85rem);
-  font-weight: 600;
-  line-height: .95;
-  letter-spacing: 0;
-  color: var(--tinta);
+  font-size: clamp(1.5rem, 2.1vw, 1.9rem);
 }
 
-.orbe--mural .orbe__meta {
-  font-family: var(--mao);
-  font-size: clamp(.9rem, 1.1vw, 1.02rem);
-  letter-spacing: .02em;
-  text-transform: none;
-  color: rgba(38, 49, 78, .62);
-}
-
-.orbe--mural:hover .orbe__meta,
-.orbe--mural:focus-visible .orbe__meta .orbe__meta { color: rgba(38, 49, 78, .8); }
+.orbe--mural .orbe__meta { opacity: .5; }
 
 /* o percevejo mora no canto da folha, fora do fluxo */
 .orbe--mural .orbe__icone {
   position: absolute;
   top: -13px; right: 16px;
   width: 34px; height: 34px;
-  filter: drop-shadow(-3px 6px 5px rgba(0, 0, 0, .55));
 }
 
 /* o hover do mural mantém a inclinação da folha */
 .orbe--mural:hover .orbe__face,
 .orbe--mural:focus-visible .orbe__face .orbe__face {
   transform: rotate(-1deg) scale(1.13) translateY(-6px);
-  border-color: rgba(255, 255, 255, .8);
-  box-shadow:
-    0 30px 56px -22px #000,
-    inset 0 0 30px rgba(190, 170, 130, .25);
 }
 
 .orbe--mural:active .orbe__face { transform: rotate(-1.8deg) scale(1.06) translateY(-2px); }
 
 /* ============================================================
-   08. POSIÇÕES & TEMPOS
+   08. POSIÇÕES, TONS & TEMPOS
+   ------------------------------------------------------------
+   --tom é a cor da placa daquele objeto: a mesma que está dentro
+   do SVG. É ela que o anel de seleção e o anel de foco assumem,
+   então cada peça acende na própria cor.
+
+   O Mural é a exceção, e de propósito: a placa dele é creme, e um
+   anel creme em volta de papel creme não acende nada. Ele acende
+   no vermelho do percevejo, que é cor dele do mesmo jeito.
    Assimetria proposital: nenhum par divide eixo, duração ou fase.
    ============================================================ */
-.orbe--github     { --tom: var(--ouro);    top: 13%; left: 12%; --curva: flutuar-a; --dur: 7s;   --fase: -1.2s; }
-.orbe--instagram  { --tom: var(--rosa);    top: 8%;  left: 47%; --curva: flutuar-b; --dur: 5s;   --fase: -.6s; }
-.orbe--mural      { --tom: var(--lampada); top: 22%; left: 76%; --curva: flutuar-c; --dur: 8s;   --fase: -4.1s; }
-.orbe--kiwi       { --tom: var(--verde);   top: 45%; left: 5%;  --curva: flutuar-d; --dur: 10s;  --fase: -6.2s; }
-.orbe--estrela    { --tom: var(--gelo);    top: 44%; left: 85%; --curva: flutuar-b; --dur: 6.5s; --fase: -5.4s; }
-.orbe--behance    { --tom: var(--azul);    top: 70%; left: 17%; --curva: flutuar-d; --dur: 9s;   --fase: -3s; }
-.orbe--passatempo { --tom: var(--ciano);   top: 69%; left: 57%; --curva: flutuar-e; --dur: 6s;   --fase: -2.4s; }
-
-/* satélites: mais lentos e mais tortos que os cards */
+.orbe--github     { --tom: var(--creme);    top: 13%; left: 12%; --curva: flutuar-a; --dur: 7s;   --fase: -1.2s; }
+.orbe--instagram  { --tom: var(--magenta);  top: 8%;  left: 47%; --curva: flutuar-b; --dur: 5s;   --fase: -.6s; }
+.orbe--mural      { --tom: var(--vermelho); top: 22%; left: 76%; --curva: flutuar-c; --dur: 8s;   --fase: -4.1s; }
+.orbe--kiwi       { --tom: var(--verde);    top: 45%; left: 5%;  --curva: flutuar-d; --dur: 10s;  --fase: -6.2s; }
+.orbe--estrela    { --tom: var(--laranja);  top: 44%; left: 85%; --curva: flutuar-b; --dur: 6.5s; --fase: -5.4s; }
+.orbe--behance    { --tom: var(--azulao);   top: 70%; left: 17%; --curva: flutuar-d; --dur: 9s;   --fase: -3s; }
+.orbe--passatempo { --tom: var(--creme);    top: 69%; left: 57%; --curva: flutuar-e; --dur: 6s;   --fase: -2.4s; }
 
 /* ============================================================
    09. FÍSICA — @keyframes
@@ -570,11 +572,6 @@ body {
   to   { transform: translate3d(-16%, -12%, 0); }
 }
 
-@keyframes cintilar {
-  0%, 100% { opacity: 1; }
-  50%      { opacity: .45; }
-}
-
 @keyframes girar {
   from { transform: translate(-50%, -50%) rotate(0deg); }
   to   { transform: translate(-50%, -50%) rotate(360deg); }
@@ -611,7 +608,7 @@ body {
   :root { --amp: 14px; --amp-x: 6px; }
 
   .orbe { width: clamp(146px, 25vw, 182px); }
-  .orbe__face { border-radius: 18px; gap: .7rem; }
+  .orbe__face { border-radius: 16px; gap: .7rem; }
 
   .orbe--github     { top: 9%;  left: 5%; }
   .orbe--instagram  { top: 5%;  left: auto; right: 6%; }
@@ -628,7 +625,7 @@ body {
   :root { --amp: 11px; --amp-x: 5px; }
 
   .nucleo { width: 92vw; }
-  .nome   { font-size: clamp(1.9rem, 11vw, 3.1rem); }
+  .nome   { font-size: clamp(2.6rem, 17vw, 4.6rem); }
 
   /* pílulas com largura de conteúdo: o rótulo nunca vaza */
   .orbe {
@@ -641,7 +638,7 @@ body {
     align-items: center;
     gap: .6rem;
     padding: .6rem .75rem;
-    border-radius: 16px;
+    border-radius: 14px;
   }
 
   .orbe__icone { width: 34px; height: 34px; flex: 0 0 auto; }
@@ -650,7 +647,7 @@ body {
   .orbe--nu .orbe__icone { width: 68px; height: 68px; }
 
   .orbe__rotulo {
-    font-size: .84rem;
+    font-size: 1.1rem;
     white-space: nowrap;
   }
 
@@ -660,8 +657,8 @@ body {
   .orbe--passatempo .orbe__icone { width: 124px; height: auto; }
 
   .orbe--mural .orbe__face { padding: .6rem .75rem .6rem 1.6rem; }
-  .orbe--mural .orbe__face::before { left: 5px; width: 7px; top: 22%; bottom: 22%; }
-  .orbe--mural .orbe__rotulo { font-size: 1.32rem; }
+  .orbe--mural .orbe__face::before { --furo: 3px; left: 5px; width: 7px; top: 22%; bottom: 22%; }
+  .orbe--mural .orbe__rotulo { font-size: 1.24rem; }
   .orbe--mural .orbe__icone { top: -10px; right: 10px; width: 26px; height: 26px; }
 
   .orbe--github     { top: 7%;  left: 4%; }
@@ -690,8 +687,8 @@ body {
   .orbe__icone { width: 30px; height: 30px; }
   .orbe--nu .orbe__icone { width: 60px; height: 60px; }
   .orbe--passatempo .orbe__icone { width: 112px; height: auto; }
-  .orbe__rotulo { font-size: .79rem; }
-  .orbe--mural .orbe__rotulo { font-size: 1.2rem; }
+  .orbe__rotulo { font-size: 1rem; }
+  .orbe--mural .orbe__rotulo { font-size: 1.12rem; }
 }
 
 /* --- celular deitado --- */
@@ -719,8 +716,8 @@ body {
 
   .orbe--passatempo .orbe__icone { width: 112px; height: auto; }
   .orbe--mural .orbe__face { padding-left: 1.7rem; }
-  .orbe--mural .orbe__face::before { left: 6px; width: 7px; }
-  .orbe--mural .orbe__rotulo { font-size: 1.3rem; }
+  .orbe--mural .orbe__face::before { --furo: 3px; left: 6px; width: 7px; }
+  .orbe--mural .orbe__rotulo { font-size: 1.22rem; }
   .orbe--mural .orbe__icone { top: -9px; right: 10px; width: 24px; height: 24px; }
 
   .orbe--github     { top: 7%;  left: 3%; }
@@ -754,39 +751,6 @@ body {
   .orbe--mural:focus-visible .orbe__face { transform: rotate(-2.4deg) scale(1.05); }
 }
 
-/* fallback para navegadores sem color-mix() */
-@supports not (color: color-mix(in srgb, red 50%, blue)) {
-  .orbe__face {
-    border-color: rgba(255, 255, 255, .14);
-    box-shadow:
-      0 0 18px -8px rgba(255, 255, 255, .3),
-      0 20px 44px -26px #000,
-      inset 0 1px 0 rgba(255, 255, 255, .08);
-  }
-
-  .orbe:hover .orbe__face,
-  .orbe:focus-visible .orbe__face {
-    border-color: rgba(255, 255, 255, .45);
-    box-shadow:
-      0 0 0 1px rgba(255, 255, 255, .2),
-      0 0 34px -6px rgba(255, 255, 255, .4),
-      0 30px 60px -22px #000,
-      inset 0 1px 0 rgba(255, 255, 255, .14);
-  }
-
-  .orbe.esta-selecionado .orbe__face {
-    border-color: rgba(255, 255, 255, .45);
-    box-shadow:
-      0 0 0 1px rgba(255, 255, 255, .2),
-      0 0 32px -6px rgba(255, 255, 255, .4),
-      0 20px 44px -26px #000,
-      inset 0 1px 0 rgba(255, 255, 255, .14);
-  }
-  .orbe--nu:hover .orbe__face { box-shadow: none; }
-  .orbe:focus-visible { outline-color: var(--halo); }
-}
-
-
 /* ============================================================
    12. A CHAVE DA GRAVIDADE
    ------------------------------------------------------------
@@ -805,50 +769,47 @@ body {
   display: inline-flex;
   align-items: center;
   gap: .5rem;
-  padding: .45rem .8rem;
-  border: 1px solid rgba(255, 255, 255, .1);
+  padding: .5rem .85rem;
+  border: 0;
   border-radius: 999px;
-  background: none;
+  background: var(--grafite);
   color: var(--texto-suave);
   font: inherit;
-  font-size: .66rem;
-  letter-spacing: .18em;
+  font-size: .64rem;
+  font-weight: 600;
+  letter-spacing: .2em;
   text-transform: uppercase;
   cursor: pointer;
-  opacity: .38;
-  transition: opacity .3s ease, border-color .3s ease, color .3s ease;
+  transition: background .2s ease, color .2s ease;
 }
 
 .chave-g:hover,
-.chave-g:focus-visible { opacity: 1; border-color: rgba(255, 255, 255, .28); }
+.chave-g:focus-visible { background: #2a2a2a; color: var(--texto); }
 
 .chave-g kbd {
-  padding: .1rem .34rem;
-  border: 1px solid rgba(255, 255, 255, .22);
+  padding: .1rem .36rem;
+  border: 0;
   border-radius: 4px;
+  background: rgba(255, 255, 255, .12);
+  color: inherit;
   font-family: var(--ui);
   font-size: .62rem;
+  font-weight: 700;
   line-height: 1.4;
 }
 
-/* com a gravidade ligada a chave assume a cor e fica acesa, para
-   não parecer que a página quebrou */
+/* com a gravidade ligada a chave vira placa magenta: acesa e
+   chapada, para não parecer que a página quebrou */
 :root.gravidade .chave-g {
-  opacity: 1;
-  color: var(--ciano);
-  border-color: color-mix(in srgb, var(--ciano) 45%, transparent);
+  background: var(--magenta);
+  color: #fff;
 }
 
-:root.gravidade .chave-g kbd { border-color: color-mix(in srgb, var(--ciano) 45%, transparent); }
+:root.gravidade .chave-g kbd { background: rgba(0, 0, 0, .28); }
 
 /* o balanço em @keyframes some quando há peso: ele empurra o objeto
    para cima e desfaz a pilha que a física acabou de montar */
 :root.com-peso .orbe__flutua { animation: none; }
-
-@supports not (color: color-mix(in srgb, red 50%, blue)) {
-  :root.gravidade .chave-g,
-  :root.gravidade .chave-g kbd { border-color: rgba(94, 242, 255, .45); }
-}
 
 
 /* ============================================================
@@ -873,9 +834,9 @@ body {
   overflow-y: auto;
   overscroll-behavior: contain;
 
-  background: rgba(10, 10, 10, .72);
-  -webkit-backdrop-filter: blur(14px) saturate(120%);
-  backdrop-filter: blur(14px) saturate(120%);
+  /* preto cheio, sem desfoque: o vácuo atrás não precisa vazar
+     borrado — ele some, e o painel é a página inteira. */
+  background: var(--vacuo);
 
   opacity: 0;
   visibility: hidden;
@@ -898,10 +859,9 @@ body {
      conteúdo por padrão. É a .janela que corta, não a folha. */
   min-width: 0;
   padding: clamp(1.4rem, 4vw, 2.6rem) clamp(1rem, 3vw, 2.4rem) clamp(2.4rem, 6vw, 4rem);
-  border: 1px solid rgba(255, 255, 255, .1);
+  border: 1px solid var(--linha);
   border-radius: 20px;
-  background: linear-gradient(180deg, #202022, var(--vacuo) 60%);
-  box-shadow: 0 40px 90px -40px #000;
+  background: var(--carvao);
   transform: translateY(14px) scale(.985);
   transition: transform .35s cubic-bezier(.2, .9, .25, 1.05);
 }
@@ -916,22 +876,18 @@ body {
   width: 40px; height: 40px;
   display: grid;
   place-items: center;
-  border: 1px solid rgba(255, 255, 255, .12);
+  border: 0;
   border-radius: 50%;
-  background: rgba(255, 255, 255, .04);
-  color: var(--texto-suave);
+  background: var(--creme);
+  color: var(--tinta);
   font: inherit;
-  font-size: 1.4rem;
+  font-size: 1.5rem;
   line-height: 1;
   cursor: pointer;
-  transition: color .25s ease, border-color .25s ease, background .25s ease;
+  transition: background .2s ease;
 }
 
-.painel__fechar:hover {
-  color: var(--texto);
-  border-color: rgba(255, 255, 255, .3);
-  background: rgba(255, 255, 255, .09);
-}
+.painel__fechar:hover { background: var(--magenta); color: #fff; }
 
 /* Dentro da folha o conteúdo não precisa da largura de página inteira.
    A especificidade é dobrada porque a folha das páginas é carregada
