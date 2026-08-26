@@ -207,7 +207,7 @@ body {
   position: absolute;
   z-index: 3;
   display: block;
-  width: clamp(152px, 13.5vw, 202px);
+  width: clamp(176px, 15.6vw, 234px);
   padding: 0;
   border: 0;
   background: none;
@@ -249,9 +249,7 @@ body {
   background: linear-gradient(158deg, var(--vidro-alto), var(--vidro) 55%, rgba(255,255,255,.02));
   -webkit-backdrop-filter: blur(14px) saturate(130%);
   backdrop-filter: blur(14px) saturate(130%);
-  /* a borda de neon já acesa em repouso */
   box-shadow:
-    0 0 18px -8px color-mix(in srgb, var(--tom) 55%, transparent),
     0 20px 44px -26px #000,
     inset 0 1px 0 rgba(255, 255, 255, .08);
   transition:
@@ -260,19 +258,6 @@ body {
     box-shadow .45s ease,
     background .45s ease;
   will-change: transform;
-}
-
-/* halo que acende no hover */
-.orbe__face::after {
-  content: "";
-  position: absolute;
-  inset: -1px;
-  border-radius: inherit;
-  opacity: 0;
-  pointer-events: none;
-  background: radial-gradient(120% 90% at 50% 0%,
-              color-mix(in srgb, var(--tom) 20%, transparent), transparent 70%);
-  transition: opacity .45s ease;
 }
 
 .orbe__texto {
@@ -307,16 +292,11 @@ body {
 .orbe:hover .orbe__face,
 .orbe:focus-visible .orbe__face .orbe__face {
   transform: scale(1.13) translateY(-6px);
-  border-color: color-mix(in srgb, var(--tom) 62%, transparent);
+  border-color: rgba(255, 255, 255, .22);
   box-shadow:
-    0 0 0 1px color-mix(in srgb, var(--tom) 32%, transparent),
-    0 0 34px -6px color-mix(in srgb, var(--tom) 65%, transparent),
     0 30px 60px -22px #000,
     inset 0 1px 0 rgba(255, 255, 255, .14);
 }
-
-.orbe:hover .orbe__face::after,
-.orbe:focus-visible .orbe__face::after .orbe__face::after { opacity: 1; }
 
 .orbe:hover .orbe__icone,
 .orbe:focus-visible .orbe__icone .orbe__icone {
@@ -339,29 +319,16 @@ body {
 .orbe.esta-selecionado { z-index: 30; }
 
 .orbe.esta-selecionado .orbe__face {
-  border-color: color-mix(in srgb, var(--tom) 62%, transparent);
-  box-shadow:
-    0 0 0 1px color-mix(in srgb, var(--tom) 34%, transparent),
-    0 0 32px -6px color-mix(in srgb, var(--tom) 62%, transparent),
-    0 20px 44px -26px #000,
-    inset 0 1px 0 rgba(255, 255, 255, .14);
+  transform: scale(1.06);
+  border-color: rgba(255, 255, 255, .2);
 }
 
-.orbe.esta-selecionado .orbe__face::after { opacity: 1; }
+.orbe--nu.esta-selecionado .orbe__face { border: 0; }
 
-/* nos ícones soltos não há moldura: sobra só o halo */
-.orbe--nu.esta-selecionado .orbe__face {
-  border: 0;
-  box-shadow: none;
-}
-
-/* no papel do Mural a luz é quente, não neon */
+/* o papel mantém a inclinação da folha ao ser marcado */
 .orbe--mural.esta-selecionado .orbe__face {
-  border-color: rgba(255, 255, 255, .8);
-  box-shadow:
-    0 0 36px -6px rgba(255, 230, 192, .55),
-    0 22px 40px -24px #000,
-    inset 0 0 30px rgba(190, 170, 130, .28);
+  transform: rotate(-2.4deg) scale(1.06);
+  border-color: rgba(255, 255, 255, .7);
 }
 
 /* nenhum contorno ao clicar: o anel é só para quem navega pelo teclado.
@@ -400,15 +367,6 @@ body {
   backdrop-filter: none;
 }
 
-/* sem moldura, o brilho do hover vira um halo atrás do ícone */
-.orbe--nu .orbe__face::after {
-  inset: -26%;
-  border-radius: 50%;
-  background: radial-gradient(circle at 50% 50%,
-              color-mix(in srgb, var(--tom) 34%, transparent), transparent 68%);
-  filter: blur(9px);
-}
-
 .orbe--nu:hover .orbe__face,
 .orbe--nu:focus-visible .orbe__face .orbe__face {
   border: 0;
@@ -422,8 +380,8 @@ body {
 
 /* solto, o ícone precisa de mais corpo do que tinha dentro do card */
 .orbe--nu .orbe__icone {
-  width: clamp(68px, 6.5vw, 94px);
-  height: clamp(68px, 6.5vw, 94px);
+  width: clamp(82px, 7.7vw, 112px);
+  height: clamp(82px, 7.7vw, 112px);
 }
 
 /* ============================================================
@@ -447,11 +405,6 @@ body {
   overflow: visible;
 }
 
-.orbe--github:hover     .orbe__icone { filter: drop-shadow(0 6px 12px rgba(0,0,0,.75)) drop-shadow(0 0 16px rgba(232, 185, 90, .55)); }
-.orbe--instagram:hover  .orbe__icone { filter: drop-shadow(0 6px 12px rgba(0,0,0,.75)) drop-shadow(0 0 16px rgba(255, 110, 199, .5)); }
-.orbe--behance:hover    .orbe__icone { filter: drop-shadow(0 6px 12px rgba(0,0,0,.75)) drop-shadow(0 0 16px rgba(109, 139, 255, .5)); }
-.orbe--passatempo:hover .orbe__icone { filter: drop-shadow(0 6px 12px rgba(0,0,0,.75)) drop-shadow(0 0 16px rgba(94, 242, 255, .5)); }
-
 /* ============================================================
    07. SKINS FÍSICAS
    ============================================================ */
@@ -463,9 +416,9 @@ body {
    soltos, que são quadrados.
    ------------------------------------------------------------ */
 .orbe--passatempo .orbe__icone {
-  width: clamp(116px, 11.5vw, 172px);
+  width: clamp(142px, 13.8vw, 206px);
   height: auto;
-  aspect-ratio: 160 / 92;
+  aspect-ratio: 160 / 80;
 }
 
 /* ------------------------------------------------------------
@@ -497,7 +450,6 @@ body {
   background-blend-mode: multiply, normal, normal, normal;
 
   box-shadow:
-    0 0 26px -6px rgba(255, 230, 192, .45),
     0 22px 40px -24px #000,
     inset 0 0 30px rgba(190, 170, 130, .3);
 }
@@ -513,12 +465,6 @@ body {
     radial-gradient(circle at 50% 50%, rgba(0,0,0,.6) 0 3.6px, transparent 4.2px),
     radial-gradient(circle at 50% 88%, rgba(0,0,0,.6) 0 3.6px, transparent 4.2px);
   pointer-events: none;
-}
-
-/* o halo de hover no papel é luz quente, não neon */
-.orbe--mural .orbe__face::after {
-  background: radial-gradient(120% 90% at 50% 0%, rgba(255, 214, 150, .35), transparent 70%);
-  mix-blend-mode: multiply;
 }
 
 .orbe--mural .orbe__rotulo {
@@ -555,7 +501,6 @@ body {
   transform: rotate(-1deg) scale(1.13) translateY(-6px);
   border-color: rgba(255, 255, 255, .8);
   box-shadow:
-    0 0 40px -4px rgba(255, 230, 192, .6),
     0 30px 56px -22px #000,
     inset 0 0 30px rgba(190, 170, 130, .25);
 }
@@ -647,7 +592,7 @@ body {
 @media (max-width: 1180px) {
   :root { --amp: 18px; --amp-x: 8px; }
 
-  .orbe { width: clamp(142px, 16vw, 178px); }
+  .orbe { width: clamp(164px, 18.5vw, 206px); }
   .orbe--github     { top: 15%; left: 6%; }
   .orbe--instagram  { top: 7%;  left: 59%; }
   .orbe--mural      { top: 29%; left: 75%; }
@@ -660,7 +605,7 @@ body {
 @media (max-width: 860px) {
   :root { --amp: 14px; --amp-x: 6px; }
 
-  .orbe { width: clamp(126px, 22vw, 158px); }
+  .orbe { width: clamp(146px, 25vw, 182px); }
   .orbe__face { border-radius: 18px; gap: .7rem; }
 
   .orbe--github     { top: 11%; left: 5%; }
@@ -695,7 +640,7 @@ body {
   .orbe__icone { width: 34px; height: 34px; flex: 0 0 auto; }
 
   .orbe--nu .orbe__face { padding: 0; }
-  .orbe--nu .orbe__icone { width: 58px; height: 58px; }
+  .orbe--nu .orbe__icone { width: 68px; height: 68px; }
 
   .orbe__rotulo {
     font-size: .84rem;
@@ -705,7 +650,7 @@ body {
   .orbe__meta { display: none; }
 
   /* o controle é deitado: precisa de mais largura que os ícones */
-  .orbe--passatempo .orbe__icone { width: 104px; height: auto; }
+  .orbe--passatempo .orbe__icone { width: 124px; height: auto; }
 
   .orbe--mural .orbe__face { padding: .6rem .75rem .6rem 1.6rem; }
   .orbe--mural .orbe__face::before { left: 5px; width: 7px; top: 22%; bottom: 22%; }
@@ -734,8 +679,8 @@ body {
   .orbe { max-width: 54vw; }
   .orbe__face { padding: .55rem .68rem; }
   .orbe__icone { width: 30px; height: 30px; }
-  .orbe--nu .orbe__icone { width: 52px; height: 52px; }
-  .orbe--passatempo .orbe__icone { width: 96px; height: auto; }
+  .orbe--nu .orbe__icone { width: 60px; height: 60px; }
+  .orbe--passatempo .orbe__icone { width: 112px; height: auto; }
   .orbe__rotulo { font-size: .79rem; }
   .orbe--mural .orbe__rotulo { font-size: 1.2rem; }
 }
@@ -761,9 +706,9 @@ body {
   .orbe__icone { width: 32px; height: 32px; flex: 0 0 auto; }
 
   .orbe--nu .orbe__face { padding: 0; }
-  .orbe--nu .orbe__icone { width: 50px; height: 50px; }
+  .orbe--nu .orbe__icone { width: 58px; height: 58px; }
 
-  .orbe--passatempo .orbe__icone { width: 96px; height: auto; }
+  .orbe--passatempo .orbe__icone { width: 112px; height: auto; }
   .orbe--mural .orbe__face { padding-left: 1.7rem; }
   .orbe--mural .orbe__face::before { left: 6px; width: 7px; }
   .orbe--mural .orbe__rotulo { font-size: 1.3rem; }
@@ -818,8 +763,6 @@ body {
       inset 0 1px 0 rgba(255, 255, 255, .14);
   }
 
-  .orbe__face::after { background: radial-gradient(120% 90% at 50% 0%, rgba(255,255,255,.14), transparent 70%); }
-
   .orbe.esta-selecionado .orbe__face {
     border-color: rgba(255, 255, 255, .45);
     box-shadow:
@@ -828,7 +771,6 @@ body {
       0 20px 44px -26px #000,
       inset 0 1px 0 rgba(255, 255, 255, .14);
   }
-  .orbe--nu .orbe__face::after { background: radial-gradient(circle at 50% 50%, rgba(255,255,255,.28), transparent 68%); }
   .orbe--nu:hover .orbe__face { box-shadow: none; }
   .orbe:focus-visible { outline-color: var(--halo); }
 }
