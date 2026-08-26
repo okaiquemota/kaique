@@ -30,89 +30,6 @@
     <div class="aro aro--dois"></div>
     <div class="aro aro--tres"></div>
 
-    <!-- Satelites: tralha pessoal boiando em gravidade zero.
-         O emoji e so o ocupante do lugar. Para plugar seu PNG
-         transparente, ponha um <img> dentro do span (o CSS ja
-         dimensiona: .satelite img { width:100%; height:100% }). -->
-    <span class="satelite sat--tampa" data-satelite="tampa-lente"><svg viewBox="0 0 32 32" focusable="false" aria-hidden="true">
-        <defs>
-          <linearGradient id="tp-corpo" x1=".2" y1="0" x2=".8" y2="1">
-            <stop offset="0" stop-color="#3f4653"/>
-            <stop offset=".45" stop-color="#1c212b"/>
-            <stop offset="1" stop-color="#0c0f15"/>
-          </linearGradient>
-        </defs>
-        <circle cx="16" cy="16" r="15" fill="url(#tp-corpo)" stroke="rgba(255,255,255,.18)"/>
-        <circle cx="16" cy="16" r="10.5" fill="none" stroke="rgba(255,255,255,.1)" stroke-width="1.2"/>
-        <rect x="2.6" y="13.4" width="5.2" height="5.2" rx="1.6" fill="rgba(255,255,255,.14)"/>
-        <rect x="24.2" y="13.4" width="5.2" height="5.2" rx="1.6" fill="rgba(255,255,255,.14)"/>
-        <path d="M8.5 8.5 A10.5 10.5 0 0 1 16 5.5" fill="none" stroke="rgba(255,255,255,.28)" stroke-width="1.4" stroke-linecap="round"/>
-      </svg></span>
-    <!-- trocar por PNG: <span class="satelite sat--tampa" data-satelite="tampa-lente"><img src="img/tampa-lente.png" alt=""></span> -->
-    <span class="satelite sat--carro" data-satelite="carro-208"><svg viewBox="0 0 60 34" focusable="false" aria-hidden="true">
-        <defs>
-          <linearGradient id="ca-pintura" x1=".25" y1="0" x2=".4" y2="1">
-            <stop offset="0" stop-color="#ffffff"/>
-            <stop offset=".32" stop-color="#f5f7fa"/>
-            <stop offset=".6" stop-color="#dde3ec"/>
-            <stop offset=".85" stop-color="#b0b9c8"/>
-            <stop offset="1" stop-color="#8a94a4"/>
-          </linearGradient>
-          <linearGradient id="ca-vidro" x1=".1" y1="0" x2=".5" y2="1">
-            <stop offset="0" stop-color="#61748c"/>
-            <stop offset="1" stop-color="#19222e"/>
-          </linearGradient>
-        </defs>
-
-        <!-- Hatch curto: balancos apertados, tampa traseira quase em pe
-             e caixas de roda recortadas em arco de verdade. -->
-        <path fill="url(#ca-pintura)" d="M4.6 25.8 L4.6 21.4 Q4.8 17.2 8.4 16.2 L16.6 15.2
-                 Q18.6 9.2 25.4 7.9 L41.6 7.6 Q43.6 7.7 44.4 8.8
-                 Q48.4 11.8 51.2 15.5 L53.8 17.5 Q55.6 18.7 55.6 21.6 L55.6 25.8
-                 L53.6 25.8 a 6.4 6.4 0 0 0 -12.8 0 L19.4 25.8 a 6.4 6.4 0 0 0 -12.8 0 Z"/>
-
-        <!-- sombra na saia: lataria branca precisa disso para ter volume -->
-        <path fill="rgba(58,68,84,.3)" d="M4.6 23.4 L55.6 23.4 L55.6 25.8 L53.6 25.8
-                 a 6.4 6.4 0 0 0 -12.8 0 L19.4 25.8 a 6.4 6.4 0 0 0 -12.8 0 Z"/>
-
-        <!-- vidros -->
-        <path fill="url(#ca-vidro)" d="M19.2 14.6 Q21 10.2 26 9.1 L32.4 9 L32.4 14.5 Z"/>
-        <path fill="url(#ca-vidro)" d="M34 9 L41.2 8.8 Q45.6 10.6 48.6 14.1 L34 14.5 Z"/>
-
-        <!-- coluna B, linha da porta, macaneta -->
-        <path d="M33.2 9 L33.2 14.6" stroke="rgba(150,160,176,.9)" stroke-width="1.1" fill="none"/>
-        <path d="M33 15.4 L33 24" stroke="rgba(150,160,176,.5)" stroke-width=".7" fill="none"/>
-        <rect x="28.6" y="17.2" width="3.4" height="1.3" rx=".65" fill="rgba(118,130,148,.8)"/>
-
-        <!-- vinco lateral -->
-        <path d="M7.8 19.2 Q30 18 54.4 19.6" stroke="rgba(255,255,255,.5)" stroke-width=".7" fill="none"/>
-
-        <!-- farol e a lanterna em garra -->
-        <path d="M4.9 17.4 L10.8 16.7 L10.8 19.2 L4.9 19.6 Z" fill="#eef4ff"/>
-        <path d="M5.2 17.9 L9.8 17.3" stroke="rgba(120,180,255,.9)" stroke-width=".8"/>
-        <path d="M55.5 17.6 L51.6 18.4 Q51 20.2 51.6 21.8 L55.5 21.4 Z" fill="#cf3a31"/>
-        <path d="M53.9 18.5 Q53.3 20 53.9 21.5" stroke="rgba(255,190,180,.75)" stroke-width=".6" fill="none"/>
-
-        <!-- retrovisor -->
-        <path d="M18 14.8 L15.8 15.1 L16 16.5 L18.2 16.2 Z" fill="#c9d2de"/>
-
-        <!-- rodas com liga de 5 raios -->
-        <g>
-          <circle cx="13" cy="25.8" r="5.5" fill="#0f1319"/>
-          <circle cx="13" cy="25.8" r="3.05" fill="#c6cfdc"/>
-          <g stroke="#8d97a6" stroke-width=".55" stroke-linecap="round"><path d="M13.00 24.80 L13.00 23.00"/><path d="M13.95 25.49 L15.66 24.93"/><path d="M13.59 26.61 L14.65 28.07"/><path d="M12.41 26.61 L11.35 28.07"/><path d="M12.05 25.49 L10.34 24.93"/></g>
-          <circle cx="13" cy="25.8" r="1.05" fill="#5b6572"/>
-          <circle cx="47.2" cy="25.8" r="5.5" fill="#0f1319"/>
-          <circle cx="47.2" cy="25.8" r="3.05" fill="#c6cfdc"/>
-          <g stroke="#8d97a6" stroke-width=".55" stroke-linecap="round"><path d="M47.20 24.80 L47.20 23.00"/><path d="M48.15 25.49 L49.86 24.93"/><path d="M47.79 26.61 L48.85 28.07"/><path d="M46.61 26.61 L45.55 28.07"/><path d="M46.25 25.49 L44.54 24.93"/></g>
-          <circle cx="47.2" cy="25.8" r="1.05" fill="#5b6572"/>
-        </g>
-
-        <!-- reflexo do vacuo na lataria -->
-        <path d="M18.4 15.4 Q32 12.6 48.8 15.1" stroke="rgba(255,255,255,.8)" stroke-width=".8" fill="none" stroke-linecap="round"/>
-      </svg></span>
-    <!-- trocar por PNG: <span class="satelite sat--carro" data-satelite="carro-208"><img src="img/carro-208.png" alt=""></span> -->
-
     <div class="vinheta"></div>
   </div>
 
@@ -206,47 +123,88 @@
         </span>
       </a>
       <!-- 4. Passatempo &middot; 6s &middot; o card e o console &middot; gancho: data-abre="jogos" -->
-      <button class="orbe orbe--passatempo" type="button" data-abre="jogos" aria-haspopup="dialog" aria-label="Passatempo" title="Passatempo &middot; dois cliques para abrir">
+      <button class="orbe orbe--nu orbe--passatempo" type="button" data-abre="jogos" aria-haspopup="dialog" aria-label="Passatempo" title="Passatempo &middot; dois cliques para abrir">
         <span class="orbe__flutua">
         <span class="orbe__face">
           <span class="orbe__icone" aria-hidden="true">
-            <svg viewBox="0 0 64 48" focusable="false" aria-hidden="true">
+            <svg viewBox="0 0 160 92" focusable="false" aria-hidden="true">
               <defs>
-                <linearGradient id="pt-lcd" x1="0" y1="0" x2=".4" y2="1">
-                  <stop offset="0" stop-color="#123f42"/>
-                  <stop offset=".55" stop-color="#0a2429"/>
-                  <stop offset="1" stop-color="#061418"/>
+                <linearGradient id="ct-corpo" x1=".3" y1="0" x2=".45" y2="1">
+                  <stop offset="0" stop-color="#f2f0ec"/>
+                  <stop offset=".3" stop-color="#dcdad5"/>
+                  <stop offset=".72" stop-color="#c0bdb7"/>
+                  <stop offset="1" stop-color="#9b9791"/>
+                </linearGradient>
+                <linearGradient id="ct-placa" x1=".2" y1="0" x2=".6" y2="1">
+                  <stop offset="0" stop-color="#b5b0a7"/>
+                  <stop offset="1" stop-color="#8d8880"/>
+                </linearGradient>
+                <linearGradient id="ct-cruz" x1=".2" y1="0" x2=".6" y2="1">
+                  <stop offset="0" stop-color="#4a4a4d"/>
+                  <stop offset="1" stop-color="#232326"/>
                 </linearGradient>
               </defs>
-              <rect width="64" height="48" rx="2.5" fill="url(#pt-lcd)"/>
 
-              <!-- a partida que roda na telinha: uma nave e dois invasores -->
-              <g fill="#5ef2ff">
-                <rect x="29" y="30" width="6" height="4"/>
-                <rect x="23" y="34" width="18" height="4"/>
-                <rect x="19" y="38" width="26" height="4"/>
-                <rect x="23" y="42" width="4" height="3"/>
-                <rect x="37" y="42" width="4" height="3"/>
-                <rect x="31" y="22" width="2" height="6"/>
-              </g>
-              <g fill="rgba(94,242,255,.62)">
-                <rect x="12" y="9" width="10" height="3"/>
-                <rect x="9" y="12" width="16" height="3"/>
-                <rect x="12" y="15" width="3" height="3"/>
-                <rect x="19" y="15" width="3" height="3"/>
-                <rect x="42" y="13" width="10" height="3"/>
-                <rect x="39" y="16" width="16" height="3"/>
-                <rect x="42" y="19" width="3" height="3"/>
-                <rect x="49" y="19" width="3" height="3"/>
-              </g>
-              <g fill="rgba(255,255,255,.5)">
-                <rect x="52" y="6" width="1.6" height="1.6"/>
-                <rect x="7" y="24" width="1.6" height="1.6"/>
-                <rect x="57" y="33" width="1.6" height="1.6"/>
+              <!-- cabo saindo por cima -->
+              <path d="M80 24 C80 14 86 8 92 3" fill="none" stroke="#2b2b2e" stroke-width="4.4" stroke-linecap="round"/>
+              <path d="M80 24 C80 14 86 8 92 3" fill="none" stroke="rgba(255,255,255,.18)" stroke-width="1.2" stroke-linecap="round"/>
+
+              <!-- ombros L e R, atras do corpo -->
+              <rect x="24" y="17" width="26" height="10" rx="5" fill="#a8a49d"/>
+              <rect x="110" y="17" width="26" height="10" rx="5" fill="#a8a49d"/>
+
+              <!-- corpo: dois lobos unidos por um bloco central -->
+              <g fill="url(#ct-corpo)">
+                <rect x="30" y="22" width="100" height="48" rx="11"/>
+                <circle cx="36" cy="50" r="28"/>
+                <circle cx="124" cy="50" r="28"/>
               </g>
 
-              <g fill="rgba(0,0,0,.28)"><rect y="0" width="64" height="1"/><rect y="3" width="64" height="1"/><rect y="6" width="64" height="1"/><rect y="9" width="64" height="1"/><rect y="12" width="64" height="1"/><rect y="15" width="64" height="1"/><rect y="18" width="64" height="1"/><rect y="21" width="64" height="1"/><rect y="24" width="64" height="1"/><rect y="27" width="64" height="1"/><rect y="30" width="64" height="1"/><rect y="33" width="64" height="1"/><rect y="36" width="64" height="1"/><rect y="39" width="64" height="1"/><rect y="42" width="64" height="1"/><rect y="45" width="64" height="1"/></g>
-              <path d="M0 0 L22 0 L4 48 L0 48 Z" fill="rgba(255,255,255,.055)"/>
+              <!-- brilho na aresta de cima -->
+              <path d="M20 27 Q80 20 140 27" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="1.6" stroke-linecap="round"/>
+
+              <!-- reentrancia central -->
+              <rect x="60" y="29" width="40" height="8" rx="4" fill="#c4c1bb"/>
+              <rect x="60" y="29" width="40" height="8" rx="4" fill="none" stroke="rgba(0,0,0,.12)"/>
+
+              <!-- cruzeta -->
+              <g transform="translate(36,50)">
+                <circle r="20" fill="rgba(0,0,0,.06)"/>
+                <path fill="url(#ct-cruz)" d="M-5.5 -16 h11 v10.5 h10.5 v11 h-10.5 v10.5 h-11 v-10.5 h-10.5 v-11 h10.5 z"/>
+                <circle r="2.6" fill="#4e4e52"/>
+                <g fill="rgba(255,255,255,.28)">
+                  <path d="M0 -12.6 l2.6 4 h-5.2 z"/>
+                  <path d="M0 12.6 l2.6 -4 h-5.2 z"/>
+                  <path d="M-12.6 0 l4 2.6 v-5.2 z"/>
+                  <path d="M12.6 0 l-4 2.6 v-5.2 z"/>
+                </g>
+              </g>
+
+              <!-- select e start -->
+              <g transform="rotate(-20 80 62)">
+                <rect x="63" y="58" width="15" height="6.4" rx="3.2" fill="#4a4a4d"/>
+                <rect x="83" y="58" width="15" height="6.4" rx="3.2" fill="#4a4a4d"/>
+              </g>
+
+              <!-- placa dos quatro botoes -->
+              <g transform="rotate(-25 124 50)">
+                <ellipse cx="124" cy="50" rx="25.5" ry="22.5" fill="url(#ct-placa)"/>
+                <rect x="109" y="35" width="30" height="14.5" rx="7.25" fill="rgba(0,0,0,.1)"/>
+                <rect x="109" y="50.5" width="30" height="14.5" rx="7.25" fill="rgba(0,0,0,.1)"/>
+                <g>
+                  <circle cx="124" cy="37" r="7.3" fill="#2f6fd0"/>
+                  <circle cx="137" cy="50" r="7.3" fill="#d8332e"/>
+                  <circle cx="124" cy="63" r="7.3" fill="#f0c02a"/>
+                  <circle cx="111" cy="50" r="7.3" fill="#2fa565"/>
+                </g>
+                <g fill="rgba(255,255,255,.42)">
+                  <ellipse cx="121.8" cy="34.6" rx="2.9" ry="1.9"/>
+                  <ellipse cx="134.8" cy="47.6" rx="2.9" ry="1.9"/>
+                  <ellipse cx="121.8" cy="60.6" rx="2.9" ry="1.9"/>
+                  <ellipse cx="108.8" cy="47.6" rx="2.9" ry="1.9"/>
+                </g>
+              </g>
+
             </svg>
           </span>
         </span>

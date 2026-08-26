@@ -153,51 +153,6 @@ body {
              border-color: rgba(232, 185, 90, .04);
              animation: girar 210s linear infinite; }
 
-/* ------------------------------------------------------------
-   SATÉLITES — tralha pessoal boiando no vácuo.
-   Cada um é um <span> dimensionado por --tam. Para trocar o
-   emoji pelo seu PNG, é só pôr um <img> dentro do span: o CSS
-   abaixo já cuida do resto, sem tocar em mais nada.
-   ------------------------------------------------------------ */
-.satelite {
-  position: absolute;
-  display: grid;
-  place-items: center;
-  width: var(--tam);
-  height: var(--tam);
-  font-size: calc(var(--tam) * .86);
-  line-height: 1;
-  opacity: var(--opa, .72);
-  filter:
-    drop-shadow(0 5px 9px rgba(0, 0, 0, .8))
-    drop-shadow(0 0 16px rgba(124, 200, 255, .3));
-  will-change: transform;
-  animation-timing-function: ease-in-out;
-  animation-iteration-count: infinite;
-  user-select: none;
-}
-
-.sat--carro {
-  --opa: .92;
-  filter:
-    drop-shadow(0 6px 12px rgba(0, 0, 0, .9))
-    drop-shadow(0 0 18px rgba(200, 220, 255, .22));
-}
-
-.satelite img,
-.satelite svg {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  display: block;
-}
-
-/* profundidade de campo: o que está "longe" desfoca e some */
-.satelite--longe {
-  filter: blur(1.5px) drop-shadow(0 4px 8px rgba(0, 0, 0, .8));
-  opacity: .42;
-}
-
 /* --- vinheta: só apaga as estrelas nas bordas, o preto segue preto --- */
 .vinheta {
   position: absolute;
@@ -426,8 +381,13 @@ body {
    mesmo (as três camadas de transform seguem valendo), só some
    a caixa de vidro e o texto.
    ------------------------------------------------------------ */
-.orbe--nu {
-  width: auto;
+.orbe.orbe--nu {
+  width: auto;                 /* .orbe.orbe--nu, não .orbe--nu: precisa
+                                  vencer o .orbe { width } dos media
+                                  queries, que vêm depois no arquivo e
+                                  ganhariam por ordem com a mesma
+                                  especificidade. Foi assim que o halo
+                                  virou um retângulo vazando à direita. */
 }
 
 .orbe--nu .orbe__face {
@@ -497,60 +457,15 @@ body {
    ============================================================ */
 
 /* ------------------------------------------------------------
-   7.1 PASSATEMPO — o card É o videogame portátil: corpo de
-   plástico com o canto inferior direito arredondado, tela de
-   LCD ocupando a largura toda e os controles embaixo.
+   7.1 PASSATEMPO — é o controle de SNES, sem caixa de vidro: a
+   peça inteira é o SVG, então ele só precisa de tamanho. A
+   proporção vem do viewBox e é deitada, ao contrário dos ícones
+   soltos, que são quadrados.
    ------------------------------------------------------------ */
-.orbe--passatempo .orbe__face {
-  border-radius: 14px 14px 28px 14px;   /* a assimetria do console */
-  padding: .6rem .6rem 46px;
-  gap: 0;
-  background:
-    linear-gradient(158deg, rgba(255,255,255,.13), rgba(255,255,255,.04) 45%, rgba(255,255,255,.02)),
-    linear-gradient(200deg, #3b4453 0%, #262d39 42%, #161b24 100%);
-  box-shadow:
-    0 0 18px -8px color-mix(in srgb, var(--tom) 55%, transparent),
-    0 20px 44px -26px #000,
-    inset 0 1px 0 rgba(255, 255, 255, .18),
-    inset 0 -3px 8px rgba(0, 0, 0, .55);
-}
-
-/* sem rótulo, o console encolhe: sobra só tela e controles */
-.orbe--passatempo { width: clamp(116px, 10.5vw, 156px); }
-
-/* a tela: 4:3, afundada no plástico e acesa por dentro */
 .orbe--passatempo .orbe__icone {
-  width: 76%;                  /* moldura larga de plástico, como num portátil de verdade */
-  margin: 0 auto;
+  width: clamp(116px, 11.5vw, 172px);
   height: auto;
-  aspect-ratio: 4 / 3;
-  border-radius: 4px 4px 9px 4px;
-  overflow: hidden;
-  background: #05090c;
-  box-shadow:
-    inset 0 2px 6px rgba(0, 0, 0, .9),
-    0 0 0 1px rgba(255, 255, 255, .06),
-    0 0 14px -2px color-mix(in srgb, var(--tom) 40%, transparent);
-  filter: none;
-}
-
-/* controles: cruzeta à esquerda, A/B à direita — tudo em
-   camadas de background num elemento só */
-.orbe--passatempo .orbe__face::before {
-  content: "";
-  position: absolute;
-  left: 9%; right: 7%; bottom: 10px;
-  height: 29px;
-  pointer-events: none;
-  background:
-    /* cruzeta */
-    linear-gradient(#5a6476, #3b4350) 0 10.5px / 28px 8px no-repeat,
-    linear-gradient(90deg, #5a6476, #3b4350) 10px .5px / 8px 28px no-repeat,
-    /* botões A e B */
-    radial-gradient(circle at 50% 40%, #f79bb0 0 3px, #d05070 3px 6.6px, transparent 6.8px) right 0 top 12px / 15px 15px no-repeat,
-    radial-gradient(circle at 50% 40%, #f79bb0 0 3px, #d05070 3px 6.6px, transparent 6.8px) right 16px top 0 / 15px 15px no-repeat,
-    /* grade do alto-falante */
-    repeating-linear-gradient(58deg, rgba(255,255,255,.22) 0 1px, transparent 1px 4px) right 35px bottom 2px / 17px 17px no-repeat;
+  aspect-ratio: 160 / 92;
 }
 
 /* ------------------------------------------------------------
@@ -658,8 +573,6 @@ body {
 .orbe--passatempo { --tom: var(--ciano);   top: 64%; left: 64%; --curva: flutuar-e; --dur: 6s; --fase: -2.4s; }
 
 /* satélites: mais lentos e mais tortos que os cards */
-.sat--tampa  { top: 45%; left: 12%; --tam: 34px; animation-name: boiar-c; animation-duration: 21s; animation-delay: -8s; }
-.sat--carro  { top: 60%; left: 33%; --tam: 58px; animation-name: boiar-a; animation-duration: 22s; animation-delay: -9s; }
 
 /* ============================================================
    09. FÍSICA — @keyframes
@@ -694,18 +607,12 @@ body {
 }
 
 /* objetos soltos giram bem mais que os cards */
-@keyframes boiar-a {
-  0%, 100% { transform: translate3d(0, 0, 0) rotate(-8deg); }
   50%      { transform: translate3d(calc(var(--amp-x) * -.9), calc(var(--amp) * -1.3), 0) rotate(14deg); }
 }
 
-@keyframes boiar-b {
-  0%, 100% { transform: translate3d(0, 0, 0) rotate(12deg); }
   45%      { transform: translate3d(calc(var(--amp-x) * 1.1), calc(var(--amp) * -.9), 0) rotate(-16deg); }
 }
 
-@keyframes boiar-c {
-  0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); }
   35%      { transform: translate3d(calc(var(--amp-x) * .8), calc(var(--amp) * -1.1), 0) rotate(22deg); }
   70%      { transform: translate3d(calc(var(--amp-x) * -.7), calc(var(--amp) * -.4), 0) rotate(-10deg); }
 }
@@ -762,8 +669,6 @@ body {
   .orbe--behance    { top: 74%; left: 5%; }
   .orbe--passatempo { top: 83%; left: auto; right: 6%; }
 
-  .sat--tampa  { top: 40%; left: 8%; }
-  .sat--carro  { top: 56%; left: 26%; --tam: 52px; }
 }
 
 /* --- celulares --- */
@@ -799,33 +704,8 @@ body {
 
   .orbe__meta { display: none; }
 
-  /* cartucho e papel encolhem sem perder a identidade */
-  /* o portátil não vira pílula: perderia a identidade de objeto */
-  .orbe--passatempo {
-    width: clamp(86px, 26vw, 112px);
-    max-width: none;
-  }
-
-  .orbe--passatempo .orbe__face {
-    flex-direction: column;
-    align-items: stretch;
-    padding: .45rem .45rem 32px;
-    gap: 0;
-    border-radius: 13px 13px 24px 13px;
-  }
-
-  .orbe--passatempo .orbe__icone { width: 78%; margin: 0 auto; height: auto; }
-
-  .orbe--passatempo .orbe__face::before {
-    bottom: 7px;
-    height: 14px;
-    height: 20px;
-    background:
-      linear-gradient(#525c6d, #3b4350) 0 7px / 19px 6px no-repeat,
-      linear-gradient(90deg, #525c6d, #3b4350) 6.5px .5px / 6px 19px no-repeat,
-      radial-gradient(circle at 50% 42%, #f4879f 0 2px, #d05070 2px 4.4px, transparent 4.6px) right 0 top 8px / 10px 10px no-repeat,
-      radial-gradient(circle at 50% 42%, #f4879f 0 2px, #d05070 2px 4.4px, transparent 4.6px) right 11px top 0 / 10px 10px no-repeat;
-  }
+  /* o controle é deitado: precisa de mais largura que os ícones */
+  .orbe--passatempo .orbe__icone { width: 104px; height: auto; }
 
   .orbe--mural .orbe__face { padding: .6rem .75rem .6rem 1.6rem; }
   .orbe--mural .orbe__face::before { left: 5px; width: 7px; top: 22%; bottom: 22%; }
@@ -846,9 +726,6 @@ body {
 
   /* menos tralha no vácuo: só o que cabe sem virar poluição */
 
-  .sat--carro  { top: 30%; left: 26%; --tam: 46px; }
-  .sat--tampa  { top: 67%; left: 84%; --tam: 24px; }
-
   .aro--tres { display: none; }
 }
 
@@ -858,6 +735,7 @@ body {
   .orbe__face { padding: .55rem .68rem; }
   .orbe__icone { width: 30px; height: 30px; }
   .orbe--nu .orbe__icone { width: 52px; height: 52px; }
+  .orbe--passatempo .orbe__icone { width: 96px; height: auto; }
   .orbe__rotulo { font-size: .79rem; }
   .orbe--mural .orbe__rotulo { font-size: 1.2rem; }
 }
@@ -885,15 +763,7 @@ body {
   .orbe--nu .orbe__face { padding: 0; }
   .orbe--nu .orbe__icone { width: 50px; height: 50px; }
 
-  .orbe--passatempo { width: clamp(84px, 13vw, 104px); max-width: none; }
-  .orbe--passatempo .orbe__face {
-    flex-direction: column;
-    align-items: stretch;
-    padding: .4rem .4rem 29px;
-    gap: 0;
-  }
-  .orbe--passatempo .orbe__icone { width: 78%; margin: 0 auto; height: auto; }
-  .orbe--passatempo .orbe__face::before { bottom: 7px; height: 19px; }
+  .orbe--passatempo .orbe__icone { width: 96px; height: auto; }
   .orbe--mural .orbe__face { padding-left: 1.7rem; }
   .orbe--mural .orbe__face::before { left: 6px; width: 7px; }
   .orbe--mural .orbe__rotulo { font-size: 1.3rem; }
@@ -905,8 +775,6 @@ body {
   .orbe--behance    { top: 70%; left: 3%; }
   .orbe--passatempo { top: 76%; left: auto; right: 5%; }
 
-  .sat--carro { top: 20%; left: 30%; --tam: 40px; }
-  .sat--tampa { top: 78%; left: 40%; --tam: 22px; }
 }
 
 /* ============================================================
