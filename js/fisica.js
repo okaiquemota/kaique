@@ -536,6 +536,11 @@ var VEL_MIN       = 20 * brisa;   // piso: em gravidade zero nada para
   function empurrarDoCursor(c, dt) {
     if (cursor.x === null || !VEL_FUGA) return;
 
+    /* Onde há peso o cursor não sopra nada: com gravidade a pilha tem
+       de ficar onde caiu, e um objeto fugindo do ponteiro desmancharia
+       o empilhamento que a queda acabou de formar. */
+    if (comPeso) return;
+
     var x0 = c.base.x + c.x, y0 = c.base.y + c.y;
     var x1 = x0 + c.w,       y1 = y0 + c.h;
 

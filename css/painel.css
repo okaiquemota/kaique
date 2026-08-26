@@ -152,27 +152,37 @@
   position: relative;
   z-index: 1;
   width: min(100% - 2.5rem, 1080px);
-  margin: clamp(2.2rem, 6vw, 4rem) auto clamp(3rem, 8vw, 5rem);
+  margin: clamp(2rem, 5vw, 3.4rem) auto clamp(2.4rem, 6vw, 4rem);
 }
-.painel .play-top { margin-bottom: clamp(1.4rem, 3.5vw, 2.4rem); }
+.painel .play-top {
+  display: flex;
+  align-items: baseline;
+  gap: clamp(.8rem, 2vw, 1.4rem);
+  flex-wrap: wrap;
+  margin-bottom: clamp(1.6rem, 4vw, 2.6rem);
+  padding-bottom: clamp(.9rem, 2vw, 1.3rem);
+  border-bottom: 1px solid var(--borda);
+}
 .painel .play-title {
   margin: 0;
   font-family: var(--serifa);
   font-weight: 900;
-  font-size: clamp(2.4rem, 8vw, 5rem);
-  line-height: .98;
+  font-size: clamp(2.2rem, 6.5vw, 3.8rem);
+  line-height: 1;
   letter-spacing: .012em;
+  color: #fff;
 }
-.painel .play-title .b { color: var(--suave); }
+
+/* o miolo do nome vira a cor da página: é o único acento do
+   cabeçalho, e amarra com a faixa dos cartuchos */
+.painel .play-title .b { color: var(--lilas); }
+.painel .mural .play-title .b { color: var(--margem); }
 .painel .play-sub {
-  display: block;
-  margin-top: .5rem;
-  font-size: clamp(.76rem, 1.6vw, .9rem);
-  letter-spacing: .2em;
+  font-size: clamp(.72rem, 1.5vw, .84rem);
+  letter-spacing: .18em;
   text-transform: uppercase;
   color: var(--suave);
 }
-
 
 /* ============================================================
    04. CARROSSEL
@@ -232,77 +242,98 @@
 
 
 /* ============================================================
-   05. CARTUCHOS — um por jogo
+   05. CARTUCHOS — um objeto por jogo
+   ------------------------------------------------------------
+   Card escuro sobre fundo escuro é painel de sistema, não
+   portfólio. Aqui cada jogo é um cartucho de verdade: casco de
+   plástico com nervuras no topo, etiqueta impressa em papel e
+   contatos dourados na base. Etiqueta clara contra o vácuo —
+   o mesmo contraste que faz o Mural funcionar na capa.
    ============================================================ */
 .painel .cartucho {
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: .7rem;
+  gap: .5rem;
   width: 100%;
   height: 100%;
-  padding: 1.1rem 1.1rem 1rem;
-  border: 1px solid var(--borda);
-  border-radius: 16px;
-  background: linear-gradient(158deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
-  color: var(--texto);
+  min-height: 190px;
+  padding: 40px 1.05rem 30px;
+  border: 0;
+  border-radius: 13px 13px 5px 5px;
+  color: var(--ink);
   font: inherit;
   text-align: left;
   cursor: pointer;
-  overflow: hidden;
-  transition: transform .35s var(--ease), border-color .35s ease;
-}
 
-/* a cor do jogo é uma tarja no topo, não o fundo do card:
-   fundo colorido brigaria com o preto do vácuo */
-.painel .cartucho::before {
-  content: "";
-  position: absolute;
-  inset: 0 0 auto;
-  height: 3px;
-  background: var(--c, var(--lilas));
+  background:
+    /* nervuras de encaixe, no plástico do topo */
+    repeating-linear-gradient(90deg, rgba(255,255,255,.11) 0 2px, transparent 2px 6px)
+      no-repeat 12% 6px / 76% 9px,
+    /* a faixa de cor da etiqueta */
+    linear-gradient(var(--c, var(--lilas)), var(--c, var(--lilas)))
+      no-repeat 10px 24px / calc(100% - 20px) 6px,
+    /* a etiqueta de papel */
+    linear-gradient(180deg, #fdfaf1, #ece5d3)
+      no-repeat 10px 30px / calc(100% - 20px) calc(100% - 54px),
+    /* contatos dourados na base */
+    repeating-linear-gradient(90deg, rgba(232,185,90,.85) 0 3px, transparent 3px 6px)
+      no-repeat 18% calc(100% - 8px) / 64% 5px,
+    /* o casco */
+    linear-gradient(165deg, #4a5262, #262c36 55%, #191d24);
+
+  box-shadow: 0 20px 40px -26px #000, inset 0 1px 0 rgba(255,255,255,.14);
+  transition: transform .35s var(--ease), box-shadow .35s ease;
 }
 .painel .cartucho:hover {
-  transform: translateY(-4px);
-  border-color: rgba(255, 255, 255, .28);
+  transform: translateY(-6px);
+  box-shadow: 0 30px 52px -26px #000, inset 0 1px 0 rgba(255,255,255,.2);
 }
 .painel .cartucho-topo {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: .6rem;
+  gap: .5rem;
 }
 .painel .cartucho-nome {
   font-family: var(--serifa);
   font-weight: 900;
-  font-size: 1.32rem;
-  letter-spacing: .01em;
+  font-size: 1.36rem;
+  line-height: 1.05;
+  color: var(--ink);
 }
 .painel .cartucho-rec {
-  font-size: .68rem;
+  font-size: .6rem;
   letter-spacing: .12em;
   text-transform: uppercase;
-  color: var(--suave);
+  color: rgba(38, 49, 78, .55);
   white-space: nowrap;
 }
-.painel .cartucho-rec b { color: var(--c, var(--lilas)); font-weight: 700; }
+.painel .cartucho-rec b {
+  font-weight: 800;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
 .painel .cartucho-sub {
   flex: 1;
-  font-size: .86rem;
+  font-size: .84rem;
   line-height: 1.45;
-  color: var(--suave);
+  color: rgba(38, 49, 78, .74);
 }
 .painel .cartucho-pe {
   display: inline-flex;
   align-items: center;
-  gap: .4rem;
-  font-size: .74rem;
+  gap: .38rem;
+  padding: .3rem .62rem;
+  align-self: flex-start;
+  border-radius: 999px;
+  background: var(--ink);
+  color: #fdfaf1;
+  font-size: .64rem;
   letter-spacing: .14em;
   text-transform: uppercase;
-  color: var(--c, var(--lilas));
 }
-.painel .cartucho-pe svg { width: 10px; height: 10px; }
-
+.painel .cartucho-pe svg { width: 9px; height: 9px; }
 
 /* ============================================================
    06. O JOGO — dialog em tela cheia
@@ -310,11 +341,17 @@
 .painel .tela {
   width: min(100% - 1.5rem, 560px);
   padding: 0;
-  border: 1px solid var(--borda);
+  border: 0;
   border-radius: 18px;
-  background: var(--superficie);
   color: var(--texto);
   overflow: visible;
+
+  /* o mesmo casco dos cartuchos, agora do tamanho do console */
+  background: linear-gradient(168deg, #4a5262, #262c36 45%, #171b22);
+  box-shadow:
+    0 40px 80px -40px #000,
+    inset 0 1px 0 rgba(255, 255, 255, .16),
+    inset 0 -3px 8px rgba(0, 0, 0, .5);
 }
 .painel .tela::backdrop { background: rgba(0, 0, 0, .82); }
 .painel .game {
@@ -459,9 +496,9 @@
 }
 .painel .btn {
   padding: .7rem 1.5rem;
-  border: 1px solid var(--borda);
+  border: 1px solid rgba(255, 255, 255, .16);
   border-radius: 999px;
-  background: rgba(255, 255, 255, .07);
+  background: rgba(255, 255, 255, .1);
   color: var(--texto);
   font: inherit;
   font-size: .82rem;
@@ -533,7 +570,24 @@
 /* ============================================================
    07. MURAL — aqui o papel é de verdade
    ============================================================ */
+/* O percevejo vermelho é o mesmo objeto do Mural na capa. É ele que
+   diz que isto é um quadro de recados e não um formulário. */
+.painel .compor::before,
+.painel .nota::before {
+  content: "";
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  width: 19px;
+  height: 19px;
+  margin-left: -9.5px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 34% 28%, #ff9d92 0 16%, #e04a3c 44%, #8e1d13 100%);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, .55), inset 0 -2px 3px rgba(0, 0, 0, .35);
+}
 .painel .compor {
+  position: relative;
+  margin-top: 14px;
   display: flex;
   flex-direction: column;
   gap: .7rem;
@@ -562,7 +616,13 @@
 .painel .compor textarea { width: 100%; }
 .painel .compor textarea::placeholder,
 .painel .compor input::placeholder { color: rgba(38, 49, 78, .42); }
-.painel .compor :focus-visible { outline-color: var(--margem); }
+/* o anel padrão é grosso demais sobre papel: aqui ele vira um traço
+   de tinta, na cor da própria escrita */
+.painel .compor :focus-visible {
+  outline: 1.5px solid rgba(38, 49, 78, .55);
+  outline-offset: 2px;
+  border-radius: 3px;
+}
 .painel .compor-pe {
   display: flex;
   align-items: center;
@@ -586,12 +646,14 @@
 /* as notas coladas */
 .painel .notas {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
-  gap: clamp(1rem, 2.5vw, 1.6rem);
-  margin-top: clamp(2rem, 5vw, 3rem);
+  grid-template-columns: repeat(auto-fill, minmax(196px, 1fr));
+  gap: clamp(1.4rem, 3vw, 2.2rem);
+  margin-top: clamp(2.4rem, 5vw, 3.4rem);
+  align-items: start;
 }
 .painel .nota {
   position: relative;
+  margin-top: 12px;
   display: flex;
   flex-direction: column;
   gap: .6rem;
