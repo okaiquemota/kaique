@@ -212,6 +212,13 @@
 
 /* ============================================================
    04. CARROSSEL
+   ------------------------------------------------------------
+   Quem rola é o `.trilho`, e não a `.janela`. Isso não é detalhe
+   de gosto: o carrossel inteiro do js/jogos.js é escrito em cima
+   de `trilho.scrollLeft` e `trilho.scrollTo()` — as setas, as
+   bolinhas, o arrasto com o mouse e o teclado, tudo. Sem
+   `overflow-x` aqui o trilho não é contêiner de rolagem, o
+   `scrollLeft` fica preso em 0 e nada anda.
    ============================================================ */
 .painel .carrossel { position: relative; }
 
@@ -222,13 +229,51 @@
   gap: clamp(.9rem, 2vw, 1.4rem);
   padding: .4rem .2rem 1rem;
   cursor: grab;
+
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+
+  /* A barra é ruído: quem navega tem seta, bolinha, teclado e
+     arrasto. Escondê-la não tira a rolagem de ninguém. */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
-.painel .carrossel.puxando .trilho { cursor: grabbing; }
+.painel .trilho::-webkit-scrollbar { width: 0; height: 0; }
 
-.painel .vaga { flex: 0 0 clamp(230px, 26vw, 288px); }
+/* o JS põe .puxando no próprio trilho, não no carrossel */
+.painel .trilho.puxando { cursor: grabbing; }
 
-.painel .peca { height: 100%; }
+.painel .vaga {
+  flex: 0 0 clamp(230px, 26vw, 288px);
+  scroll-snap-align: start;
+}
+
+/* --f é o quanto a peça está longe do meio (0 a 1) e --d de que
+   lado ela ficou (-1 ou 1). Os dois vêm do js/jogos.js a cada
+   quadro: quem está na borda recua um pouco e escapa para o
+   próprio lado.
+
+   Só tamanho, nunca opacidade. Cor chapada rebaixada não vira
+   distância, vira sujeira: a coral virava marrom e o limão
+   virava oliva, e o cartucho parecia defeito de pintura em vez
+   de peça mais longe. */
+.painel .peca {
+  height: 100%;
+  transform: translateX(calc(var(--d, 0) * var(--f, 0) * 10px))
+             scale(calc(1 - var(--f, 0) * .045));
+  transition: transform .3s var(--ease);
+}
+
+/* durante a rolagem a peça obedece o JS direto: com transição
+   ligada ela ficaria sempre um quadro atrás do dedo */
+.painel .trilho.rolando .peca { transition: none; }
+
+/* se tudo couber na tela não há o que navegar */
+.painel .carrossel[data-rola="0"] .carrossel-pe { display: none; }
 
 .painel .carrossel-pe {
   display: flex;
@@ -251,8 +296,11 @@
   transition: background .2s ease, width .2s ease;
 }
 
-/* o ponto de agora não cresce: ele estica e vira magenta */
-.painel .ponto.aqui {
+/* O ponto de agora não cresce: ele estica e vira magenta. O
+   estado vem do aria-current que o js/jogos.js escreve — é o
+   mesmo atributo que o leitor de tela anuncia, então não há um
+   segundo estado só para o visual poder discordar do primeiro. */
+.painel .ponto[aria-current="true"] {
   width: 22px;
   background: var(--magenta);
 }
@@ -574,7 +622,15 @@
 
 .painel .btn--peq { padding: .55rem 1.15rem; font-size: .72rem; }
 
-/* ranking coletivo */
+/* ------------------------------------------------------------
+   RANKING COLETIVO
+   ------------------------------------------------------------
+   Cada linha é `<b>posição</b><span>nome</span><i>pontos</i>`,
+   montada em js/kiq.js. Sem regra para os três, o navegador dava
+   o padrão dele: número em negrito colado na esquerda, nome
+   solto no meio e pontuação em itálico — que é itálico de
+   `<i>`, não decisão de ninguém.
+   ------------------------------------------------------------ */
 .painel .rank { width: 100%; }
 
 .painel .rank h4 {
@@ -597,19 +653,68 @@
 
 .painel .rank li {
   display: flex;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: .45rem .65rem;
+  align-items: center;
+  gap: .7rem;
+  padding: .4rem .55rem;
   border-radius: 8px;
   background: var(--grafite);
-  font-size: .82rem;
+  font-size: .84rem;
   font-variant-numeric: tabular-nums;
 }
 
-/* a sua linha não é um destaque de fundo: é a placa inteira */
-.painel .rank li.eu { background: var(--magenta); color: #fff; font-weight: 700; }
+/* a posição é uma placa quadrada, não um número solto */
+.painel .rank li b {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 22px; height: 22px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, .1);
+  font-size: .7rem;
+  font-weight: 700;
+}
 
-.painel .sem-rank { font-size: .8rem; color: var(--suave); }
+/* o pódio ganha cor; do quarto em diante é só número */
+.painel .rank li:nth-child(1) b { background: var(--magenta); color: #fff; }
+.painel .rank li:nth-child(2) b { background: var(--coral);   color: var(--ink); }
+.painel .rank li:nth-child(3) b { background: var(--creme);   color: var(--ink); }
+
+.painel .rank li span {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* `<i>` é itálico por padrão do navegador, e aqui ele é número */
+.painel .rank li i {
+  flex: 0 0 auto;
+  font-style: normal;
+  font-weight: 700;
+}
+
+/* A sua linha não é um destaque de fundo: é a placa inteira. O
+   gancho é o data-eu que o js/kiq.js escreve — antes daqui a
+   regra pedia `.eu`, uma classe que ninguém nunca pôs. */
+.painel .rank li[data-eu] {
+  background: var(--magenta);
+  color: #fff;
+  font-weight: 700;
+}
+
+.painel .rank li[data-eu] b { background: rgba(0, 0, 0, .28); color: #fff; }
+
+/* Vazio e indisponível não são linha de ranking: são recado. Sem
+   placa e sem número, para não parecerem o primeiro colocado. */
+.painel .rank li.sem-rank {
+  justify-content: center;
+  padding: .7rem;
+  background: none;
+  border: 1px dashed var(--borda);
+  font-size: .78rem;
+  color: var(--suave);
+}
 
 /* apelido para o ranking */
 /* o apelido pertence ao cabeçalho da página, não ao centro dela */
@@ -731,9 +836,14 @@
 .painel .conta {
   font-family: var(--ui);
   font-size: .68rem;
+  font-weight: 700;
   font-variant-numeric: tabular-nums;
   color: rgba(17, 17, 17, .5);
 }
+
+/* o js/mural.js marca quando faltam 20 caracteres, e até agora
+   ninguém lia essa marca */
+.painel .conta[data-cheio="sim"] { color: var(--vermelho); }
 
 /* magenta sobre creme fica gritado: no papel a pílula é a tinta */
 .painel .compor .btn {

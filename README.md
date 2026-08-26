@@ -32,13 +32,13 @@ Na prática:
 
   | token | cor | onde manda |
   | --- | --- | --- |
-  | `--magenta` | `#ff2d87` | Instagram, botão de ação, seleção de texto |
+  | `--magenta` | `#ff2d87` | Instagram, botão de ação, 1º do ranking, seleção |
   | `--laranja` | `#ff6a13` | @imnotkiq, Fuga 208 |
-  | `--coral` | `#ff9a76` | Cobrinha |
-  | `--creme` | `#ece2d0` | GitHub, Passatempo, papel do Mural, Flick |
-  | `--vermelho` | `#ff3b2f` | percevejo e margem do Mural |
-  | `--limao` | `#d4ff3f` | Kiwi Voador |
-  | `--azulao` | `#2b5cff` | Behance, Movcode |
+  | `--coral` | `#ff9a76` | Mural, Cobrinha, 2º do ranking |
+  | `--creme` | `#ece2d0` | GitHub, Passatempo, Flick, papel do Mural por dentro |
+  | `--vermelho` | `#ff3b2f` | percevejo do Mural, contador no limite |
+  | `--limao` | `#d4ff3f` | Movcode, Kiwi Voador |
+  | `--azulao` | `#2b5cff` | Behance, Movcode (o jogo) |
   | `--verde` | `#6ca029` | A Loja do Kiwi — é o verde da marca, sem retoque |
 
 - **`--tom` é a cor da placa daquele objeto**, e é ela que os anéis de foco e de
@@ -185,8 +185,43 @@ Nesses dois, o `click` é disparado **antes** da janela abrir: se o seu script d
 chamar `preventDefault`, quem manda é ele e o pop-up não aparece.
 
 Repare que **o seu script não precisa saber disso**. Todo clique simples é cancelado em
-fase de captura; no duplo clique a física chama `el.click()`, que nasce com `detail === 0`
+fase de captura; na ativação a física chama `el.click()`, que nasce com `detail === 0`
 e por isso atravessa o próprio filtro. O que chega no seu listener é um `click` comum.
+
+#### O segundo toque não é o `dblclick`
+
+Quem decide que houve ativação é o **`pointerup`**, em `aoSoltar` — dois toques limpos
+no mesmo objeto, dentro de 450ms. O `dblclick` só existe ali para ser cancelado.
+
+Isso não é preferência: **no celular nada abria**, e por dois motivos somados.
+
+O `dblclick` é um evento de mouse. O navegador até tenta sintetizá-lo no toque, mas com
+`touch-action: none` e o `preventDefault` do `pointerdown` — os dois necessários para o
+arrasto ser nosso — a maioria dos celulares não entrega nenhum. Sem `dblclick` não
+existia segundo evento: o primeiro toque selecionava e acabava ali.
+
+E o limiar de arrasto era 5px para todo mundo. **O dedo não pousa parado**: um toque que
+a pessoa jura ter sido imóvel anda uns 10px enquanto a polpa se acomoda, e medido com a
+régua do mouse ele virava arrasto — que é justamente o gesto que nunca ativa nada. Por
+isso existem dois limiares, `LIMIAR_ARRASTO` para o cursor e `LIMIAR_DEDO` para o toque.
+
+**Não há trava de distância entre um toque e o outro**, e isso é decisão. O objeto
+deriva: com `VEL_DERIVA` em 105px/s, meio segundo leva a peça quase 50px para o lado, e
+quem acompanha com o dedo toca em dois pontos diferentes da tela por causa do movimento,
+não por engano. Qualquer raio que coubesse num toque parado recusaria o toque legítimo
+num objeto rápido. Quem faz esse papel é melhor: os dois toques precisam cair no **mesmo
+objeto** (cada corpo guarda o próprio último toque) e nenhum dos dois pode ter sido
+arrasto.
+
+#### A dica, e por que ela só existe no toque
+
+No desktop o `title` de cada objeto conta que são dois cliques. **No toque não existe
+tooltip**: quem toca uma vez vê a peça acender e mais nada acontecer, e conclui — com
+razão — que a página quebrou. Então em `(hover: none)` aparece uma pílula fixa no rodapé,
+"toque de novo para abrir", só depois do primeiro toque. Quem liga e desliga é a classe
+`tem-selecao` no `<html>`, escrita pela mesma função `selecionar()`.
+
+Se um dia o contrato virar toque único, é essa pílula que sai junto.
 
 **A física não atrapalha esse clique.** Um toque sem arrasto dispara o `click`
 normalmente; só o clique que nasce de um arrasto é cancelado — senão largar um card
@@ -196,18 +231,28 @@ inclusive se o seu for delegado no `document`.
 
 ## Ícone solto vs. card
 
-GitHub, Instagram, Behance, Kiwi, @imnotkiq e Passatempo usam o modificador
-`.orbe--nu`: mesmo esqueleto de três camadas, mas sem caixa e sem texto — a placa
-de cor mora dentro do próprio SVG. Como não sobra texto visível, o nome acessível
-vem do `aria-label` (e o `title` dá o tooltip que o rótulo dava antes).
+GitHub, Instagram, Behance, Kiwi, @imnotkiq, Movcode e Passatempo usam o
+modificador `.orbe--nu`: mesmo esqueleto de três camadas, mas sem caixa e sem
+texto — a placa de cor mora dentro do próprio SVG. Como não sobra texto visível, o
+nome acessível vem do `aria-label` (e o `title` dá o tooltip que o rótulo dava
+antes).
 
 O `border-radius: 25%` da `.orbe--nu .orbe__face` não pinta nada: ele existe só
 para o anel de seleção acompanhar o canto arredondado do ícone, e por isso repete
 o mesmo `rx` que os SVGs usam. O Passatempo é a exceção deitada — o controle não é
 quadrado, então o raio dele é fixo em px.
 
-O Mural continua card, porque nele a superfície *é* o conteúdo: é folha de
-fichário, e por isso ele não vira pílula no celular.
+O Mural é o único card com rótulo, e ele é a mesma placa dos outros — um
+retângulo de cor cheia, sem borda e sem textura. Já foi folha de fichário, com
+régua, margem, furos e papel torto; do lado de sete placas retas, era a única peça
+que se explicava por textura em vez de cor. O que diz que ali é recado agora é o
+percevejo espetado na borda de cima, com a cabeça para fora, contra o vácuo.
+
+**O ícone do Movcode é provisório.** Não tenho a marca deles, então o desenho é a
+metáfora que o próprio site já usa: o jogo de mesmo nome no Passatempo empilha
+interface bloco por bloco, e o ícone são esses blocos. Para trocar pela logo de
+verdade basta substituir o `<g>` de dentro do SVG — a placa, o `rx` e o resto do
+esqueleto seguem valendo.
 
 ## O que ajustar
 
@@ -223,6 +268,10 @@ fichário, e por isso ele não vira pílula no celular.
 ## Acessibilidade
 
 - `:focus-visible` espelha o hover, então dá pra navegar tudo pelo teclado.
+- **O nome e a linha de apoio não são selecionáveis.** `.nucleo` leva `user-select: none`
+  e `-webkit-touch-callout: none`: ali é a marca no meio do vácuo, não texto para copiar,
+  e no celular ela fica logo abaixo dos objetos que se arrasta — segurar um instante a
+  mais acendia a alça de seleção e a lupa do sistema por cima da página.
 - `prefers-reduced-motion: reduce` desliga animações e deriva, mantendo a interação.
 - **Tinta escolhida à mão, não calculada.** Cada cartucho declara `--c` (a cor da
   placa) e `--t` (a tinta que vai por cima), e o `--t` está escrito no HTML em vez
@@ -242,3 +291,22 @@ o escopo `.painel` e as três raízes viram o próprio `.painel`.
 ```
 node tools/gera-painel.mjs
 ```
+
+## O carrossel e o `?v=`
+
+Duas coisas que já quebraram a página e são fáceis de quebrar de novo.
+
+**Quem rola é o `.trilho`, não a `.janela`.** O carrossel inteiro do
+`js/jogos.js` — setas, bolinhas, teclado, arrasto com o mouse — está escrito em
+cima de `trilho.scrollLeft` e `trilho.scrollTo()`. Sem `overflow-x` no `.trilho`
+ele não é contêiner de rolagem: o `scrollLeft` fica preso em 0, nada anda, e não
+há erro nenhum no console para avisar.
+
+Na mesma linha, o estado da bolinha é o `aria-current` que o JS escreve — não uma
+classe. Um estado só, que o leitor de tela e o CSS leem juntos; com dois, o visual
+podia discordar do que era anunciado, e foi o que aconteceu.
+
+**Os `<link>` e `<script>` carregam com `?v=N`.** É um site estático em cache de
+CDN: sem a versão na URL, o navegador de quem já visitou continua com o CSS antigo
+e a página aparece meio nova e meio velha — ícone novo com tipografia velha, por
+exemplo. Ao mexer em `css/` ou `js/`, **suba o número nos três HTML**.
