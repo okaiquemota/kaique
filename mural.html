@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mural — Kaique Mota</title>
+<meta name="description" content="O mural de recados do Kaique Mota: cola o seu, todo mundo vê.">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#181818">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Mural — Kaique Mota">
+<meta property="og:description" content="O mural de recados do Kaique Mota: cola o seu, todo mundo vê.">
+<meta property="og:locale" content="pt_BR">
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23181818'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-weight='bold' font-size='17' text-anchor='middle' fill='%23ffffff'%3EK%3C/text%3E%3C/svg%3E">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Caveat:wght@500;600&display=swap">
+<link rel="stylesheet" href="css/paginas.css">
+</head>
+<body>
+
+<div class="shell shell--topo">
+  <header class="top">
+    <a class="who" href="./">Kaique <span class="b">Mota</span></a>
+    <span class="lockup">
+      <a class="sticker" href="jogos.html">Passatempo</a>
+      <a class="sticker" href="https://www.instagram.com/kiq.ham/" target="_blank" rel="noopener">@kiq.ham</a>
+    </span>
+  </header>
+</div>
+
+<main>
+<section class="mural" id="mural">
+
+  <header class="play-top">
+    <h1 class="play-title">Mu<span class="b">ral</span></h1>
+    <span class="play-sub">cola um recado aí</span>
+  </header>
+
+  <form class="compor" id="compor" autocomplete="off">
+    <label class="vis-oculto" for="m-texto">Recado</label>
+    <textarea id="m-texto" name="texto" rows="4" maxlength="180"
+              placeholder="escreve aqui…" required></textarea>
+    <div class="compor-pe">
+      <label class="vis-oculto" for="m-nome">Seu nome</label>
+      <input id="m-nome" name="nome" maxlength="24" placeholder="seu nome (opcional)">
+      <span class="conta" id="m-conta" aria-hidden="true">180</span>
+    </div>
+    <button class="btn btn--peq" type="submit">Colar</button>
+  </form>
+
+  <div class="notas" id="notas"></div>
+  <p class="vazio" id="m-vazio">Nada colado ainda. Começa você.</p>
+
+</section>
+</main>
+
+<script src="js/kiq.js"></script>
+<script src="js/mural.js"></script>
+
+</body>
+</html>

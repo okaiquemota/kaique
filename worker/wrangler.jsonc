@@ -1,0 +1,35 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "kiq-api",
+  "main": "src/index.js",
+  "compatibility_date": "2026-08-01",
+  "observability": { "enabled": true },
+
+  // Explicitos para o deploy nao avisar que esta decidindo por conta.
+  // O endereco workers.dev e o unico que o site usa; as URLs de
+  // pre-visualizacao por versao seriam mais hostnames publicos para a
+  // mesma API, sem servir para nada aqui.
+  "workers_dev": true,
+  "preview_urls": false,
+
+  // O binding precisa se chamar DB: e por env.DB que src/index.js
+  // fala com o banco. O id nao e segredo — sozinho nao da acesso a
+  // nada, so identifica o banco dentro da conta.
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "kiq",
+      "database_id": "80715019-f6b6-4bdc-94a4-3e921eeaf1df"
+    }
+  ],
+
+  // Quem pode chamar a API. Quando o domínio próprio existir, é só
+  // acrescentar aqui e publicar de novo — o código não muda.
+  "vars": {
+    "ORIGENS": "https://okaiquemota.github.io"
+  }
+
+  // Os dois segredos NÃO ficam aqui. Ver worker/README.md:
+  //   npx wrangler secret put SAL
+  //   npx wrangler secret put SEGREDO_DONO
+}

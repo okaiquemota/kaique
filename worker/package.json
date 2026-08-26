@@ -1,0 +1,22 @@
+{
+  "name": "kiq-api",
+  "private": true,
+  "type": "module",
+  "description": "Ranking dos jogos e mural de recados do kiq.portfolio",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "entrar": "wrangler login",
+    "criar-banco": "wrangler d1 create kiq",
+    "criar-tabelas": "wrangler d1 execute kiq --remote --file=./schema.sql",
+    "segredo-sal": "wrangler secret put SAL",
+    "segredo-dono": "wrangler secret put SEGREDO_DONO",
+    "publicar": "wrangler deploy",
+    "registro": "wrangler tail",
+    "teste": "node teste.mjs"
+  },
+  "devDependencies": {
+    "wrangler": "^4.125.0"
+  }
+}

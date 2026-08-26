@@ -1,0 +1,750 @@
+/* ============================================================
+   KIQ — páginas internas (Passatempo e Mural)
+   ------------------------------------------------------------
+   Mesmo mundo da capa: vácuo #181818, serifa no título, objetos
+   com sombra dura e nenhum brilho. A capa é o espaço; estas
+   páginas são o que existe dentro de dois dos objetos dela.
+
+   Os nomes de classe e os tokens (--c, --t, --tilt) vêm do
+   projeto antigo de propósito: são o contrato com os 45KB de
+   jogos e com o mural. Mudou o que eles parecem, não como se
+   chamam.
+   ------------------------------------------------------------
+   01. Tokens & reset      05. Cartuchos
+   02. Cabeçalho           06. Jogo (dialog)
+   03. Título de página    07. Mural
+   04. Carrossel           08. Responsivo & acessibilidade
+   ============================================================ */
+
+/* ============================================================
+   01. TOKENS & RESET
+   ============================================================ */
+:root {
+  --vacuo:       #181818;
+  --superficie:  #1f1f21;
+  --texto:       #f0f2fa;
+  --suave:       #8f99b8;
+  --borda:       rgba(255, 255, 255, .12);
+
+  /* a paleta herdada, remapeada para o mundo novo. Os quatro
+     primeiros são os botões do controle da capa. */
+  --azul:        #2f6fd0;
+  --vermelho:    #d8332e;
+  --amarelo:     #f0c02a;
+  --verde:       #2fa565;
+  --roxo:        #7c5cff;
+  --lilas:       #b9a5ff;
+  --rosa:        #ff6ec7;
+
+  /* papel: é o mesmo do Mural na capa */
+  --papel:       #f6f1e4;
+  --ink:         #26314e;
+  --regua:       #7896c8;
+  --margem:      #d64a42;
+  --cream:       var(--papel);
+
+  --serifa: "Playfair Display", Georgia, "Times New Roman", serif;
+  --mao:    "Caveat", "Segoe Script", cursive;
+  --ui:     system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+  --ease: cubic-bezier(.2, .9, .3, 1.1);
+  color-scheme: dark;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+html { background: var(--vacuo); }
+
+body {
+  margin: 0;
+  background: var(--vacuo);
+  color: var(--texto);
+  font-family: var(--ui);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a { color: inherit; text-decoration: none; }
+
+/* campo de estrelas, o mesmo da capa, bem discreto */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image:
+    radial-gradient(1.1px 1.1px at 18% 22%, rgba(255,255,255,.5), transparent 62%),
+    radial-gradient(1px   1px   at 72% 14%, rgba(255,255,255,.4), transparent 62%),
+    radial-gradient(1.1px 1.1px at 41% 68%, rgba(255,255,255,.45), transparent 62%),
+    radial-gradient(1px   1px   at 88% 79%, rgba(255,255,255,.35), transparent 62%);
+  background-size: 260px 260px;
+}
+
+.vis-oculto {
+  position: absolute;
+  width: 1px; height: 1px;
+  margin: -1px; padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+:focus-visible {
+  outline: 2px solid var(--lilas);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+::selection { background: rgba(124, 200, 255, .3); color: #fff; }
+
+
+/* ============================================================
+   02. CABEÇALHO
+   ============================================================ */
+.shell {
+  position: relative;
+  z-index: 1;
+  width: min(100% - 2.5rem, 1080px);
+  margin-inline: auto;
+}
+
+.shell--topo { padding-top: clamp(1.2rem, 3vw, 2rem); }
+
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  padding-bottom: clamp(1.4rem, 4vw, 2.6rem);
+  border-bottom: 1px solid var(--borda);
+}
+
+/* a marca leva de volta para o espaço */
+.who {
+  font-family: var(--serifa);
+  font-weight: 900;
+  font-size: clamp(1.1rem, 2.2vw, 1.5rem);
+  letter-spacing: .01em;
+  transition: opacity .25s ease;
+}
+
+.who .b { color: var(--suave); }
+.who:hover { opacity: .75; }
+
+.lockup { display: flex; gap: .5rem; flex-wrap: wrap; }
+
+.sticker {
+  padding: .42rem .8rem;
+  border: 1px solid var(--borda);
+  border-radius: 999px;
+  font-size: .78rem;
+  letter-spacing: .06em;
+  color: var(--suave);
+  transition: color .25s ease, border-color .25s ease;
+}
+
+.sticker:hover {
+  color: var(--texto);
+  border-color: rgba(255, 255, 255, .32);
+}
+
+
+/* ============================================================
+   03. TÍTULO DE PÁGINA
+   ============================================================ */
+.play,
+.mural {
+  position: relative;
+  z-index: 1;
+  width: min(100% - 2.5rem, 1080px);
+  margin: clamp(2.2rem, 6vw, 4rem) auto clamp(3rem, 8vw, 5rem);
+}
+
+.play-top { margin-bottom: clamp(1.4rem, 3.5vw, 2.4rem); }
+
+.play-title {
+  margin: 0;
+  font-family: var(--serifa);
+  font-weight: 900;
+  font-size: clamp(2.4rem, 8vw, 5rem);
+  line-height: .98;
+  letter-spacing: .012em;
+}
+
+.play-title .b { color: var(--suave); }
+
+.play-sub {
+  display: block;
+  margin-top: .5rem;
+  font-size: clamp(.76rem, 1.6vw, .9rem);
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--suave);
+}
+
+
+/* ============================================================
+   04. CARROSSEL
+   ============================================================ */
+.carrossel { position: relative; }
+
+.janela { overflow: hidden; }
+
+.trilho {
+  display: flex;
+  gap: clamp(.9rem, 2vw, 1.4rem);
+  padding: .4rem .2rem 1rem;
+  cursor: grab;
+}
+
+.carrossel.puxando .trilho { cursor: grabbing; }
+
+.vaga { flex: 0 0 clamp(230px, 26vw, 288px); }
+
+.peca { height: 100%; }
+
+.carrossel-pe {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: .4rem;
+}
+
+/* bolinhas de posição */
+.pontos { display: flex; gap: .45rem; }
+
+.ponto {
+  width: 6px; height: 6px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, .22);
+  cursor: pointer;
+  transition: background .25s ease, transform .25s ease;
+}
+
+.ponto.aqui {
+  background: var(--texto);
+  transform: scale(1.3);
+}
+
+.carrossel-setas { display: flex; gap: .5rem; }
+
+.carrossel-seta {
+  width: 38px; height: 38px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--borda);
+  border-radius: 50%;
+  background: none;
+  color: var(--texto);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: border-color .25s ease, background .25s ease, opacity .25s ease;
+}
+
+.carrossel-seta:hover:not(:disabled) {
+  border-color: rgba(255, 255, 255, .34);
+  background: rgba(255, 255, 255, .05);
+}
+
+.carrossel-seta:disabled { opacity: .3; cursor: default; }
+
+
+/* ============================================================
+   05. CARTUCHOS — um por jogo
+   ============================================================ */
+.cartucho {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: .7rem;
+  width: 100%;
+  height: 100%;
+  padding: 1.1rem 1.1rem 1rem;
+  border: 1px solid var(--borda);
+  border-radius: 16px;
+  background: linear-gradient(158deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+  color: var(--texto);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  overflow: hidden;
+  transition: transform .35s var(--ease), border-color .35s ease;
+}
+
+/* a cor do jogo é uma tarja no topo, não o fundo do card:
+   fundo colorido brigaria com o preto do vácuo */
+.cartucho::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 3px;
+  background: var(--c, var(--lilas));
+}
+
+.cartucho:hover {
+  transform: translateY(-4px);
+  border-color: rgba(255, 255, 255, .28);
+}
+
+.cartucho-topo {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: .6rem;
+}
+
+.cartucho-nome {
+  font-family: var(--serifa);
+  font-weight: 900;
+  font-size: 1.32rem;
+  letter-spacing: .01em;
+}
+
+.cartucho-rec {
+  font-size: .68rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--suave);
+  white-space: nowrap;
+}
+
+.cartucho-rec b { color: var(--c, var(--lilas)); font-weight: 700; }
+
+.cartucho-sub {
+  flex: 1;
+  font-size: .86rem;
+  line-height: 1.45;
+  color: var(--suave);
+}
+
+.cartucho-pe {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  font-size: .74rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--c, var(--lilas));
+}
+
+.cartucho-pe svg { width: 10px; height: 10px; }
+
+
+/* ============================================================
+   06. O JOGO — dialog em tela cheia
+   ============================================================ */
+.tela {
+  width: min(100% - 1.5rem, 560px);
+  padding: 0;
+  border: 1px solid var(--borda);
+  border-radius: 18px;
+  background: var(--superficie);
+  color: var(--texto);
+  overflow: visible;
+}
+
+.tela::backdrop { background: rgba(0, 0, 0, .82); }
+
+.game {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: clamp(1.4rem, 4vw, 2rem);
+}
+
+.fechar {
+  position: absolute;
+  top: .6rem; right: .7rem;
+  width: 34px; height: 34px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--borda);
+  border-radius: 50%;
+  background: none;
+  color: var(--suave);
+  font-size: 1.2rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: color .25s ease, border-color .25s ease;
+}
+
+.fechar:hover { color: var(--texto); border-color: rgba(255,255,255,.3); }
+
+.game-nome {
+  margin: 0;
+  font-family: var(--serifa);
+  font-weight: 900;
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  text-align: center;
+}
+
+.game-nome span {
+  display: block;
+  margin-top: .3rem;
+  font-family: var(--ui);
+  font-weight: 400;
+  font-size: .72rem;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--suave);
+}
+
+.hud {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: .45rem;
+  padding: .34rem .7rem;
+  border: 1px solid var(--borda);
+  border-radius: 999px;
+  font-size: .68rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+.chip b { font-weight: 500; color: var(--suave); }
+.chip i { font-style: normal; font-weight: 700; font-variant-numeric: tabular-nums; }
+
+.som {
+  padding: .34rem .7rem;
+  border: 1px solid var(--borda);
+  border-radius: 999px;
+  background: none;
+  color: var(--suave);
+  font: inherit;
+  font-size: .68rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.som:hover { color: var(--texto); }
+
+/* tabuleiros */
+canvas {
+  width: 100%;
+  max-width: 380px;
+  height: auto;
+  border: 1px solid var(--borda);
+  border-radius: 10px;
+  background: #101012;
+  touch-action: none;
+}
+
+#c-tela { image-rendering: pixelated; }
+
+/* Gênio: os quatro botões */
+.pads {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: .7rem;
+  width: min(100%, 300px);
+}
+
+.pad {
+  aspect-ratio: 1;
+  border: 0;
+  border-radius: 14px;
+  background: var(--c, var(--lilas));
+  cursor: pointer;
+  opacity: .42;
+  transition: opacity .12s linear, transform .12s linear;
+}
+
+.pad.on { opacity: 1; transform: scale(1.04); }
+.pad:hover { opacity: .62; }
+
+/* direcional na tela, para o celular */
+.dpad {
+  display: grid;
+  grid-template-columns: repeat(3, 46px);
+  grid-template-rows: repeat(2, 46px);
+  gap: .4rem;
+  justify-content: center;
+}
+
+.dpad .seta:nth-child(1) { grid-column: 2; }
+
+.seta {
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--borda);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, .05);
+  color: var(--texto);
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+.seta:active { background: rgba(255, 255, 255, .14); }
+
+.msg {
+  margin: 0;
+  min-height: 1.4em;
+  font-size: .84rem;
+  text-align: center;
+  color: var(--suave);
+}
+
+.msg.tremer { animation: tremer .4s ease; }
+
+@keyframes tremer {
+  0%, 100% { transform: translateX(0); }
+  25%      { transform: translateX(-5px); }
+  75%      { transform: translateX(5px); }
+}
+
+.btn {
+  padding: .7rem 1.5rem;
+  border: 1px solid var(--borda);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .07);
+  color: var(--texto);
+  font: inherit;
+  font-size: .82rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background .25s ease, border-color .25s ease;
+}
+
+.btn:hover { background: rgba(255, 255, 255, .13); border-color: rgba(255,255,255,.3); }
+
+.btn--peq { padding: .5rem 1.1rem; font-size: .74rem; }
+
+/* ranking coletivo */
+.rank { width: 100%; }
+
+.rank h4 {
+  margin: 0 0 .5rem;
+  font-size: .68rem;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--suave);
+}
+
+.rank ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: .3rem;
+}
+
+.rank li {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: .4rem .6rem;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, .04);
+  font-size: .82rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.rank li.eu { background: rgba(124, 92, 255, .18); }
+
+.sem-rank { font-size: .8rem; color: var(--suave); }
+
+/* apelido para o ranking */
+/* o apelido pertence ao cabeçalho da página, não ao centro dela */
+.apelido {
+  display: inline-flex;
+  gap: .4rem;
+  align-items: center;
+  margin-top: 1rem;
+}
+
+.apelido input {
+  padding: .5rem .8rem;
+  border: 1px solid var(--borda);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .05);
+  color: var(--texto);
+  font: inherit;
+  font-size: .82rem;
+}
+
+/* confete ao bater o recorde */
+.festa {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 60;
+}
+
+
+/* ============================================================
+   07. MURAL — aqui o papel é de verdade
+   ============================================================ */
+.compor {
+  display: flex;
+  flex-direction: column;
+  gap: .7rem;
+  width: min(100%, 380px);
+  padding: 1.1rem 1.1rem 1rem 2.2rem;
+  border: 1px solid rgba(255, 255, 255, .5);
+  border-radius: 3px 10px 4px 6px;
+  transform: rotate(-1.4deg);
+  color: var(--ink);
+  background:
+    linear-gradient(90deg, transparent 0 24px, rgba(214, 74, 66, .55) 24px 25.4px, transparent 25.4px),
+    repeating-linear-gradient(180deg, transparent 0 25px, rgba(120, 150, 200, .38) 25px 26px),
+    linear-gradient(152deg, #fffdf6, var(--papel) 60%, #e4dcc8);
+  box-shadow: 0 22px 40px -24px #000;
+}
+
+.compor textarea,
+.compor input {
+  border: 0;
+  background: none;
+  color: var(--ink);
+  font-family: var(--mao);
+  font-size: 1.25rem;
+  line-height: 26px;
+  resize: none;
+}
+
+.compor textarea { width: 100%; }
+.compor textarea::placeholder,
+.compor input::placeholder { color: rgba(38, 49, 78, .42); }
+.compor :focus-visible { outline-color: var(--margem); }
+
+.compor-pe {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+}
+
+.compor-pe input { flex: 1; min-width: 0; font-size: 1.05rem; }
+
+.conta {
+  font-family: var(--ui);
+  font-size: .68rem;
+  font-variant-numeric: tabular-nums;
+  color: rgba(38, 49, 78, .5);
+}
+
+.compor .btn {
+  align-self: flex-start;
+  border-color: rgba(38, 49, 78, .3);
+  background: rgba(38, 49, 78, .08);
+  color: var(--ink);
+}
+
+.compor .btn:hover { background: rgba(38, 49, 78, .16); }
+
+/* as notas coladas */
+.notas {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: clamp(1rem, 2.5vw, 1.6rem);
+  margin-top: clamp(2rem, 5vw, 3rem);
+}
+
+.nota {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: .6rem;
+  min-height: 150px;
+  padding: 1rem 1rem .8rem 1.9rem;
+  border: 1px solid rgba(255, 255, 255, .45);
+  border-radius: 3px 9px 4px 6px;
+  color: var(--ink);
+  transform: rotate(var(--tilt, -1deg));
+  background:
+    linear-gradient(90deg, transparent 0 20px, rgba(214, 74, 66, .5) 20px 21.2px, transparent 21.2px),
+    repeating-linear-gradient(180deg, transparent 0 24px, rgba(120, 150, 200, .34) 24px 25px),
+    linear-gradient(152deg, #fffdf6, var(--papel) 60%, #e6dfcc);
+  box-shadow: 0 18px 34px -22px #000;
+}
+
+/* a inclinação alterna, para a grade não virar fileira */
+.nota:nth-child(3n)   { --tilt: 1.4deg; }
+.nota:nth-child(3n+1) { --tilt: -1.8deg; }
+.nota:nth-child(4n)   { --tilt: .8deg; }
+
+.nota-txt {
+  flex: 1;
+  margin: 0;
+  font-family: var(--mao);
+  font-size: 1.2rem;
+  line-height: 25px;
+  overflow-wrap: anywhere;
+}
+
+.nota-pe {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: .6rem;
+  font-family: var(--mao);
+  font-size: 1rem;
+  color: rgba(38, 49, 78, .62);
+}
+
+.tirar {
+  position: absolute;
+  top: 6px; right: 8px;
+  width: 22px; height: 22px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: rgba(38, 49, 78, .45);
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: color .2s ease, background .2s ease;
+}
+
+.tirar:hover { color: var(--margem); background: rgba(214, 74, 66, .12); }
+
+.vazio {
+  margin-top: 2rem;
+  font-size: .9rem;
+  color: var(--suave);
+}
+
+
+/* ============================================================
+   08. RESPONSIVO & ACESSIBILIDADE
+   ============================================================ */
+@media (max-width: 600px) {
+  .top { justify-content: center; text-align: center; }
+  .vaga { flex: 0 0 78vw; }
+  .compor { width: 100%; transform: rotate(-.8deg); }
+  .notas { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+  .dpad { grid-template-columns: repeat(3, 52px); grid-template-rows: repeat(2, 52px); }
+}
+
+/* o direcional só faz sentido onde não há teclado */
+@media (hover: hover) and (pointer: fine) {
+  .dpad { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    transition-duration: .01ms !important;
+  }
+  .cartucho:hover { transform: none; }
+}
