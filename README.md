@@ -46,9 +46,7 @@ JavaScript puro, sem biblioteca. Faz três coisas:
   um segundo; com a velocidade de fuga, 136px).
 - **Gravidade** — a tecla `G`, ou a chave no rodapé, liga o peso: os objetos despencam e
   se empilham. A constante é bem maior que os 9,8 m/s² reais: a tela tem meio metro de
-  queda, e no valor certo a coisa parece pena caindo. Com o peso ligado, dois cliques
-  **não abrem nada** — ali se está empurrando as coisas, não navegando, e no celular dois
-  toques seguidos num objeto que escorrega saem sem querer. Desligue para abrir. As quatro bordas devolvem pouco e arrastam na paralela, que é o que faz a
+  queda, e no valor certo a coisa parece pena caindo. As quatro bordas devolvem pouco e arrastam na paralela, que é o que faz a
   pilha assentar em vez de quicar para sempre; abaixo de um limiar o objeto desiste e
   descansa. Ao desligar, ninguém é arremessado de volta: o peso simplesmente deixa de
   existir e cada um sai do repouso pela corrente, como quem se solta do chão.

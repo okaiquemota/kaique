@@ -405,12 +405,6 @@ var VEL_MIN       = 20 * brisa;   // piso: em gravidade zero nada para
       e.preventDefault();
       e.stopPropagation();
 
-      /* Com a gravidade ligada, dois toques não abrem nada. Ali a
-         pessoa está empurrando as coisas, não navegando — e no celular
-         dois toques seguidos num objeto que está escorregando são
-         fáceis de dar sem querer. Desliga a gravidade para abrir. */
-      if (caindo) return;
-
       // se o gesto foi arrasto, não é ativação
       if (c.origemX !== null) {
         var longe = Math.hypot(e.clientX - c.origemX, e.clientY - c.origemY);
