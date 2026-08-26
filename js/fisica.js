@@ -34,12 +34,13 @@
 
   /* --- constantes do "líquido" ------------------------------ */
   var MARGEM        = 8;      // respiro até a borda da tela (px)
-  var ATRITO        = 0.999;  // por quadro a 60fps: quase nada
+  var ATRITO        = 0.9993; // por quadro a 60fps: quase nada
   var RESTITUICAO   = 0.82;   // energia devolvida na batida
-  var VEL_INICIAL   = calmo ? 0 : 16;   // px/s
-  var CORRENTE      = calmo ? 0 : 9;    // empurrão aleatório, px/s²
+  var VEL_INICIAL   = calmo ? 0 : 30;   // px/s
+  var CORRENTE      = calmo ? 0 : 26;   // empurrão aleatório, px/s²
   var VEL_MAX       = 900;    // teto do arremesso, px/s
-  var VEL_DERIVA    = 70;     // teto da deriva livre, px/s
+  var VEL_DERIVA    = 105;    // teto da deriva livre, px/s
+var VEL_MIN       = calmo ? 0 : 20;   // piso: em gravidade zero nada para
   var LIMIAR_ARRASTO = 5;     // px percorridos que já contam como arrasto
 
   /* --- estado de cada card ---------------------------------- */
@@ -49,7 +50,7 @@
       base: { x: 0, y: 0 }, w: 0, h: 0,
       arrastando: false, ponteiro: null,
       px: 0, py: 0, tUltimo: 0, percorrido: 0,
-      origemX: null, origemY: null
+      origemX: null, origemY: null, destino: null
     };
   });
 
@@ -121,6 +122,49 @@
       if (!a.arrastando && !b.arrastando) {
         var ty = a.vy; a.vy = b.vy * RESTITUICAO; b.vy = ty * RESTITUICAO;
       }
+    }
+  }
+
+  /* --- o href sai do caminho ---------------------------------
+     Um <a href> é interceptável por qualquer listener de clique em
+     fase de captura no window — e captura desce do window para o
+     elemento, então esse listener roda ANTES do nosso, sempre.
+     O visualizador de artifacts do Claude faz exatamente isso:
+     procura o closest('a[href]') e manda o shell navegar. Não há
+     ordem de registro que ganhe dele, e o preventDefault chega
+     tarde: a navegação já foi disparada.
+
+     Solução: guardamos o destino e tiramos o href do elemento. Sem
+     href, não existe o que interceptar — nem para o visualizador,
+     nem para o navegador. O href volta por um instante só quando a
+     ativação é de verdade (ver ativar()).
+
+     Sem JS a página degrada bem: os href continuam no HTML e os
+     links funcionam como links comuns.
+     ------------------------------------------------------------ */
+  corpos.forEach(function (c) {
+    var el = c.el;
+    if (el.tagName !== 'A') return;
+    var destino = el.getAttribute('href');
+    if (!destino) return;
+
+    c.destino = destino;
+    el.removeAttribute('href');
+    el.setAttribute('role', 'link');           // continua sendo link para leitores de tela
+    if (!el.hasAttribute('tabindex')) el.setAttribute('tabindex', '0');
+  });
+
+  /* Ativação de verdade: devolve o href, dispara um click e tira o
+     href de novo. O dispatch é síncrono, então quando o click()
+     retorna quem tinha de ler o href já leu. */
+  function ativar(c) {
+    var el = c.el;
+    if (c.destino) {
+      el.setAttribute('href', c.destino);
+      el.click();
+      el.removeAttribute('href');
+    } else {
+      el.click();                              // [data-abre]: o modal escuta o click
     }
   }
 
@@ -249,7 +293,16 @@
       }
 
       selecionar(c);
-      el.click();
+      ativar(c);
+    });
+
+    /* sem href, o <a> perde a ativação nativa por teclado — repomos */
+    el.addEventListener('keydown', function (e) {
+      if (e.key !== 'Enter' && e.key !== ' ' && e.key !== 'Spacebar') return;
+      if (!c.destino) return;                  // <button> já faz isso sozinho
+      e.preventDefault();
+      selecionar(c);
+      ativar(c);
     });
   });
 
@@ -276,13 +329,28 @@
       c.vx *= atrito;
       c.vy *= atrito;
 
+      var v = Math.hypot(c.vx, c.vy);
+
       // teto só para a deriva — um arremesso pode passar disso e
       // vai desacelerando sozinho até voltar para a faixa calma
-      var v = Math.hypot(c.vx, c.vy);
       if (v > VEL_DERIVA) {
         var alvo = Math.max(VEL_DERIVA, v * atrito);
         c.vx *= alvo / v;
         c.vy *= alvo / v;
+      }
+
+      /* Piso de velocidade. Sem ele a caminhada aleatória da corrente
+         eventualmente cancela a si mesma e o objeto fica parado no
+         vácuo — que é justamente o que não deve acontecer aqui. */
+      else if (v < VEL_MIN) {
+        if (v < 0.01) {                        // parou de vez: escolhe um rumo
+          var ang = Math.random() * Math.PI * 2;
+          c.vx = Math.cos(ang);
+          c.vy = Math.sin(ang);
+          v = 1;
+        }
+        c.vx *= VEL_MIN / v;
+        c.vy *= VEL_MIN / v;
       }
 
       bater(c);

@@ -70,6 +70,19 @@ document.querySelectorAll('[data-abre]').forEach(el => {
 
 ### O arraste e o link
 
+**O `href` sai do elemento.** Qualquer listener de clique em fase de captura no `window`
+roda antes de qualquer listener no elemento — captura desce do `window` para o alvo, e
+não existe ordem de registro que mude isso. O visualizador de artifacts do Claude injeta
+exatamente esse listener: procura o `closest('a[href]')` e manda o shell navegar. Quando
+o nosso `preventDefault` executa, a navegação já foi disparada.
+
+Por isso `js/fisica.js` guarda o destino em memória e **remove o atributo `href`** na
+entrada (repondo `role="link"` e `tabindex`). Sem `href` não existe o que interceptar. O
+`href` volta por um instante só na ativação real, dentro de `ativar()`. Sem JS a página
+degrada bem: os `href` continuam no HTML e viram links comuns.
+
+
+
 No desktop, apertar e puxar um `<a>` faz o navegador iniciar o **drag-and-drop nativo
 de link**, e a partir daí o fluxo de `pointermove` simplesmente para. No toque isso não
 existe — era por isso que só o mouse quebrava.

@@ -21,8 +21,8 @@
    01. TOKENS & RESET
    ============================================================ */
 :root {
-  /* o vácuo é preto puro — nada tinge esse fundo */
-  --vacuo:        #000000;
+  /* o fundo do vácuo */
+  --vacuo:        #181818;
 
   --texto:        #f0f2fa;
   --texto-suave:  #8f99b8;
@@ -49,8 +49,8 @@
   --margem:       #d64a42;
 
   /* movimento */
-  --amp:          12px;
-  --amp-x:        6px;
+  --amp:          17px;
+  --amp-x:        9px;
 
   /* tipografia */
   --serifa: "Playfair Display", "Cinzel", Georgia, "Times New Roman", serif;
@@ -203,7 +203,7 @@ body {
   position: absolute;
   inset: 0;
   background: radial-gradient(ellipse 78% 68% at 50% 50%,
-              rgba(0, 0, 0, 0) 42%, rgba(0, 0, 0, .7) 80%, #000 100%);
+              rgba(24, 24, 24, 0) 42%, rgba(24, 24, 24, .72) 80%, var(--vacuo) 100%);
 }
 
 /* ============================================================
@@ -466,7 +466,6 @@ body {
   height: clamp(68px, 6.5vw, 94px);
 }
 
-
 /* ============================================================
    06. ÍCONES VOLUMOSOS
    O SVG é a peça inteira (placa, lente, cartucho), então o
@@ -553,8 +552,6 @@ body {
     /* grade do alto-falante */
     repeating-linear-gradient(58deg, rgba(255,255,255,.22) 0 1px, transparent 1px 4px) right 35px bottom 2px / 17px 17px no-repeat;
 }
-
-
 
 /* ------------------------------------------------------------
    7.2 MURAL — não é vidro: é uma folha de fichário de verdade,
@@ -661,12 +658,7 @@ body {
 .orbe--passatempo { --tom: var(--ciano);   top: 64%; left: 64%; --curva: flutuar-e; --dur: 6s; --fase: -2.4s; }
 
 /* satélites: mais lentos e mais tortos que os cards */
-.sat--filme  { top: 14%; left: 30%; --tam: 34px; animation-name: boiar-a; animation-duration: 17s; animation-delay: -2s; }
-.sat--clipe  { top: 25%; left: 41%; --tam: 22px; animation-name: boiar-b; animation-duration: 13s; animation-delay: -5s; }
 .sat--tampa  { top: 45%; left: 12%; --tam: 34px; animation-name: boiar-c; animation-duration: 21s; animation-delay: -8s; }
-.sat--cafe   { top: 79%; left: 29%; --tam: 30px; animation-name: boiar-b; animation-duration: 19s; animation-delay: -3s; }
-.sat--usb    { top: 55%; left: 90%; --tam: 30px; animation-name: boiar-a; animation-duration: 15s; animation-delay: -6s; }
-.sat--clipe2 { top: 88%; left: 48%; --tam: 17px; animation-name: boiar-c; animation-duration: 24s; animation-delay: -1s; }
 .sat--carro  { top: 60%; left: 33%; --tam: 58px; animation-name: boiar-a; animation-duration: 22s; animation-delay: -9s; }
 
 /* ============================================================
@@ -755,7 +747,6 @@ body {
   .orbe--behance    { top: 68%; left: 5%; }
   .orbe--passatempo { top: 74%; left: 61%; }
 
-  .sat--usb { left: 88%; }
 }
 
 /* --- tablets --- */
@@ -772,7 +763,6 @@ body {
   .orbe--passatempo { top: 83%; left: auto; right: 6%; }
 
   .sat--tampa  { top: 40%; left: 8%; }
-  .sat--usb    { top: 58%; left: 86%; }
   .sat--carro  { top: 56%; left: 26%; --tam: 52px; }
 }
 
@@ -855,14 +845,9 @@ body {
   .orbe--mural:focus-visible .orbe__face .orbe__face { transform: rotate(-1.4deg) scale(1.07) translateY(-4px); }
 
   /* menos tralha no vácuo: só o que cabe sem virar poluição */
-  .sat--clipe,
-  .sat--clipe2 { display: none; }
 
   .sat--carro  { top: 30%; left: 26%; --tam: 46px; }
-  .sat--filme  { top: 38%; left: 6%;  --tam: 24px; }
   .sat--tampa  { top: 67%; left: 84%; --tam: 24px; }
-  .sat--usb    { top: 34%; left: 82%; --tam: 22px; }
-  .sat--cafe   { top: 66%; left: 10%; --tam: 22px; }
 
   .aro--tres { display: none; }
 }
@@ -920,12 +905,8 @@ body {
   .orbe--behance    { top: 70%; left: 3%; }
   .orbe--passatempo { top: 76%; left: auto; right: 5%; }
 
-  .sat--clipe, .sat--clipe2 { display: none; }
   .sat--carro { top: 20%; left: 30%; --tam: 40px; }
-  .sat--filme { top: 12%; left: 36%; --tam: 22px; }
   .sat--tampa { top: 78%; left: 40%; --tam: 22px; }
-  .sat--usb   { top: 30%; left: 62%; --tam: 20px; }
-  .sat--cafe  { top: 82%; left: 62%; --tam: 20px; }
 }
 
 /* ============================================================
