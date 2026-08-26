@@ -785,3 +785,67 @@ body {
   .orbe--nu:hover .orbe__face { box-shadow: none; }
   .orbe:focus-visible { outline-color: var(--halo); }
 }
+
+
+/* ============================================================
+   12. A CHAVE DA GRAVIDADE
+   ------------------------------------------------------------
+   O easter egg do conceito: liga a gravidade e os sete objetos
+   despencam e se empilham no rodapé. A tecla G faz o mesmo — o
+   botão existe porque no celular não há tecla, e porque um
+   easter egg que ninguém acha é só código morto.
+   ============================================================ */
+.chave-g {
+  position: fixed;
+  left: 50%;
+  bottom: clamp(1rem, 3vh, 2rem);
+  transform: translateX(-50%);
+  z-index: 50;
+
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .45rem .8rem;
+  border: 1px solid rgba(255, 255, 255, .1);
+  border-radius: 999px;
+  background: none;
+  color: var(--texto-suave);
+  font: inherit;
+  font-size: .66rem;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  cursor: pointer;
+  opacity: .38;
+  transition: opacity .3s ease, border-color .3s ease, color .3s ease;
+}
+
+.chave-g:hover,
+.chave-g:focus-visible { opacity: 1; border-color: rgba(255, 255, 255, .28); }
+
+.chave-g kbd {
+  padding: .1rem .34rem;
+  border: 1px solid rgba(255, 255, 255, .22);
+  border-radius: 4px;
+  font-family: var(--ui);
+  font-size: .62rem;
+  line-height: 1.4;
+}
+
+/* com a gravidade ligada a chave assume a cor e fica acesa, para
+   não parecer que a página quebrou */
+:root.gravidade .chave-g {
+  opacity: 1;
+  color: var(--ciano);
+  border-color: color-mix(in srgb, var(--ciano) 45%, transparent);
+}
+
+:root.gravidade .chave-g kbd { border-color: color-mix(in srgb, var(--ciano) 45%, transparent); }
+
+/* o balanço em @keyframes some quando há peso: ele empurra o objeto
+   para cima e desfaz a pilha que a física acabou de montar */
+:root.gravidade .orbe__flutua { animation: none; }
+
+@supports not (color: color-mix(in srgb, red 50%, blue)) {
+  :root.gravidade .chave-g,
+  :root.gravidade .chave-g kbd { border-color: rgba(94, 242, 255, .45); }
+}

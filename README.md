@@ -38,6 +38,18 @@ JavaScript puro, sem biblioteca. Faz três coisas:
 
 - **Deriva** — cada card vagueia sozinho pela página, empurrado por uma corrente
   aleatória fraca, como tralha boiando na água.
+- **Reação ao cursor** — os objetos se afastam do ponteiro antes de serem tocados. A
+  distância é medida da **borda** da peça, não do centro: assim a força cai a zero
+  quando o cursor entra em cima dela e dá para mirar e clicar. E o cursor não acelera,
+  ele estabelece uma *velocidade de fuga* — no vácuo, aceleração livre guarda tudo que
+  recebeu e joga o objeto para o outro lado da tela (medido: 509px numa aproximação de
+  um segundo; com a velocidade de fuga, 136px).
+- **Gravidade** — a tecla `G`, ou a chave no rodapé, liga o peso: os objetos despencam e
+  se empilham. O chão devolve pouco e arrasta na horizontal, que é o que faz a pilha
+  assentar em vez de quicar para sempre; abaixo de um limiar o objeto desiste e
+  descansa. Ao desligar, todos ganham um empurrão para cima — sem ele ficariam parados
+  no rodapé parecendo travados. O balanço em `@keyframes` é desligado enquanto há peso:
+  ele empurraria os objetos para cima e desfaria a pilha.
 - **Colisão** — cards batem entre si e nas bordas da tela, com perda de energia.
 - **Arrasto** — segurar e mover leva o card junto; ao soltar, ele sai com a
   velocidade do arremesso e continua planando.

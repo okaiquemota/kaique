@@ -49,6 +49,29 @@
 var VEL_MIN       = 20 * brisa;   // piso: em gravidade zero nada para
   var LIMIAR_ARRASTO = 5;     // px percorridos que já contam como arrasto
 
+  /* --- e se a gravidade voltasse? -----------------------------
+     O chão devolve pouco (QUICA_CHAO) e arrasta na horizontal
+     (ATRITO_CHAO): é essa perda que faz a pilha se formar em vez
+     de tudo quicar para sempre. Abaixo de PARA_DE_QUICAR o objeto
+     desiste e descansa — sem esse corte ele treme no chão eterno,
+     quicando um pixel de cada vez. */
+  var GRAVIDADE      = 1500;  // px/s²
+  var QUICA_CHAO     = 0.34;
+  var ATRITO_CHAO    = 0.72;
+  var PARA_DE_QUICAR = 46;    // px/s
+  var caindo = false;
+
+  /* --- o vácuo sente o cursor --------------------------------
+     Os objetos se afastam do ponteiro antes de serem tocados. A
+     força é medida da BORDA da peça, não do centro: assim ela cai
+     a zero quando o cursor entra em cima do objeto, e dá para
+     mirar e clicar nele. Se fosse do centro, o item fugiria
+     justamente na hora de acertá-lo. */
+  var RAIO_CURSOR = 175;            // px de alcance
+  var VEL_FUGA    = 190 * brisa;    // px/s: o quanto ele foge, no máximo
+  var ACEL_FUGA   = 1000 * brisa;   // px/s²: o quão rápido chega lá
+  var cursor = { x: null, y: null };
+
   /* --- estado de cada card ---------------------------------- */
   var corpos = orbes.map(function (el) {
     return {
@@ -98,7 +121,16 @@ var VEL_MIN       = 20 * brisa;   // piso: em gravidade zero nada para
     if (c.x < l.min.x) { c.x = l.min.x; c.vx = Math.abs(c.vx) * RESTITUICAO; }
     else if (c.x > l.max.x) { c.x = l.max.x; c.vx = -Math.abs(c.vx) * RESTITUICAO; }
     if (c.y < l.min.y) { c.y = l.min.y; c.vy = Math.abs(c.vy) * RESTITUICAO; }
-    else if (c.y > l.max.y) { c.y = l.max.y; c.vy = -Math.abs(c.vy) * RESTITUICAO; }
+    else if (c.y > l.max.y) {
+      c.y = l.max.y;
+      if (caindo) {
+        c.vy = -Math.abs(c.vy) * QUICA_CHAO;
+        c.vx *= ATRITO_CHAO;
+        if (Math.abs(c.vy) < PARA_DE_QUICAR) c.vy = 0;   // descansa
+      } else {
+        c.vy = -Math.abs(c.vy) * RESTITUICAO;
+      }
+    }
   }
 
   /* --- colisão entre dois cards ----------------------------- */
@@ -126,7 +158,14 @@ var VEL_MIN       = 20 * brisa;   // piso: em gravidade zero nada para
       a.y += invadeY * sinalY * pesoA;
       b.y -= invadeY * sinalY * pesoB;
       if (!a.arrastando && !b.arrastando) {
-        var ty = a.vy; a.vy = b.vy * RESTITUICAO; b.vy = ty * RESTITUICAO;
+        if (caindo) {
+          // pousou em cima do outro: a queda morre aqui, senão a pilha
+          // fica quicando e nunca assenta
+          a.vy *= 0.24; b.vy *= 0.24;
+          a.vx *= 0.86; b.vx *= 0.86;
+        } else {
+          var ty = a.vy; a.vy = b.vy * RESTITUICAO; b.vy = ty * RESTITUICAO;
+        }
       }
     }
   }
@@ -359,16 +398,20 @@ var VEL_MIN       = 20 * brisa;   // piso: em gravidade zero nada para
     corpos.forEach(function (c) {
       if (c.arrastando) return;
 
-      // corrente do "líquido": um empurrãozinho aleatório constante
-      if (CORRENTE) {
+      if (caindo) {
+        c.vy += GRAVIDADE * dt;
+      } else if (CORRENTE) {
+        // corrente do "líquido": um empurrãozinho aleatório constante
         c.vx += (Math.random() - 0.5) * CORRENTE * dt * 2;
         c.vy += (Math.random() - 0.5) * CORRENTE * dt * 2;
       }
 
+      empurrarDoCursor(c, dt);
+
       c.x += c.vx * dt;
       c.y += c.vy * dt;
       c.vx *= atrito;
-      c.vy *= atrito;
+      if (!caindo) c.vy *= atrito;
 
       var v = Math.hypot(c.vx, c.vy);
 
@@ -382,8 +425,9 @@ var VEL_MIN       = 20 * brisa;   // piso: em gravidade zero nada para
 
       /* Piso de velocidade. Sem ele a caminhada aleatória da corrente
          eventualmente cancela a si mesma e o objeto fica parado no
-         vácuo — que é justamente o que não deve acontecer aqui. */
-      else if (v < VEL_MIN) {
+         vácuo — que é justamente o que não deve acontecer aqui.
+         Com gravidade ligada o piso sai de cena: lá parar é o certo. */
+      else if (!caindo && v < VEL_MIN) {
         if (v < 0.01) {                        // parou de vez: escolhe um rumo
           var ang = Math.random() * Math.PI * 2;
           c.vx = Math.cos(ang);
@@ -407,6 +451,78 @@ var VEL_MIN       = 20 * brisa;   // piso: em gravidade zero nada para
 
     requestAnimationFrame(passo);
   }
+
+  /* --- o cursor ---------------------------------------------- */
+  window.addEventListener('pointermove', function (e) {
+    if (e.pointerType === 'touch') return;   // no toque o dedo já arrasta
+    cursor.x = e.clientX;
+    cursor.y = e.clientY;
+  }, { passive: true });
+
+  // ponteiro fora da janela não empurra nada
+  document.addEventListener('mouseleave', function () { cursor.x = cursor.y = null; });
+  window.addEventListener('blur', function () { cursor.x = cursor.y = null; });
+
+  function empurrarDoCursor(c, dt) {
+    if (cursor.x === null || !VEL_FUGA) return;
+
+    var x0 = c.base.x + c.x, y0 = c.base.y + c.y;
+    var x1 = x0 + c.w,       y1 = y0 + c.h;
+
+    // ponto da caixa mais perto do cursor — dentro dela, dá o próprio
+    // cursor, e a distância zera junto com a força
+    var px = Math.max(x0, Math.min(cursor.x, x1));
+    var py = Math.max(y0, Math.min(cursor.y, y1));
+    var dx = px - cursor.x, dy = py - cursor.y;
+    var d = Math.hypot(dx, dy);
+    if (d < 0.01 || d > RAIO_CURSOR) return;
+
+    var ux = dx / d, uy = dy / d;                   // direção de fuga
+
+    /* Empurrar com aceleração livre lança o objeto para o outro lado
+       da tela: no vácuo ele guarda tudo que recebeu. Então o cursor
+       não acelera — ele estabelece uma VELOCIDADE DE FUGA, e só
+       acrescenta o que falta para chegar nela. Quem já está fugindo
+       rápido o bastante não recebe nada, e o efeito nunca vira sopro. */
+    var alvo = VEL_FUGA * (1 - d / RAIO_CURSOR);
+    var indo = c.vx * ux + c.vy * uy;               // velocidade já na direção
+    if (indo >= alvo) return;
+
+    var falta = Math.min(alvo - indo, ACEL_FUGA * dt);
+    c.vx += ux * falta;
+    c.vy += uy * falta;
+  }
+
+  /* --- o interruptor da gravidade ---------------------------- */
+  function virarGravidade(ligar) {
+    caindo = (ligar === undefined) ? !caindo : Boolean(ligar);
+    document.documentElement.classList.toggle('gravidade', caindo);
+
+    var botao = document.querySelector('[data-gravidade]');
+    if (botao) botao.setAttribute('aria-pressed', String(caindo));
+
+    if (!caindo) {
+      // ao desligar, tudo sobe de volta: sem esse empurrão os objetos
+      // ficariam parados no rodapé, parecendo travados e não flutuando
+      corpos.forEach(function (c) {
+        var ang = Math.random() * Math.PI * 2;
+        c.vx = Math.cos(ang) * 110;
+        c.vy = -Math.abs(Math.sin(ang)) * 150 - 60;
+      });
+    }
+  }
+
+  window.addEventListener('keydown', function (e) {
+    if (e.key !== 'g' && e.key !== 'G') return;
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    var alvo = e.target || {};
+    if (/^(INPUT|TEXTAREA|SELECT)$/.test(alvo.tagName || '') || alvo.isContentEditable) return;
+    e.preventDefault();
+    virarGravidade();
+  });
+
+  var botaoG = document.querySelector('[data-gravidade]');
+  if (botaoG) botaoG.addEventListener('click', function () { virarGravidade(); });
 
   /* --- partida ---------------------------------------------- */
   function iniciar() {
