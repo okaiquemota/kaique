@@ -160,11 +160,48 @@ var VEL_MIN       = 20 * brisa;   // piso: em gravidade zero nada para
     if (!el.hasAttribute('tabindex')) el.setAttribute('tabindex', '0');
   });
 
+  /* As páginas de casa (Passatempo e Mural) abrem em janela própria,
+     não em aba: são coisas para usar ao lado do portfólio, não para
+     substituí-lo. Quem marca isso é o data-abre, que só elas têm. */
+  function janelinha(c) {
+    var largura = Math.min(1120, Math.max(360, (screen.availWidth || 1280) - 80));
+    var altura  = Math.min(860,  Math.max(420, (screen.availHeight || 800) - 80));
+    var esq = Math.round(((screen.availWidth  || 1280) - largura) / 2);
+    var topo = Math.round(((screen.availHeight || 800) - altura) / 2);
+
+    try {
+      return window.open(
+        c.destino,
+        'kiq-' + c.el.dataset.abre,
+        'popup=yes,width=' + largura + ',height=' + altura +
+        ',left=' + esq + ',top=' + topo + ',resizable=yes,scrollbars=yes'
+      );
+    } catch (erro) {
+      return null;
+    }
+  }
+
   /* Ativação de verdade: devolve o href, dispara um click e tira o
      href de novo. O dispatch é síncrono, então quando o click()
      retorna quem tinha de ler o href já leu. */
   function ativar(c) {
     var el = c.el;
+
+    if (c.destino && el.dataset.abre) {
+      /* Primeiro o click, para um eventual script de modal ter a
+         primeira palavra: se ele chamar preventDefault, quem manda é
+         ele e a janela não abre. Sem href no elemento, esse click não
+         navega sozinho nem é pego pelo interceptador do visualizador. */
+      var aviso = new MouseEvent('click', { bubbles: true, cancelable: true });
+      if (!el.dispatchEvent(aviso)) return;
+
+      var janela = janelinha(c);
+      /* Bloqueador de pop-up, ou um iframe sem allow-popups, devolvem
+         null. Aí segue pelo caminho normal — melhor abrir em aba do
+         que não abrir nada. */
+      if (janela) { try { janela.focus(); } catch (erro) {} return; }
+    }
+
     if (c.destino) {
       el.setAttribute('href', c.destino);
       el.click();

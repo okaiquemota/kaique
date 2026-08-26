@@ -116,8 +116,15 @@ começo de um arrasto. Então:
 
 - **um clique** apenas seleciona o objeto (`.esta-selecionado`, que acende o halo na cor
   dele). Clicar no vácuo tira a seleção;
-- **dois cliques rápidos** ativam de verdade — o `<a>` navega, o `[data-abre]` abre o modal;
+- **dois cliques rápidos** ativam de verdade: os links de rede abrem normalmente, e o
+  Passatempo e o Mural abrem em **janela própria** (`window.open` com features de
+  pop-up), não em aba — são coisas para usar ao lado do portfólio, não no lugar dele.
+  Se o navegador bloquear o pop-up, cai para a navegação comum: melhor abrir em aba do
+  que não abrir;
 - **arrastar** nunca ativa nada.
+
+Nesses dois, o `click` é disparado **antes** da janela abrir: se o seu script de modal
+chamar `preventDefault`, quem manda é ele e o pop-up não aparece.
 
 Repare que **o seu script não precisa saber disso**. Todo clique simples é cancelado em
 fase de captura; no duplo clique a física chama `el.click()`, que nasce com `detail === 0`
