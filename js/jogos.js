@@ -1,3 +1,28 @@
+/* ------------------------------------------------------------------
+   A paleta chapada, do lado do canvas.
+   ------------------------------------------------------------------
+   O CSS resolve a cor por token (--magenta, --limao...), mas canvas
+   nao le variavel de CSS: cada `fillStyle` quer um valor cru. Entao
+   as mesmas sete cores vivem aqui uma vez so, e os seis jogos leem
+   deste objeto — trocar a paleta continua sendo um lugar so, nao
+   quarenta `fillStyle` espalhados pelo arquivo.
+
+   Precisa casar com o :root de css/paginas.css.
+   ------------------------------------------------------------------ */
+const PALETA = {
+  vacuo:   '#000000',
+  creme:   '#ece2d0',
+  magenta: '#ff2d87',
+  laranja: '#ff6a13',
+  coral:   '#ff9a76',
+  limao:   '#d4ff3f',
+  azul:    '#2b5cff',
+  /* a casca do kiwi: e fruta cortada, nao interface */
+  casca:   '#8b4513',
+  /* creme rebaixado, para grade e faixa de pista */
+  veu:      (a) => `rgba(236, 226, 208, ${a})`
+};
+
 /* ---------------------------- Genio ---------------------------- */
 (() => {
   'use strict';
@@ -160,11 +185,11 @@
   const CEL  = tela.width / N;
 
   const COR = {
-    fundo:  '#16111c',
-    grade:  'rgba(251,243,228,0.05)',
-    corpo:  '#6d28d9',
-    cabeca: '#c9a7ff',
-    fruta:  '#ff4d97'
+    fundo:  PALETA.vacuo,
+    grade:  PALETA.veu(0.06),
+    corpo:  PALETA.azul,
+    cabeca: PALETA.limao,
+    fruta:  PALETA.magenta
   };
 
   const LADOS = {
@@ -408,25 +433,25 @@
     pincel.translate(x, y);
     
     // Corpo branco do 208
-    pincel.fillStyle = '#fbf3e4';
+    pincel.fillStyle = PALETA.creme;
     pincel.beginPath();
     pincel.roundRect(-CAR_W/2, 0, CAR_W, CAR_H, 8);
     pincel.fill();
     
     // Teto panorâmico (Griffe)
-    pincel.fillStyle = '#16111c';
+    pincel.fillStyle = PALETA.vacuo;
     pincel.fillRect(-CAR_W/2 + 4, 15, CAR_W - 8, 30);
     
     // Para-brisa traseiro
     pincel.fillRect(-CAR_W/2 + 6, CAR_H - 15, CAR_W - 12, 10);
     
     // DRL "dente de sabre" (assinatura do 208)
-    pincel.fillStyle = '#c9a7ff'; // lilas
+    pincel.fillStyle = PALETA.limao;
     pincel.fillRect(-CAR_W/2 + 2, 2, 4, 15);
     pincel.fillRect(CAR_W/2 - 6, 2, 4, 15);
     
     // Lanternas traseiras (garras de leão)
-    pincel.fillStyle = '#ff4d97'; // rosa
+    pincel.fillStyle = PALETA.magenta;
     pincel.fillRect(-CAR_W/2 + 2, CAR_H - 6, 8, 4);
     pincel.fillRect(CAR_W/2 - 10, CAR_H - 6, 8, 4);
     
@@ -439,7 +464,7 @@
     pincel.translate(x, y);
     
     // Laranja/Amarelo do cone
-    pincel.fillStyle = '#ffc531'; 
+    pincel.fillStyle = PALETA.laranja; 
     pincel.beginPath();
     pincel.moveTo(0, -size/2);
     pincel.lineTo(-size/2, size/2);
@@ -447,7 +472,7 @@
     pincel.fill();
     
     // Faixa branca do cone
-    pincel.fillStyle = '#fbf3e4';
+    pincel.fillStyle = PALETA.creme;
     pincel.beginPath();
     pincel.moveTo(-size/4.5, -size/6);
     pincel.lineTo(size/4.5, -size/6);
@@ -460,11 +485,11 @@
 
   function desenhar() {
     // Asfalto
-    pincel.fillStyle = '#16111c';
+    pincel.fillStyle = PALETA.vacuo;
     pincel.fillRect(0, 0, LARGURA, ALTURA);
 
     // Faixas da pista
-    pincel.strokeStyle = 'rgba(251,243,228,0.15)';
+    pincel.strokeStyle = PALETA.veu(0.16);
     pincel.lineWidth = 4;
     pincel.setLineDash([20, 20]);
     pincel.lineDashOffset = -offsetFaixa;
@@ -658,7 +683,7 @@
 
   function desenhar(timestamp) {
     // Fundo
-    pincel.fillStyle = '#16111c';
+    pincel.fillStyle = PALETA.vacuo;
     pincel.fillRect(0, 0, tela.width, tela.height);
 
     if (!alvo) return;
@@ -674,20 +699,20 @@
     const prop = Math.max(0, 1 - (idade / alvo.vida));
 
     // Anel externo que vai fechando (indicador de tempo)
-    pincel.strokeStyle = '#ffc531'; // amarelo
+    pincel.strokeStyle = PALETA.laranja;
     pincel.lineWidth = 3;
     pincel.beginPath();
     pincel.arc(alvo.x, alvo.y, alvo.r + (prop * 20), 0, Math.PI * 2);
     pincel.stroke();
 
     // Alvo principal
-    pincel.fillStyle = '#ff4d97'; // rosa
+    pincel.fillStyle = PALETA.magenta;
     pincel.beginPath();
     pincel.arc(alvo.x, alvo.y, alvo.r, 0, Math.PI * 2);
     pincel.fill();
     
     // Miolo do alvo
-    pincel.fillStyle = '#fbf3e4'; // creme
+    pincel.fillStyle = PALETA.creme;
     pincel.beginPath();
     pincel.arc(alvo.x, alvo.y, alvo.r * 0.4, 0, Math.PI * 2);
     pincel.fill();
@@ -774,7 +799,7 @@
     pontos = 0;
     alvo = null;
     marcar();
-    pincel.fillStyle = '#16111c';
+    pincel.fillStyle = PALETA.vacuo;
     pincel.fillRect(0, 0, tela.width, tela.height);
     elMsg.textContent = 'Clica no alvo. Errou ou demorou, morre.';
     btComecar.disabled = false;
@@ -782,7 +807,7 @@
   });
 
   marcar();
-  pincel.fillStyle = '#16111c';
+  pincel.fillStyle = PALETA.vacuo;
   pincel.fillRect(0, 0, tela.width, tela.height);
 })();
 
@@ -827,24 +852,24 @@
     pincel.rotate(rotacao);
     
     // Corpo (marrom por fora, verde por dentro simulando a fruta cortada)
-    pincel.fillStyle = '#8B4513';
+    pincel.fillStyle = PALETA.casca;
     pincel.beginPath();
     pincel.arc(0, 0, KIWI.r, 0, Math.PI * 2);
     pincel.fill();
     
-    pincel.fillStyle = '#84cc16'; // verde kiwi
+    pincel.fillStyle = PALETA.limao;   // polpa
     pincel.beginPath();
     pincel.arc(0, 0, KIWI.r - 3, 0, Math.PI * 2);
     pincel.fill();
     
     // Olho
-    pincel.fillStyle = '#16111c';
+    pincel.fillStyle = PALETA.vacuo;
     pincel.beginPath();
     pincel.arc(4, -4, 2.5, 0, Math.PI * 2);
     pincel.fill();
     
     // Biquinho longo do kiwi
-    pincel.fillStyle = '#ffc531'; // amarelo
+    pincel.fillStyle = PALETA.laranja;
     pincel.beginPath();
     pincel.moveTo(8, -1);
     pincel.lineTo(22, 2);
@@ -856,13 +881,13 @@
 
   function desenhar() {
     // Fundo
-    pincel.fillStyle = '#16111c';
+    pincel.fillStyle = PALETA.vacuo;
     pincel.fillRect(0, 0, tela.width, tela.height);
 
     // Canos (Pintados com as cores do site)
     canos.forEach(cano => {
       // Muda a cor do cano depois que você passa por ele pra dar um feedback visual
-      pincel.fillStyle = cano.passou ? '#ff4d97' : '#6d28d9';
+      pincel.fillStyle = cano.passou ? PALETA.magenta : PALETA.azul;
       
       // Topo
       pincel.fillRect(cano.x, 0, LARGURA_CANO, cano.topo);
@@ -870,7 +895,7 @@
       pincel.fillRect(cano.x, cano.topo + BURACO, LARGURA_CANO, tela.height - (cano.topo + BURACO));
       
       // Detalhe na ponta dos canos pra dar estilo
-      pincel.fillStyle = '#16111c';
+      pincel.fillStyle = PALETA.vacuo;
       pincel.fillRect(cano.x, cano.topo - 6, LARGURA_CANO, 6);
       pincel.fillRect(cano.x, cano.topo + BURACO, LARGURA_CANO, 6);
     });
@@ -1036,8 +1061,10 @@
   let pontos = 0, rodando = false, animationId = null;
 
   const ALTURA_BLOCO = 28;
-  // A paleta de cores inteira do seu site, o jogo vai ciclando nelas
-  const CORES = ['#6d28d9', '#ff4d97', '#ffc531', '#c9a7ff', '#fbf3e4'];
+  /* A paleta do site, e o jogo vai ciclando nela. O creme fica de
+     fora: o contorno de cada bloco tambem e creme, e um bloco creme
+     nascia sem contorno nenhum. */
+  const CORES = [PALETA.azul, PALETA.magenta, PALETA.laranja, PALETA.limao, PALETA.coral];
   
   let blocos = [];
   let blocoAtual = null;
@@ -1054,14 +1081,14 @@
     pincel.fillRect(b.x, b.y, b.w, ALTURA_BLOCO);
     
     // Contorno brutalista em cada bloco de UI
-    pincel.strokeStyle = '#fbf3e4';
+    pincel.strokeStyle = PALETA.creme;
     pincel.lineWidth = 2;
     pincel.strokeRect(b.x, b.y, b.w, ALTURA_BLOCO);
   }
 
   function desenhar() {
     // Fundo da prancheta
-    pincel.fillStyle = '#16111c'; 
+    pincel.fillStyle = PALETA.vacuo; 
     pincel.fillRect(0, 0, tela.width, tela.height);
 
     pincel.save();
@@ -1071,7 +1098,7 @@
     pincel.translate(0, offsetAtual);
 
     // Grid sutil no fundo pra dar cara de software de design
-    pincel.strokeStyle = 'rgba(251,243,228,0.05)';
+    pincel.strokeStyle = PALETA.veu(0.06);
     pincel.lineWidth = 1;
     for (let i = 0; i < tela.height + offsetAtual + 100; i += ALTURA_BLOCO) {
       pincel.beginPath();
@@ -1184,7 +1211,7 @@
       x: 30, 
       y: tela.height - ALTURA_BLOCO, 
       w: tela.width - 60, 
-      cor: '#6d28d9' 
+      cor: PALETA.azul 
     }];
     
     blocoAtual = {

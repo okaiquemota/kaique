@@ -3,16 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#181818">
+  <meta name="theme-color" content="#000000">
   <meta name="description" content="Portf&oacute;lio de Kaique Mota &mdash; desenvolvedor e criativo.">
   <title>Kaique Mota &mdash; Portf&oacute;lio</title>
 
-  <!-- Playfair Display (nome) + Caveat (manuscrito do Mural).
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23ff2d87'/%3E%3Ctext x='16' y='24' font-family='Impact,Haettenschweiler,sans-serif' font-size='22' text-anchor='middle' fill='%23ffffff'%3EK%3C/text%3E%3C/svg%3E">
+
+  <!-- Anton (display pesado, caixa alta) + Caveat (manuscrito do Mural).
        Se quiser voltar a zero dependencias externas, remova estas 3 linhas:
-       o CSS ja cai para Georgia/cursive do sistema. -->
+       o CSS ja cai para Impact/cursive do sistema. -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Caveat:wght@500;600&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Caveat:wght@500;600&display=swap">
 
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/painel.css">
@@ -30,8 +32,6 @@
     <div class="aro aro--um"></div>
     <div class="aro aro--dois"></div>
     <div class="aro aro--tres"></div>
-
-    <div class="vinheta"></div>
   </div>
 
   <!-- ============================================================
@@ -42,236 +42,168 @@
     <!-- ---------- O CENTRO ---------- -->
     <div class="nucleo">
       <h1 class="nome">KiQ</h1>
+      <span class="nucleo__sub">Desenvolvedor &amp; criativo</span>
     </div>
 
     <!-- ---------- A ORBITA ---------- -->
     <nav class="orbita" aria-label="Links do portf&oacute;lio">
-      <!-- 1. GitHub &middot; 7s &middot; octocat dourado sobre placa de circuito -->
+      <!-- 1. GitHub &middot; 7s &middot; placa creme, octocat preto -->
       <a class="orbe orbe--nu orbe--github" href="https://github.com/okaiquemota" target="_blank" rel="noopener noreferrer"
          draggable="false" aria-label="GitHub" title="GitHub &middot; dois cliques para abrir">
         <span class="orbe__flutua">
         <span class="orbe__face">
           <span class="orbe__icone" aria-hidden="true">
             <svg viewBox="0 0 48 48" focusable="false" aria-hidden="true">
-              <defs>
-                <linearGradient id="gh-corpo" x1="0" y1="0" x2=".32" y2="1">
-                  <stop offset="0" stop-color="#2b3138"/>
-                  <stop offset="1" stop-color="#0d1117"/>
-                </linearGradient>
-              </defs>
-              <rect x="1" y="1" width="46" height="46" rx="11" fill="url(#gh-corpo)" stroke="rgba(255,255,255,.2)" stroke-width="1"/>
-              <g transform="translate(24,24) scale(1.3) translate(-12,-12)">
-                <path fill="#ffffff" d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23a11.5 11.5 0 0 1 3-.405c1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>
+              <rect width="48" height="48" rx="12" fill="#ece2d0"/>
+              <g transform="translate(24,24) scale(1.42) translate(-12,-12)">
+                <path fill="#111111" d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23a11.5 11.5 0 0 1 3-.405c1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>
               </g>
-              <path d="M11 5.2 Q24 2.2 37 5.2" fill="none" stroke="rgba(255,255,255,.16)" stroke-width="1.4" stroke-linecap="round"/>
             </svg>
           </span>
         </span>
         </span>
       </a>
-      <!-- 2. Instagram &middot; 5s &middot; lente real dentro da moldura do Insta -->
+      <!-- 2. Instagram &middot; 5s &middot; placa magenta, moldura branca -->
       <a class="orbe orbe--nu orbe--instagram" href="https://www.instagram.com/kiq.ham" target="_blank" rel="noopener noreferrer"
          draggable="false" aria-label="Instagram" title="Instagram &middot; dois cliques para abrir">
         <span class="orbe__flutua">
         <span class="orbe__face">
           <span class="orbe__icone" aria-hidden="true">
             <svg viewBox="0 0 48 48" focusable="false" aria-hidden="true">
-              <defs>
-                <radialGradient id="ig-fundo" cx=".3" cy="1.06" r="1.3">
-                  <stop offset="0" stop-color="#ffdd77"/>
-                  <stop offset=".18" stop-color="#f9a03f"/>
-                  <stop offset=".38" stop-color="#ed4956"/>
-                  <stop offset=".6" stop-color="#d62976"/>
-                  <stop offset=".82" stop-color="#962fbf"/>
-                  <stop offset="1" stop-color="#4f5bd5"/>
-                </radialGradient>
-              </defs>
-              <rect x="1" y="1" width="46" height="46" rx="13" fill="url(#ig-fundo)"/>
-              <rect x="12.6" y="12.6" width="22.8" height="22.8" rx="7.2" fill="none" stroke="#ffffff" stroke-width="2.7"/>
-              <circle cx="24" cy="24" r="6" fill="none" stroke="#ffffff" stroke-width="2.7"/>
-              <circle cx="31.7" cy="16.3" r="1.75" fill="#ffffff"/>
-              <path d="M11 5.2 Q24 2.2 37 5.2" fill="none" stroke="rgba(255,255,255,.22)" stroke-width="1.4" stroke-linecap="round"/>
+              <rect width="48" height="48" rx="12" fill="#ff2d87"/>
+              <rect x="12" y="12" width="24" height="24" rx="7.5" fill="none" stroke="#ffffff" stroke-width="3.2"/>
+              <circle cx="24" cy="24" r="6" fill="none" stroke="#ffffff" stroke-width="3.2"/>
+              <circle cx="32.2" cy="15.8" r="2" fill="#ffffff"/>
             </svg>
           </span>
         </span>
         </span>
       </a>
-      <!-- 3. Behance &middot; 9s -->
+      <!-- 3. Behance &middot; 9s &middot; placa azul, marca branca -->
       <a class="orbe orbe--nu orbe--behance" href="https://www.behance.net/okaiquemota" target="_blank" rel="noopener noreferrer"
          draggable="false" aria-label="Behance" title="Behance &middot; dois cliques para abrir">
         <span class="orbe__flutua">
         <span class="orbe__face">
           <span class="orbe__icone" aria-hidden="true">
             <svg viewBox="0 0 48 48" focusable="false" aria-hidden="true">
-              <defs>
-                <linearGradient id="be-azul" x1="0" y1="0" x2=".4" y2="1">
-                  <stop offset="0" stop-color="#cdd8ff"/>
-                  <stop offset=".4" stop-color="#6d8bff"/>
-                  <stop offset="1" stop-color="#2b3f9e"/>
-                </linearGradient>
-                <linearGradient id="be-placa" x1="0" y1="0" x2=".3" y2="1">
-                  <stop offset="0" stop-color="#171c2e"/>
-                  <stop offset="1" stop-color="#080a13"/>
-                </linearGradient>
-              </defs>
-              <rect x="1" y="1" width="46" height="46" rx="10" fill="url(#be-placa)" stroke="rgba(109,139,255,.32)"/>
-              <text x="24" y="32.6" text-anchor="middle" font-size="24" font-weight="800" fill="#1d2650" font-family="system-ui, -apple-system, Segoe UI, Roboto, sans-serif">B&#275;</text>
-              <text x="24" y="31.4" text-anchor="middle" font-size="24" font-weight="800" fill="url(#be-azul)" font-family="system-ui, -apple-system, Segoe UI, Roboto, sans-serif">B&#275;</text>
-              <path d="M11 7 Q24 3.5 37 7" fill="none" stroke="rgba(255,255,255,.13)" stroke-width="1.4" stroke-linecap="round"/>
+              <rect width="48" height="48" rx="12" fill="#2b5cff"/>
+              <!-- a marca de verdade, em path: o &lt;text&gt; de antes dependia da
+                   fonte instalada e saía diferente em cada sistema -->
+              <g transform="translate(24,24) scale(1.28) translate(-12,-12)">
+                <path fill="#ffffff" d="M7.443 5.35c.639 0 1.23.05 1.77.198.541.099 1.001.297 1.387.544.388.248.69.594.9 1.04.198.445.297.98.297 1.615 0 .693-.157 1.271-.474 1.717-.315.445-.78.83-1.377 1.113.84.247 1.462.692 1.878 1.286.415.593.623 1.336.623 2.177 0 .692-.129 1.286-.386 1.78-.257.495-.613.9-1.06 1.207-.446.297-.95.514-1.535.643a6.723 6.723 0 0 1-1.77.198H0V5.35h7.443zm-.446 5.239c.525 0 .96-.128 1.297-.376.336-.247.5-.653.5-1.207 0-.306-.06-.564-.169-.762a1.185 1.185 0 0 0-.465-.465 1.762 1.762 0 0 0-.673-.238 4.276 4.276 0 0 0-.792-.06H3.35v3.108h3.647zm.2 5.5c.297 0 .584-.03.85-.09.267-.06.505-.158.703-.297.198-.138.356-.326.475-.564.118-.238.178-.545.178-.911 0-.713-.198-1.222-.594-1.53-.396-.306-.93-.455-1.593-.455H3.35v3.847h3.847zM16.9 15.98c.446.435 1.089.653 1.93.653.603 0 1.12-.149 1.554-.455.435-.297.703-.614.802-.95h2.564c-.415 1.27-1.04 2.177-1.9 2.72-.85.554-1.88.83-3.09.83-.84 0-1.6-.138-2.276-.406a4.83 4.83 0 0 1-1.72-1.15 5.264 5.264 0 0 1-1.09-1.79 6.62 6.62 0 0 1-.386-2.286c0-.802.128-1.554.396-2.246a5.28 5.28 0 0 1 1.11-1.8 5.166 5.166 0 0 1 1.73-1.196 5.51 5.51 0 0 1 2.226-.436c.91 0 1.702.178 2.395.535a4.79 4.79 0 0 1 1.673 1.415c.436.594.752 1.276.94 2.038.196.762.257 1.554.207 2.385h-7.752c0 .861.297 1.673.742 2.108zm3.386-5.723c-.356-.386-.98-.594-1.712-.594-.475 0-.87.08-1.188.238a2.4 2.4 0 0 0-.752.594c-.188.238-.317.485-.396.752a3.32 3.32 0 0 0-.13.653h4.802c-.069-.752-.267-1.257-.624-1.643zM15.198 6.31h6.02v1.465h-6.02V6.31z"/>
+              </g>
             </svg>
           </span>
         </span>
         </span>
       </a>
-      <!-- 4. A Loja do Kiwi &middot; 10s &middot; arte em img/kiwi.svg -->
+      <!-- 4. A Loja do Kiwi &middot; 10s &middot; placa verde da loja, marca branca -->
       <a class="orbe orbe--nu orbe--kiwi" href="https://www.instagram.com/alojadokiwi" target="_blank" rel="noopener noreferrer"
          draggable="false" aria-label="A Loja do Kiwi" title="A Loja do Kiwi &middot; dois cliques para abrir">
         <span class="orbe__flutua">
         <span class="orbe__face">
           <span class="orbe__icone" aria-hidden="true">
             <svg focusable="false" aria-hidden="true" viewBox="0 0 2000 2000" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
-    <g transform="matrix(1.98906,0,0,1.98906,1000,1000)">
+    <rect width="2000" height="2000" rx="500" style="fill:rgb(108,160,41);"/>
+    <g transform="translate(1000,1000) scale(0.63) translate(-987,-1035)"><g transform="matrix(1.98906,0,0,1.98906,1000,1000)">
         <g transform="matrix(1,0,0,1,-650,-650)">
             <g transform="matrix(2,0,0,2,0,0)">
-                <path d="M501.819,321.4C543.828,328.01 573.713,368.832 552.083,405.445C511.806,473.622 433.834,513.925 352.184,501.077L383.389,302.765L501.819,321.4Z" style="fill:rgb(108,160,41);fill-rule:nonzero;"/>
+                <path d="M501.819,321.4C543.828,328.01 573.713,368.832 552.083,405.445C511.806,473.622 433.834,513.925 352.184,501.077L383.389,302.765L501.819,321.4Z" style="fill:#ffffff;fill-rule:nonzero;"/>
             </g>
             <g transform="matrix(2,0,0,2,0,0)">
-                <path d="M537.788,398.187C526.586,469.378 443.488,515.444 352.184,501.077C292.037,491.613 243.332,458.284 220.299,416.287C208.367,394.533 203.324,370.454 207.147,346.161C215.764,291.394 266.93,251.497 331.649,242.544C351.058,239.859 371.686,239.957 392.75,243.271C484.054,257.638 548.99,326.996 537.788,398.187Z" style="fill:rgb(108,160,41);fill-rule:nonzero;"/>
+                <path d="M537.788,398.187C526.586,469.378 443.488,515.444 352.184,501.077C292.037,491.613 243.332,458.284 220.299,416.287C208.367,394.533 203.324,370.454 207.147,346.161C215.764,291.394 266.93,251.497 331.649,242.544C351.058,239.859 371.686,239.957 392.75,243.271C484.054,257.638 548.99,326.996 537.788,398.187Z" style="fill:#ffffff;fill-rule:nonzero;"/>
             </g>
             <g transform="matrix(2,0,0,2,0,0)">
-                <path d="M537.788,398.187C526.586,469.378 443.488,515.444 352.184,501.077C292.037,491.613 243.332,458.284 220.299,416.287C208.367,394.533 203.324,370.454 207.147,346.161C215.764,291.394 266.93,251.497 331.649,242.544C351.058,239.859 371.686,239.957 392.75,243.271C484.054,257.638 548.99,326.996 537.788,398.187Z" style="fill:rgb(108,160,41);fill-rule:nonzero;"/>
+                <path d="M537.788,398.187C526.586,469.378 443.488,515.444 352.184,501.077C292.037,491.613 243.332,458.284 220.299,416.287C208.367,394.533 203.324,370.454 207.147,346.161C215.764,291.394 266.93,251.497 331.649,242.544C351.058,239.859 371.686,239.957 392.75,243.271C484.054,257.638 548.99,326.996 537.788,398.187Z" style="fill:#ffffff;fill-rule:nonzero;"/>
             </g>
             <g transform="matrix(2,0,0,2,0,0)">
-                <path d="M356.467,217.884C356.467,272.496 310.699,316.767 254.241,316.767C208.453,316.767 169.695,287.647 156.682,247.508L92.102,228.316C81.646,225.208 81.603,210.415 92.04,207.246L156.915,187.551C170.152,147.778 208.722,119 254.241,119C310.699,119 356.467,163.272 356.467,217.884ZM224.463,236.972C240.909,236.972 254.241,223.452 254.241,206.775C254.241,190.098 240.909,176.578 224.463,176.578C208.018,176.578 194.686,190.098 194.686,206.775C194.686,223.452 208.018,236.972 224.463,236.972Z" style="fill:rgb(108,160,41);"/>
+                <path d="M356.467,217.884C356.467,272.496 310.699,316.767 254.241,316.767C208.453,316.767 169.695,287.647 156.682,247.508L92.102,228.316C81.646,225.208 81.603,210.415 92.04,207.246L156.915,187.551C170.152,147.778 208.722,119 254.241,119C310.699,119 356.467,163.272 356.467,217.884ZM224.463,236.972C240.909,236.972 254.241,223.452 254.241,206.775C254.241,190.098 240.909,176.578 224.463,176.578C208.018,176.578 194.686,190.098 194.686,206.775C194.686,223.452 208.018,236.972 224.463,236.972Z" style="fill:#ffffff;"/>
             </g>
             <g transform="matrix(2,0,0,2,0,0)">
-                <path d="M354.902,203.804C362.412,241.354 378.997,236.66 422.807,250.742C466.616,264.825 210.646,391.869 210.646,391.869C196.251,351.189 202.51,317.394 198.129,308.632C193.748,299.87 178.727,286.415 170.904,274.524C170.904,274.524 347.392,166.255 354.902,203.804Z" style="fill:rgb(108,160,41);fill-rule:nonzero;"/>
+                <path d="M354.902,203.804C362.412,241.354 378.997,236.66 422.807,250.742C466.616,264.825 210.646,391.869 210.646,391.869C196.251,351.189 202.51,317.394 198.129,308.632C193.748,299.87 178.727,286.415 170.904,274.524C170.904,274.524 347.392,166.255 354.902,203.804Z" style="fill:#ffffff;fill-rule:nonzero;"/>
             </g>
             <g transform="matrix(2,0,0,2,0,0)">
-                <path d="M296.072,466.97L317.56,534.504C322.74,550.783 345.561,551.366 351.565,535.372L372.425,479.8L384.214,531.379C389.416,554.137 421.814,554.191 427.092,531.45L439.078,479.8L366.167,437.242L296.072,466.97Z" style="fill:rgb(108,160,41);fill-rule:nonzero;"/>
+                <path d="M296.072,466.97L317.56,534.504C322.74,550.783 345.561,551.366 351.565,535.372L372.425,479.8L384.214,531.379C389.416,554.137 421.814,554.191 427.092,531.45L439.078,479.8L366.167,437.242L296.072,466.97Z" style="fill:#ffffff;fill-rule:nonzero;"/>
             </g>
             <g transform="matrix(2,0,0,2,0,0)">
-                <circle cx="214.714" cy="206.933" r="12.204" style="fill:rgb(108,160,41);"/>
+                <circle cx="214.714" cy="206.933" r="12.204" style="fill:#ffffff;"/>
             </g>
         </g>
-    </g>
+    </g></g>
 </svg>
           </span>
         </span>
         </span>
       </a>
-      <!-- 5. @imnotkiq &middot; 6.5s &middot; arte em img/star.svg -->
+      <!-- 5. @imnotkiq &middot; 6.5s &middot; placa laranja, estrela branca -->
       <a class="orbe orbe--nu orbe--estrela" href="https://www.instagram.com/imnotkiq" target="_blank" rel="noopener noreferrer"
          draggable="false" aria-label="@imnotkiq" title="@imnotkiq &middot; dois cliques para abrir">
         <span class="orbe__flutua">
         <span class="orbe__face">
           <span class="orbe__icone" aria-hidden="true">
             <svg focusable="false" aria-hidden="true" viewBox="0 0 2000 2000" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+    <rect width="2000" height="2000" rx="500" style="fill:#ff6a13;"/>
+    <g transform="translate(1000,1000) scale(0.6) translate(-1000,-1000)">
     <g transform="matrix(3.234661,0,0,3.234661,-2422.195178,-2192.882993)">
         <path d="M1262.737,1114.281L1091.145,1116.978L975.987,1248.972L973.955,1118.812L772.921,1121.961L972.398,1019.187L967.8,725.196L1129.354,938.32L1343.031,828.229L1184.045,1010.477L1262.737,1114.281Z" style="fill:white;"/>
+    </g>
     </g>
 </svg>
           </span>
         </span>
         </span>
       </a>
-      <!-- 4. Passatempo &middot; 6s &middot; o card e o console &middot; gancho: data-abre="jogos" -->
+      <!-- 6. Passatempo &middot; 6s &middot; placa creme, controle preto &middot; gancho: data-abre="jogos" -->
       <button class="orbe orbe--nu orbe--passatempo" type="button" data-abre="jogos" aria-haspopup="dialog" aria-label="Passatempo" title="Passatempo &middot; dois cliques para abrir">
         <span class="orbe__flutua">
         <span class="orbe__face">
           <span class="orbe__icone" aria-hidden="true">
+            <!-- O controle inteiro: placa creme, casco preto, quatro
+                 botões nas cores da paleta. Nenhum degradê, nenhum
+                 brilho — o que dá volume aqui é o recorte da forma. -->
             <svg viewBox="0 8 160 80" focusable="false" aria-hidden="true">
-              <defs>
-                <linearGradient id="ct-corpo" x1=".3" y1="0" x2=".45" y2="1">
-                  <stop offset="0" stop-color="#f2f0ec"/>
-                  <stop offset=".3" stop-color="#dcdad5"/>
-                  <stop offset=".72" stop-color="#c0bdb7"/>
-                  <stop offset="1" stop-color="#9b9791"/>
-                </linearGradient>
-                <linearGradient id="ct-placa" x1=".2" y1="0" x2=".6" y2="1">
-                  <stop offset="0" stop-color="#b5b0a7"/>
-                  <stop offset="1" stop-color="#8d8880"/>
-                </linearGradient>
-                <linearGradient id="ct-cruz" x1=".2" y1="0" x2=".6" y2="1">
-                  <stop offset="0" stop-color="#4a4a4d"/>
-                  <stop offset="1" stop-color="#232326"/>
-                </linearGradient>
-              </defs>
+              <rect x="0" y="8" width="160" height="80" rx="20" fill="#ece2d0"/>
 
               <!-- ombros L e R, atras do corpo -->
-              <rect x="24" y="17" width="26" height="10" rx="5" fill="#a8a49d"/>
-              <rect x="110" y="17" width="26" height="10" rx="5" fill="#a8a49d"/>
+              <rect x="30" y="21" width="24" height="9" rx="4.5" fill="#111111"/>
+              <rect x="106" y="21" width="24" height="9" rx="4.5" fill="#111111"/>
 
               <!-- corpo: dois lobos unidos por um bloco central -->
-              <g fill="url(#ct-corpo)">
-                <rect x="30" y="22" width="100" height="48" rx="11"/>
-                <circle cx="36" cy="50" r="28"/>
-                <circle cx="124" cy="50" r="28"/>
+              <g fill="#111111">
+                <rect x="34" y="26" width="92" height="42" rx="10"/>
+                <circle cx="40" cy="50" r="24"/>
+                <circle cx="120" cy="50" r="24"/>
               </g>
-
-              <!-- brilho na aresta de cima -->
-              <path d="M20 27 Q80 20 140 27" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="1.6" stroke-linecap="round"/>
 
               <!-- reentrancia central -->
-              <rect x="60" y="29" width="40" height="8" rx="4" fill="#c4c1bb"/>
-              <rect x="60" y="29" width="40" height="8" rx="4" fill="none" stroke="rgba(0,0,0,.12)"/>
+              <rect x="65" y="32" width="30" height="7" rx="3.5" fill="#ece2d0"/>
 
               <!-- cruzeta -->
-              <g transform="translate(36,50)">
-                <circle r="20" fill="rgba(0,0,0,.06)"/>
-                <path fill="url(#ct-cruz)" d="M-5.5 -16 h11 v10.5 h10.5 v11 h-10.5 v10.5 h-11 v-10.5 h-10.5 v-11 h10.5 z"/>
-                <circle r="2.6" fill="#4e4e52"/>
-                <g fill="rgba(255,255,255,.28)">
-                  <path d="M0 -12.6 l2.6 4 h-5.2 z"/>
-                  <path d="M0 12.6 l2.6 -4 h-5.2 z"/>
-                  <path d="M-12.6 0 l4 2.6 v-5.2 z"/>
-                  <path d="M12.6 0 l-4 2.6 v-5.2 z"/>
-                </g>
+              <g transform="translate(40,50)">
+                <path fill="#ece2d0" d="M-4.6 -13.5 h9.2 v8.9 h8.9 v9.2 h-8.9 v8.9 h-9.2 v-8.9 h-8.9 v-9.2 h8.9 z"/>
               </g>
 
-              <!-- placa dos quatro botoes -->
-              <g transform="rotate(-25 124 50)">
-                <ellipse cx="124" cy="50" rx="25.5" ry="22.5" fill="url(#ct-placa)"/>
-                <rect x="109" y="35" width="30" height="14.5" rx="7.25" fill="rgba(0,0,0,.1)"/>
-                <rect x="109" y="50.5" width="30" height="14.5" rx="7.25" fill="rgba(0,0,0,.1)"/>
-                <g>
-                  <circle cx="124" cy="37" r="7.3" fill="#2f6fd0"/>
-                  <circle cx="137" cy="50" r="7.3" fill="#d8332e"/>
-                  <circle cx="124" cy="63" r="7.3" fill="#f0c02a"/>
-                  <circle cx="111" cy="50" r="7.3" fill="#2fa565"/>
-                </g>
-                <g fill="rgba(255,255,255,.42)">
-                  <ellipse cx="121.8" cy="34.6" rx="2.9" ry="1.9"/>
-                  <ellipse cx="134.8" cy="47.6" rx="2.9" ry="1.9"/>
-                  <ellipse cx="121.8" cy="60.6" rx="2.9" ry="1.9"/>
-                  <ellipse cx="108.8" cy="47.6" rx="2.9" ry="1.9"/>
-                </g>
+              <!-- os quatro botoes, na placa deitada de sempre -->
+              <g transform="rotate(-25 120 50)">
+                <circle cx="120" cy="38.5" r="6.4" fill="#2b5cff"/>
+                <circle cx="131.5" cy="50" r="6.4" fill="#ff3b2f"/>
+                <circle cx="120" cy="61.5" r="6.4" fill="#ff6a13"/>
+                <circle cx="108.5" cy="50" r="6.4" fill="#ff2d87"/>
               </g>
-
             </svg>
           </span>
         </span>
         </span>
       </button>
-      <!-- 5. Mural &middot; 8s &middot; folha de fichario, nao vidro &middot; gancho: data-abre="mural" -->
+      <!-- 7. Mural &middot; 8s &middot; folha de fichario chapada &middot; gancho: data-abre="mural" -->
       <button class="orbe orbe--mural" type="button" data-abre="mural" aria-haspopup="dialog" title="Mural &middot; dois cliques para abrir">
         <span class="orbe__flutua">
         <span class="orbe__face">
           <span class="orbe__icone" aria-hidden="true">
+            <!-- percevejo: um circulo cheio e uma agulha reta -->
             <svg viewBox="0 0 34 34" focusable="false" aria-hidden="true">
-              <defs>
-                <radialGradient id="mu-cabeca" cx=".33" cy=".28" r=".8">
-                  <stop offset="0" stop-color="#ff9d92"/>
-                  <stop offset=".45" stop-color="#e04a3c"/>
-                  <stop offset="1" stop-color="#8e1d13"/>
-                </radialGradient>
-              </defs>
-              <path d="M17 19 L22 30" stroke="#8f97a6" stroke-width="1.8" stroke-linecap="round"/>
-              <path d="M17 19 L22 30" stroke="rgba(255,255,255,.4)" stroke-width=".6" stroke-linecap="round"/>
-              <ellipse cx="17" cy="18.4" rx="7.6" ry="3.1" fill="rgba(0,0,0,.35)"/>
-              <circle cx="17" cy="13.6" r="8.4" fill="url(#mu-cabeca)"/>
-              <ellipse cx="13.8" cy="10.2" rx="3" ry="2" fill="rgba(255,255,255,.5)" transform="rotate(-32 13.8 10.2)"/>
-              <ellipse cx="17" cy="17.6" rx="8.2" ry="2.6" fill="rgba(0,0,0,.22)"/>
+              <path d="M17 18 L22.5 30" stroke="#111111" stroke-width="2.4" stroke-linecap="round"/>
+              <circle cx="17" cy="13" r="9" fill="#ff3b2f"/>
             </svg>
           </span>
           <span class="orbe__texto">
@@ -326,7 +258,7 @@
 
         <div class="vaga">
           <div class="peca">
-            <button class="cartucho" type="button" data-abre="genio" style="--c:var(--roxo)">
+            <button class="cartucho" type="button" data-abre="genio" style="--c:var(--magenta); --t:#ffffff">
               <span class="cartucho-topo">
                 <span class="cartucho-nome">Gênio</span>
                 <span class="cartucho-rec">Recorde <b data-rec="genio">0</b></span>
@@ -342,7 +274,7 @@
 
         <div class="vaga">
           <div class="peca">
-            <button class="cartucho" type="button" data-abre="cobrinha" style="--c:var(--rosa)">
+            <button class="cartucho" type="button" data-abre="cobrinha" style="--c:var(--coral); --t:var(--tinta)">
               <span class="cartucho-topo">
                 <span class="cartucho-nome">Cobrinha</span>
                 <span class="cartucho-rec">Recorde <b data-rec="cobrinha">0</b></span>
@@ -358,7 +290,7 @@
 
         <div class="vaga">
           <div class="peca">
-            <button class="cartucho" type="button" data-abre="corrida" style="--c:var(--amarelo)">
+            <button class="cartucho" type="button" data-abre="corrida" style="--c:var(--laranja); --t:var(--tinta)">
               <span class="cartucho-topo">
                 <span class="cartucho-nome">Fuga 208</span>
                 <span class="cartucho-rec">Recorde <b data-rec="corrida">0</b></span>
@@ -374,7 +306,7 @@
 
         <div class="vaga">
           <div class="peca">
-            <button class="cartucho" type="button" data-abre="mira" style="--c:var(--lilas)">
+            <button class="cartucho" type="button" data-abre="mira" style="--c:var(--creme); --t:var(--tinta)">
               <span class="cartucho-topo">
                 <span class="cartucho-nome">Flick</span>
                 <span class="cartucho-rec">Recorde <b data-rec="mira">0</b></span>
@@ -390,7 +322,7 @@
 
         <div class="vaga">
           <div class="peca">
-            <button class="cartucho" type="button" data-abre="kiwi" style="--c:var(--verde)">
+            <button class="cartucho" type="button" data-abre="kiwi" style="--c:var(--limao); --t:var(--tinta)">
               <span class="cartucho-topo">
                 <span class="cartucho-nome">Kiwi Voador</span>
                 <span class="cartucho-rec">Recorde <b data-rec="kiwi">0</b></span>
@@ -406,7 +338,7 @@
 
         <div class="vaga">
           <div class="peca">
-            <button class="cartucho" type="button" data-abre="stack" style="--c:var(--azul)">
+            <button class="cartucho" type="button" data-abre="stack" style="--c:var(--azulao); --t:#ffffff">
               <span class="cartucho-topo">
                 <span class="cartucho-nome">Movcode</span>
                 <span class="cartucho-rec">Recorde <b data-rec="stack">0</b></span>
@@ -447,10 +379,10 @@
     </div>
 
     <div class="pads">
-      <button class="pad" type="button" style="--c:var(--roxo)"    aria-label="Botão 1"></button>
-      <button class="pad" type="button" style="--c:var(--rosa)"    aria-label="Botão 2"></button>
-      <button class="pad" type="button" style="--c:var(--amarelo)" aria-label="Botão 3"></button>
-      <button class="pad" type="button" style="--c:var(--lilas)"   aria-label="Botão 4"></button>
+      <button class="pad" type="button" style="--c:var(--magenta)" aria-label="Botão 1"></button>
+      <button class="pad" type="button" style="--c:var(--azulao)"  aria-label="Botão 2"></button>
+      <button class="pad" type="button" style="--c:var(--laranja)" aria-label="Botão 3"></button>
+      <button class="pad" type="button" style="--c:var(--limao)"   aria-label="Botão 4"></button>
     </div>
 
     <p class="msg" id="msg" role="status" aria-live="polite">Aperta começar.</p>

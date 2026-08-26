@@ -1,7 +1,7 @@
 # Portfólio — Kaique Mota
 
 Portfólio no conceito **Gravidade Zero** (spatial navigation / infinite canvas),
-em dark mode sobre preto puro.
+sobre preto puro.
 
 ```
 index.html
@@ -11,9 +11,40 @@ js/fisica.js
 
 Abra o `index.html` no navegador. Não precisa de build.
 
-**Dependências externas:** só as fontes Playfair Display e Caveat, via Google Fonts.
+**Dependências externas:** só as fontes Anton e Caveat, via Google Fonts.
 Se quiser voltar a zero dependências, remova as 3 linhas de `<link>` do `<head>` —
-o CSS já cai para `Georgia` e a cursiva do sistema.
+o CSS já cai para `Impact` e a cursiva do sistema.
+
+## O visual é chapado
+
+Esta é a regra que decide tudo o que vem depois, e ela é uma só: **cor sólida,
+forma sólida, contraste alto**. Nada de degradê, vidro, bisel, brilho ou sombra
+projetada. O que separa uma peça da outra é a cor; o que separa a peça do fundo
+é o preto entre as duas.
+
+Na prática:
+
+- **Cada objeto da capa é uma placa de cor** com o desenho vazado em branco ou
+  preto por cima. O SVG é a peça inteira — placa e marca —, então o contêiner só
+  dá tamanho.
+- **A paleta são sete cores**, no `:root` de `css/style.css`, e as mesmas sete
+  no `:root` de `css/paginas.css`:
+
+  | token | cor | onde manda |
+  | --- | --- | --- |
+  | `--magenta` | `#ff2d87` | Instagram, botão de ação, seleção de texto |
+  | `--laranja` | `#ff6a13` | @imnotkiq, Fuga 208 |
+  | `--coral` | `#ff9a76` | Cobrinha |
+  | `--creme` | `#ece2d0` | GitHub, Passatempo, papel do Mural, Flick |
+  | `--vermelho` | `#ff3b2f` | percevejo e margem do Mural |
+  | `--limao` | `#d4ff3f` | Kiwi Voador |
+  | `--azulao` | `#2b5cff` | Behance, Movcode |
+  | `--verde` | `#6ca029` | A Loja do Kiwi — é o verde da marca, sem retoque |
+
+- **`--tom` é a cor da placa daquele objeto**, e é ela que os anéis de foco e de
+  seleção assumem: cada peça acende na própria cor.
+- **`--titulo` (Anton, caixa alta) é para rótulo**; a letra de mão (Caveat) ficou
+  só para o conteúdo do Mural, onde ela é o próprio recado e não a etiqueta.
 
 ## As três camadas de transform
 
@@ -165,30 +196,49 @@ inclusive se o seu for delegado no `document`.
 
 ## Ícone solto vs. card
 
-GitHub, Instagram e Behance usam o modificador `.orbe--nu`: mesmo esqueleto de três
-camadas, mas sem a caixa de vidro e sem texto — é só o ícone do app boiando. Como não
-sobra texto visível, o nome acessível vem do `aria-label` (e o `title` dá o tooltip que
-o rótulo dava antes).
+GitHub, Instagram, Behance, Kiwi, @imnotkiq e Passatempo usam o modificador
+`.orbe--nu`: mesmo esqueleto de três camadas, mas sem caixa e sem texto — a placa
+de cor mora dentro do próprio SVG. Como não sobra texto visível, o nome acessível
+vem do `aria-label` (e o `title` dá o tooltip que o rótulo dava antes).
 
-Passatempo e Mural continuam cards, porque neles a superfície *é* o conteúdo: um é
-folha de fichário — nele a superfície *é* o conteúdo, e por isso ele não vira pílula no
-celular. O Passatempo também usa `.orbe--nu`: é um controle de SNES desenhado em SVG,
-sem caixa nenhuma em volta. Nenhum dos dois sem rótulo leva texto: a peça já se explica,
-e o nome acessível vem do `aria-label`.
+O `border-radius: 25%` da `.orbe--nu .orbe__face` não pinta nada: ele existe só
+para o anel de seleção acompanhar o canto arredondado do ícone, e por isso repete
+o mesmo `rx` que os SVGs usam. O Passatempo é a exceção deitada — o controle não é
+quadrado, então o raio dele é fixo em px.
+
+O Mural continua card, porque nele a superfície *é* o conteúdo: é folha de
+fichário, e por isso ele não vira pílula no celular.
 
 ## O que ajustar
 
 - **Links**: Instagram em `@kiq.ham`; GitHub e Behance ainda em `okaiquemota` — confirme o Behance.
-- **Posições iniciais**: bloco *08* do CSS.
-- **Cores**: acentos em `--ouro`, `--rosa`, `--azul`, `--ciano`, `--lampada` no `:root`;
-  cada card escolhe o seu com `--tom`.
+- **Posições iniciais**: bloco *08* do CSS, junto com o `--tom` de cada peça.
+- **Cores**: a tabela acima. Trocar uma cor é trocar o token; nenhum valor de cor
+  está escrito dentro de uma regra.
 - **Passatempo**: o controle inteiro é o SVG do ícone; o bloco *7.1* só o dimensiona
   (é a única peça deitada — as outras são quadradas).
-- **Mural**: não é vidro como os outros — é papel de fichário (régua, margem, grão,
-  furos), no bloco *7.2*.
+- **Mural**: não é placa lisa como os outros — é papel de fichário, com régua,
+  margem e furos desenhados em traço cheio, no bloco *7.2*.
 
 ## Acessibilidade
 
 - `:focus-visible` espelha o hover, então dá pra navegar tudo pelo teclado.
 - `prefers-reduced-motion: reduce` desliga animações e deriva, mantendo a interação.
-- Fallback para navegadores sem `color-mix()`.
+- **Tinta escolhida à mão, não calculada.** Cada cartucho declara `--c` (a cor da
+  placa) e `--t` (a tinta que vai por cima), e o `--t` está escrito no HTML em vez
+  de sair de um `color-mix`: contraste sobre cor chapada é decisão de quem
+  desenhou o card, e não conta que o navegador faça no escuro.
+
+## As páginas internas e o `css/painel.css`
+
+`jogos.html` e `mural.html` existem como página com endereço próprio **e** como
+modal dentro da capa. A folha delas é `css/paginas.css`; a versão que vive dentro
+do modal é `css/painel.css`, e essa é **gerada** — o `:root` e o `body` de
+`paginas.css` pintariam a capa inteira ao abrir o painel, então cada seletor ganha
+o escopo `.painel` e as três raízes viram o próprio `.painel`.
+
+**Edite sempre `css/paginas.css`**, nunca `css/painel.css`. Depois:
+
+```
+node tools/gera-painel.mjs
+```
