@@ -71,11 +71,21 @@ document.querySelectorAll('[data-abre]').forEach(el => {
 ### O arraste e o link
 
 No desktop, apertar e puxar um `<a>` faz o navegador iniciar o **drag-and-drop nativo
-de link** — ele manda `pointercancel`, o rastreamento morre e o clique de saída acaba
-navegando. No toque isso não existe, então o bug era só de mouse. A defesa está em três
-camadas: `e.preventDefault()` no `pointerdown` (mata os eventos de mouse de
-compatibilidade, que é de onde o arraste nativo nasce), `draggable="false"` nos links e
-`-webkit-user-drag: none` no CSS.
+de link**, e a partir daí o fluxo de `pointermove` simplesmente para. No toque isso não
+existe — era por isso que só o mouse quebrava.
+
+Barrar o arraste nativo é a primeira metade (`preventDefault` no `pointerdown` **e** no
+`mousedown`, que é de onde ele de fato nasce, mais `draggable="false"` e
+`-webkit-user-drag: none`). Mas depender só disso é frágil: qualquer camada acima — o
+iframe de um visualizador, uma extensão — pode capturar o ponteiro do mesmo jeito.
+
+Por isso o veredito sobre o clique **não depende de `pointermove` nenhum**: ele compara
+as coordenadas do próprio evento de `click` com o ponto onde o `pointerdown` desceu. Se
+o ponteiro subiu longe de onde desceu, foi arrasto, e o clique é cancelado — não importa
+quantos eventos se perderam no meio. Pelo mesmo motivo o rastreamento escuta na `window`,
+não no card.
+
+Cliques de teclado (`detail === 0`) nunca são cancelados.
 
 **A física não atrapalha esse clique.** Um toque sem arrasto dispara o `click`
 normalmente; só o clique que nasce de um arrasto é cancelado — senão largar um card

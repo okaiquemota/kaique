@@ -49,7 +49,7 @@
       base: { x: 0, y: 0 }, w: 0, h: 0,
       arrastando: false, ponteiro: null,
       px: 0, py: 0, tUltimo: 0, percorrido: 0,
-      cancelarClique: false
+      origemX: null, origemY: null
     };
   });
 
@@ -124,35 +124,25 @@
     }
   }
 
-  /* --- arrasto ---------------------------------------------- */
+  /* --- arrasto ----------------------------------------------
+     Duas lições que custaram caro:
+
+     1. Não dá para confiar que o pointermove chega. Se o navegador
+        resolve iniciar o arraste nativo de link, ou se alguma camada
+        acima (o iframe de um visualizador, por exemplo) captura o
+        ponteiro, o fluxo simplesmente para no meio. Por isso o
+        rastreamento escuta na JANELA e não no card, e o veredito
+        sobre o clique sai das COORDENADAS DO PRÓPRIO CLIQUE: se o
+        ponteiro subiu longe de onde desceu, foi arrasto — não
+        importa quantos pointermove chegaram.
+
+     2. O arraste nativo tem de ser barrado antes de nascer, e ele
+        nasce do mousedown. Daí o preventDefault nos dois eventos.
+     ------------------------------------------------------------ */
   corpos.forEach(function (c) {
     var el = c.el;
 
-    el.addEventListener('pointerdown', function (e) {
-      if (e.button > 0) return;                    // só botão principal
-
-      /* Sem isto o arraste quebra no desktop: o navegador entende que
-         você está arrastando um link, dispara o drag-and-drop nativo e
-         manda pointercancel — o rastreamento morre, percorrido fica 0 e
-         o clique de saída acaba navegando. preventDefault aqui mata os
-         eventos de mouse de compatibilidade (é deles que o arraste
-         nativo nasce) e mantém o click, que é quem a gente filtra
-         depois. No toque isso não acontece, daí só o desktop sofria. */
-      e.preventDefault();
-      if (el.focus) el.focus({ preventScroll: true });
-
-      c.arrastando = true;
-      c.ponteiro = e.pointerId;
-      c.percorrido = 0;
-      c.px = e.clientX;
-      c.py = e.clientY;
-      c.tUltimo = e.timeStamp;
-      c.vx = c.vy = 0;
-      el.classList.add('a-arrastar');
-      if (el.setPointerCapture) el.setPointerCapture(e.pointerId);
-    });
-
-    el.addEventListener('pointermove', function (e) {
+    function aoMover(e) {
       if (!c.arrastando || e.pointerId !== c.ponteiro) return;
 
       var dx = e.clientX - c.px;
@@ -167,42 +157,74 @@
       c.x += dx;
       c.y += dy;
 
-      // velocidade do arremesso, suavizada para o último gesto não
-      // dominar sozinho (um tremor no fim jogaria o card longe)
+      // velocidade do arremesso, suavizada: um tremor no fim do gesto
+      // não pode sozinho jogar o card para o outro lado da tela
       c.vx = 0.75 * (dx / dt) + 0.25 * c.vx;
       c.vy = 0.75 * (dy / dt) + 0.25 * c.vy;
 
       bater(c);
       aplicar(c);
-    });
+    }
 
-    function soltar(e) {
+    function aoSoltar(e) {
       if (!c.arrastando || (e && e.pointerId !== c.ponteiro)) return;
       c.arrastando = false;
       c.ponteiro = null;
       el.classList.remove('a-arrastar');
+      escutarJanela(false);
 
       if (calmo) { c.vx = c.vy = 0; }
 
       var v = Math.hypot(c.vx, c.vy);
       if (v > VEL_MAX) { c.vx *= VEL_MAX / v; c.vy *= VEL_MAX / v; }
-
-      // arrastou de verdade? então o clique que vem a seguir não vale
-      c.cancelarClique = c.percorrido > LIMIAR_ARRASTO;
     }
 
-    el.addEventListener('pointerup', soltar);
-    el.addEventListener('pointercancel', soltar);
+    function escutarJanela(ligar) {
+      var m = ligar ? 'addEventListener' : 'removeEventListener';
+      window[m]('pointermove', aoMover);
+      window[m]('pointerup', aoSoltar);
+      window[m]('pointercancel', aoSoltar);
+    }
 
-    // captura: roda antes dos listeners de modal, inclusive delegados
+    el.addEventListener('pointerdown', function (e) {
+      if (e.button > 0) return;                    // só botão principal
+      e.preventDefault();
+
+      c.arrastando = true;
+      c.ponteiro = e.pointerId;
+      c.percorrido = 0;
+      c.origemX = e.clientX;                       // o que decide o clique
+      c.origemY = e.clientY;
+      c.px = e.clientX;
+      c.py = e.clientY;
+      c.tUltimo = e.timeStamp;
+      c.vx = c.vy = 0;
+      el.classList.add('a-arrastar');
+
+      try { el.setPointerCapture(e.pointerId); } catch (erro) { /* opcional */ }
+      escutarJanela(true);
+    });
+
+    // segunda barreira contra o arraste nativo (é do mousedown que ele
+    // nasce). Também impede o foco de mouse — que é justamente o que
+    // acendia o contorno do :focus-visible ao clicar.
+    el.addEventListener('mousedown', function (e) { e.preventDefault(); });
+
+    el.addEventListener('dragstart', function (e) { e.preventDefault(); });
+
+    /* Captura: roda antes de qualquer listener de modal, inclusive
+       delegado no document. */
     el.addEventListener('click', function (e) {
-      if (!c.cancelarClique) return;
-      c.cancelarClique = false;
+      if (e.detail === 0) return;                  // veio do teclado: sempre vale
+      if (c.origemX === null) return;              // não houve pointerdown aqui
+
+      var longe = Math.hypot(e.clientX - c.origemX, e.clientY - c.origemY);
+      if (c.percorrido <= LIMIAR_ARRASTO && longe <= LIMIAR_ARRASTO) return;
+
+      c.origemX = c.origemY = null;
       e.preventDefault();
       e.stopPropagation();
     }, true);
-
-    el.addEventListener('dragstart', function (e) { e.preventDefault(); });
   });
 
   /* --- laço ------------------------------------------------- */

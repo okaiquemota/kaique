@@ -375,6 +375,11 @@ body {
 
 .orbe:active .orbe__face { transform: scale(1.06) translateY(-2px); }
 
+/* nenhum contorno ao clicar: o anel é só para quem navega pelo teclado.
+   :focus pega qualquer foco; :focus-visible vem depois e reacende o anel
+   no caso do teclado (mesma especificidade, ganha a última regra). */
+.orbe:focus { outline: none; }
+
 .orbe:focus-visible {
   outline: 2px solid color-mix(in srgb, var(--tom) 80%, transparent);
   outline-offset: 8px;
