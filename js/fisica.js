@@ -47,7 +47,33 @@
   var VEL_MAX       = 900;    // teto do arremesso, px/s
   var VEL_DERIVA    = 105;    // teto da deriva livre, px/s
 var VEL_MIN       = 20 * brisa;   // piso: em gravidade zero nada para
-  var LIMIAR_ARRASTO = 5;     // px percorridos que já contam como arrasto
+  var LIMIAR_ARRASTO = 5;     // mouse: px percorridos que já contam como arrasto
+
+  /* O dedo não pousa parado. Um toque que a pessoa jura ter sido
+     imóvel anda uns 10px enquanto a polpa se acomoda, e medido com a
+     régua do mouse ele vira arrasto — que é justamente o gesto que
+     nunca ativa nada. Era metade do motivo de nenhum link abrir no
+     celular. */
+  var LIMIAR_DEDO = 14;
+
+  /* Os dois toques da ativação, medidos só no tempo.
+
+     Não há trava de distância entre um e outro, e isso é decisão e
+     não esquecimento: o objeto DERIVA. Com VEL_DERIVA em 105px/s,
+     meio segundo já leva a peça quase 50px para o lado, e quem
+     acompanha com o dedo toca em dois pontos diferentes da tela
+     por culpa do movimento, não por engano. Qualquer raio que
+     coubesse num toque parado recusaria o toque legítimo num
+     objeto rápido.
+
+     Quem faz esse papel é outra coisa, e melhor: os dois toques
+     precisam cair no MESMO objeto — cada corpo guarda o próprio
+     último toque — e nenhum dos dois pode ter sido arrasto. */
+  var JANELA_2TOQUES = 450;   // ms
+
+  function folga(e) {
+    return e && e.pointerType === 'touch' ? LIMIAR_DEDO : LIMIAR_ARRASTO;
+  }
 
   /* --- e se a gravidade voltasse? -----------------------------
      O chão devolve pouco (QUICA_CHAO) e arrasta na horizontal
@@ -154,7 +180,10 @@ var VEL_MIN       = 20 * brisa;   // piso: em gravidade zero nada para
       base: { x: 0, y: 0 }, w: 0, h: 0,
       arrastando: false, ponteiro: null,
       px: 0, py: 0, tUltimo: 0, percorrido: 0,
-      origemX: null, origemY: null, destino: null
+      origemX: null, origemY: null, destino: null,
+      /* quando foi o toque anterior NESTE objeto: é com ele que o
+         próximo decide se virou ativação */
+      tToque: 0
     };
   });
 
@@ -309,6 +338,9 @@ var VEL_MIN       = 20 * brisa;   // piso: em gravidade zero nada para
     corpos.forEach(function (o) {
       o.el.classList.toggle('esta-selecionado', o === alvo);
     });
+    /* quem lê isto é a dica do segundo toque, que só existe no
+       toque — no desktop o title de cada objeto já conta */
+    document.documentElement.classList.toggle('tem-selecao', Boolean(alvo));
   }
 
   // clicar no vácuo tira a seleção
@@ -367,6 +399,39 @@ var VEL_MIN       = 20 * brisa;   // piso: em gravidade zero nada para
 
       var v = Math.hypot(c.vx, c.vy);
       if (v > VEL_MAX) { c.vx *= VEL_MAX / v; c.vy *= VEL_MAX / v; }
+
+      /* --- o segundo toque -------------------------------------
+         O dblclick nasceu para o mouse. No toque o navegador até
+         tenta sintetizá-lo, mas com `touch-action: none` e o
+         preventDefault do pointerdown a maioria dos celulares não
+         entrega nenhum — e sem dblclick não existia segundo evento
+         para ativar: o primeiro toque selecionava e acabava ali.
+
+         O arrasto já era nosso; o segundo toque passa a ser também.
+         Dois pointerup limpos no mesmo objeto, perto um do outro no
+         tempo e na tela, valem ativação — e isso vale igual para
+         dedo, caneta e mouse, que é o que tira o dblclick do
+         caminho crítico de vez.
+         --------------------------------------------------------- */
+      if (!e || e.type !== 'pointerup') return;
+
+      /* mesmo veredito do clique: conta a distância entre onde o
+         ponteiro desceu e onde subiu, não quantos pointermove
+         chegaram no meio */
+      var limite = folga(e);
+      var longe = c.origemX === null ? 0
+        : Math.hypot(e.clientX - c.origemX, e.clientY - c.origemY);
+
+      if (c.percorrido > limite || longe > limite) { c.tToque = 0; return; }
+
+      if (c.tToque && e.timeStamp - c.tToque < JANELA_2TOQUES) {
+        c.tToque = 0;
+        selecionar(c);
+        ativar(c);
+        return;
+      }
+
+      c.tToque = e.timeStamp;
     }
 
     function escutarJanela(ligar) {
@@ -412,22 +477,14 @@ var VEL_MIN       = 20 * brisa;   // piso: em gravidade zero nada para
       e.stopPropagation();
     }, true);
 
-    /* Dois cliques rápidos ativam de verdade. O el.click() nasce com
-       detail 0, então atravessa o filtro acima sozinho: o <a> navega e
-       os listeners de [data-abre] recebem um click normal, sem que o
-       contrato deles precise saber que existe um duplo clique aqui. */
+    /* O dblclick não ativa mais nada — quem ativa é o pointerup, em
+       `aoSoltar`. Ele fica só para barrar o que o navegador faria
+       sozinho com dois cliques: selecionar o texto em volta. Se ele
+       também ativasse, o mouse abriria duas vezes, porque os dois
+       pointerup do duplo clique já disparam a ativação. */
     el.addEventListener('dblclick', function (e) {
       e.preventDefault();
       e.stopPropagation();
-
-      // se o gesto foi arrasto, não é ativação
-      if (c.origemX !== null) {
-        var longe = Math.hypot(e.clientX - c.origemX, e.clientY - c.origemY);
-        if (c.percorrido > LIMIAR_ARRASTO || longe > LIMIAR_ARRASTO) return;
-      }
-
-      selecionar(c);
-      ativar(c);
     });
 
     /* sem href, o <a> perde a ativação nativa por teclado — repomos */

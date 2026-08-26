@@ -185,8 +185,43 @@ Nesses dois, o `click` é disparado **antes** da janela abrir: se o seu script d
 chamar `preventDefault`, quem manda é ele e o pop-up não aparece.
 
 Repare que **o seu script não precisa saber disso**. Todo clique simples é cancelado em
-fase de captura; no duplo clique a física chama `el.click()`, que nasce com `detail === 0`
+fase de captura; na ativação a física chama `el.click()`, que nasce com `detail === 0`
 e por isso atravessa o próprio filtro. O que chega no seu listener é um `click` comum.
+
+#### O segundo toque não é o `dblclick`
+
+Quem decide que houve ativação é o **`pointerup`**, em `aoSoltar` — dois toques limpos
+no mesmo objeto, dentro de 450ms. O `dblclick` só existe ali para ser cancelado.
+
+Isso não é preferência: **no celular nada abria**, e por dois motivos somados.
+
+O `dblclick` é um evento de mouse. O navegador até tenta sintetizá-lo no toque, mas com
+`touch-action: none` e o `preventDefault` do `pointerdown` — os dois necessários para o
+arrasto ser nosso — a maioria dos celulares não entrega nenhum. Sem `dblclick` não
+existia segundo evento: o primeiro toque selecionava e acabava ali.
+
+E o limiar de arrasto era 5px para todo mundo. **O dedo não pousa parado**: um toque que
+a pessoa jura ter sido imóvel anda uns 10px enquanto a polpa se acomoda, e medido com a
+régua do mouse ele virava arrasto — que é justamente o gesto que nunca ativa nada. Por
+isso existem dois limiares, `LIMIAR_ARRASTO` para o cursor e `LIMIAR_DEDO` para o toque.
+
+**Não há trava de distância entre um toque e o outro**, e isso é decisão. O objeto
+deriva: com `VEL_DERIVA` em 105px/s, meio segundo leva a peça quase 50px para o lado, e
+quem acompanha com o dedo toca em dois pontos diferentes da tela por causa do movimento,
+não por engano. Qualquer raio que coubesse num toque parado recusaria o toque legítimo
+num objeto rápido. Quem faz esse papel é melhor: os dois toques precisam cair no **mesmo
+objeto** (cada corpo guarda o próprio último toque) e nenhum dos dois pode ter sido
+arrasto.
+
+#### A dica, e por que ela só existe no toque
+
+No desktop o `title` de cada objeto conta que são dois cliques. **No toque não existe
+tooltip**: quem toca uma vez vê a peça acender e mais nada acontecer, e conclui — com
+razão — que a página quebrou. Então em `(hover: none)` aparece uma pílula fixa no rodapé,
+"toque de novo para abrir", só depois do primeiro toque. Quem liga e desliga é a classe
+`tem-selecao` no `<html>`, escrita pela mesma função `selecionar()`.
+
+Se um dia o contrato virar toque único, é essa pílula que sai junto.
 
 **A física não atrapalha esse clique.** Um toque sem arrasto dispara o `click`
 normalmente; só o clique que nasce de um arrasto é cancelado — senão largar um card
@@ -233,6 +268,10 @@ esqueleto seguem valendo.
 ## Acessibilidade
 
 - `:focus-visible` espelha o hover, então dá pra navegar tudo pelo teclado.
+- **O nome e a linha de apoio não são selecionáveis.** `.nucleo` leva `user-select: none`
+  e `-webkit-touch-callout: none`: ali é a marca no meio do vácuo, não texto para copiar,
+  e no celular ela fica logo abaixo dos objetos que se arrasta — segurar um instante a
+  mais acendia a alça de seleção e a lupa do sistema por cima da página.
 - `prefers-reduced-motion: reduce` desliga animações e deriva, mantendo a interação.
 - **Tinta escolhida à mão, não calculada.** Cada cartucho declara `--c` (a cor da
   placa) e `--t` (a tinta que vai por cima), e o `--t` está escrito no HTML em vez

@@ -16,8 +16,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Caveat:wght@500;600&display=swap">
 
-  <link rel="stylesheet" href="css/style.css?v=3">
-  <link rel="stylesheet" href="css/painel.css?v=3">
+  <link rel="stylesheet" href="css/style.css?v=4">
+  <link rel="stylesheet" href="css/painel.css?v=4">
 </head>
 <body>
 
@@ -240,6 +240,11 @@
 
     </nav>
 
+    <!-- So aparece no toque, e so depois do primeiro toque: e ali que
+         a pessoa precisa saber que falta o segundo. No desktop quem
+         diz isso e o title de cada objeto. -->
+    <p class="dica-toque" aria-hidden="true">toque de novo para abrir</p>
+
     <!-- O easter egg precisa de uma porta: no celular nao existe tecla G.
          Discreto de proposito - quem nao reparar nao perde nada. -->
     <button class="chave-g" type="button" data-gravidade aria-pressed="false">
@@ -253,10 +258,10 @@
        sem arrasto continua disparando o click normalmente. -->
   <!-- Os painéis são as páginas de verdade, embutidas: por isso os
        mesmos scripts delas rodam aqui. -->
-  <script src="js/kiq.js?v=3" defer></script>
-  <script src="js/jogos.js?v=3" defer></script>
-  <script src="js/mural.js?v=3" defer></script>
-  <script src="js/fisica.js?v=3" defer></script>
+  <script src="js/kiq.js?v=4" defer></script>
+  <script src="js/jogos.js?v=4" defer></script>
+  <script src="js/mural.js?v=4" defer></script>
+  <script src="js/fisica.js?v=4" defer></script>
 
 
     <!-- Passatempo: o mesmo conteudo de jogos.html, aqui como modal -->
