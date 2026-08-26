@@ -45,11 +45,22 @@ JavaScript puro, sem biblioteca. Faz três coisas:
   recebeu e joga o objeto para o outro lado da tela (medido: 509px numa aproximação de
   um segundo; com a velocidade de fuga, 136px).
 - **Gravidade** — a tecla `G`, ou a chave no rodapé, liga o peso: os objetos despencam e
-  se empilham. O chão devolve pouco e arrasta na horizontal, que é o que faz a pilha
-  assentar em vez de quicar para sempre; abaixo de um limiar o objeto desiste e
-  descansa. Ao desligar, todos ganham um empurrão para cima — sem ele ficariam parados
-  no rodapé parecendo travados. O balanço em `@keyframes` é desligado enquanto há peso:
-  ele empurraria os objetos para cima e desfaria a pilha.
+  se empilham. As quatro bordas devolvem pouco e arrastam na paralela, que é o que faz a
+  pilha assentar em vez de quicar para sempre; abaixo de um limiar o objeto desiste e
+  descansa. Ao desligar, ninguém é arremessado de volta: o peso simplesmente deixa de
+  existir e cada um sai do repouso pela corrente, como quem se solta do chão.
+- **Giroscópio** — no celular a gravidade aponta para onde o aparelho está inclinado, e
+  não para baixo: `beta` é o tombo para frente/trás, `gamma` para os lados, e o seno de
+  cada um dá a componente naquele eixo. Por isso as quatro bordas absorvem igual — a
+  pilha se forma contra a parede que estiver por baixo.
+
+  Duas coisas que essa camada exige. **O iOS 13+ só entrega leitura depois de um pedido
+  explícito**, e o pedido só vale dentro de um gesto do usuário — é por isso que ele mora
+  no clique da chave e não na carga da página, onde seria recusado em silêncio. E **o
+  peso deixa de ser liga/desliga**: deitar o telefone na mesa dá inclinação zero, e zero
+  tem de significar ausência de peso de verdade (parede que não segura, corrente e piso
+  de velocidade de volta). Quem responde por isso no laço é `comPeso`, o valor medido a
+  cada quadro — não a chave.
 - **Colisão** — cards batem entre si e nas bordas da tela, com perda de energia.
 - **Arrasto** — segurar e mover leva o card junto; ao soltar, ele sai com a
   velocidade do arremesso e continua planando.

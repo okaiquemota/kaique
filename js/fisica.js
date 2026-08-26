@@ -61,6 +61,21 @@ var VEL_MIN       = 20 * brisa;   // piso: em gravidade zero nada para
   var PARA_DE_QUICAR = 46;    // px/s
   var caindo = false;
 
+  /* No celular a gravidade não precisa apontar para baixo: aponta para
+     onde o aparelho estiver inclinado. beta é o tombo para frente/trás,
+     gamma o tombo para os lados — o seno de cada um dá direto a
+     componente da gravidade naquele eixo, e deitar o telefone na mesa
+     zera os dois: as coisas voltam a boiar. */
+  var inclinacao = null;
+  var ouvindoTombo = false;
+
+  /* Com giroscópio o peso deixa de ser liga/desliga e vira um valor:
+     deitar o telefone na mesa dá zero, e zero tem de significar
+     ausência de peso de verdade — parede que não segura, corrente de
+     volta, piso de velocidade de volta. É comPeso, e não "caindo",
+     que responde por isso no resto do laço. */
+  var comPeso = false;
+
   /* --- o vácuo sente o cursor --------------------------------
      Os objetos se afastam do ponteiro antes de serem tocados. A
      força é medida da BORDA da peça, não do centro: assim ela cai
@@ -116,21 +131,27 @@ var VEL_MIN       = 20 * brisa;   // piso: em gravidade zero nada para
     return { min: min, max: max };
   }
 
+  /* Com o telefone inclinado a "queda" pode ser para qualquer lado, e
+     a pilha se forma contra a parede que estiver por baixo. Então as
+     quatro bordas absorvem igual: devolvem pouco na perpendicular,
+     arrastam na paralela, e abaixo de um limiar o objeto assenta. No
+     vácuo (caindo falso) nada disso vale e a batida é elástica. */
   function bater(c) {
     var l = limites(c);
-    if (c.x < l.min.x) { c.x = l.min.x; c.vx = Math.abs(c.vx) * RESTITUICAO; }
-    else if (c.x > l.max.x) { c.x = l.max.x; c.vx = -Math.abs(c.vx) * RESTITUICAO; }
-    if (c.y < l.min.y) { c.y = l.min.y; c.vy = Math.abs(c.vy) * RESTITUICAO; }
-    else if (c.y > l.max.y) {
-      c.y = l.max.y;
-      if (caindo) {
-        c.vy = -Math.abs(c.vy) * QUICA_CHAO;
-        c.vx *= ATRITO_CHAO;
-        if (Math.abs(c.vy) < PARA_DE_QUICAR) c.vy = 0;   // descansa
-      } else {
-        c.vy = -Math.abs(c.vy) * RESTITUICAO;
-      }
+    var quica = comPeso ? QUICA_CHAO : RESTITUICAO;
+
+    function assentar(eixo) {
+      if (!comPeso) return;
+      var outro = eixo === 'x' ? 'y' : 'x';
+      c['v' + outro] *= ATRITO_CHAO;
+      if (Math.abs(c['v' + eixo]) < PARA_DE_QUICAR) c['v' + eixo] = 0;
     }
+
+    if (c.x < l.min.x)      { c.x = l.min.x; c.vx =  Math.abs(c.vx) * quica; assentar('x'); }
+    else if (c.x > l.max.x) { c.x = l.max.x; c.vx = -Math.abs(c.vx) * quica; assentar('x'); }
+
+    if (c.y < l.min.y)      { c.y = l.min.y; c.vy =  Math.abs(c.vy) * quica; assentar('y'); }
+    else if (c.y > l.max.y) { c.y = l.max.y; c.vy = -Math.abs(c.vy) * quica; assentar('y'); }
   }
 
   /* --- colisão entre dois cards ----------------------------- */
@@ -158,7 +179,7 @@ var VEL_MIN       = 20 * brisa;   // piso: em gravidade zero nada para
       a.y += invadeY * sinalY * pesoA;
       b.y -= invadeY * sinalY * pesoB;
       if (!a.arrastando && !b.arrastando) {
-        if (caindo) {
+        if (comPeso) {
           // pousou em cima do outro: a queda morre aqui, senão a pilha
           // fica quicando e nunca assenta
           a.vy *= 0.24; b.vy *= 0.24;
@@ -395,11 +416,21 @@ var VEL_MIN       = 20 * brisa;   // piso: em gravidade zero nada para
 
     var atrito = Math.pow(ATRITO, dt * 60);
 
+    /* Quanto do peso está valendo agora. Sem giroscópio é tudo ou
+       nada; com ele, é o tamanho do vetor de inclinação — telefone
+       deitado dá quase zero e a página volta a ser vácuo sozinha. */
+    comPeso = caindo && (!inclinacao || Math.hypot(inclinacao.x, inclinacao.y) > 0.09);
+
     corpos.forEach(function (c) {
       if (c.arrastando) return;
 
-      if (caindo) {
-        c.vy += GRAVIDADE * dt;
+      if (comPeso) {
+        if (inclinacao) {
+          c.vx += GRAVIDADE * inclinacao.x * dt;
+          c.vy += GRAVIDADE * inclinacao.y * dt;
+        } else {
+          c.vy += GRAVIDADE * dt;
+        }
       } else if (CORRENTE) {
         // corrente do "líquido": um empurrãozinho aleatório constante
         c.vx += (Math.random() - 0.5) * CORRENTE * dt * 2;
@@ -411,7 +442,7 @@ var VEL_MIN       = 20 * brisa;   // piso: em gravidade zero nada para
       c.x += c.vx * dt;
       c.y += c.vy * dt;
       c.vx *= atrito;
-      if (!caindo) c.vy *= atrito;
+      if (!comPeso) c.vy *= atrito;
 
       var v = Math.hypot(c.vx, c.vy);
 
@@ -427,7 +458,7 @@ var VEL_MIN       = 20 * brisa;   // piso: em gravidade zero nada para
          eventualmente cancela a si mesma e o objeto fica parado no
          vácuo — que é justamente o que não deve acontecer aqui.
          Com gravidade ligada o piso sai de cena: lá parar é o certo. */
-      else if (!caindo && v < VEL_MIN) {
+      else if (!comPeso && v < VEL_MIN) {
         if (v < 0.01) {                        // parou de vez: escolhe um rumo
           var ang = Math.random() * Math.PI * 2;
           c.vx = Math.cos(ang);
@@ -448,6 +479,9 @@ var VEL_MIN       = 20 * brisa;   // piso: em gravidade zero nada para
     corpos.forEach(function (c) {
       if (!c.arrastando) { bater(c); aplicar(c); }
     });
+
+    // o balanço em @keyframes só fica desligado enquanto há peso mesmo
+    if (caindo) document.documentElement.classList.toggle('com-peso', comPeso);
 
     requestAnimationFrame(passo);
   }
@@ -493,6 +527,38 @@ var VEL_MIN       = 20 * brisa;   // piso: em gravidade zero nada para
     c.vy += uy * falta;
   }
 
+  /* --- giroscópio -------------------------------------------- */
+  function lerTombo(e) {
+    if (e.beta === null || e.gamma === null) return;
+    var x = Math.sin(e.gamma * Math.PI / 180);
+    var y = Math.sin(e.beta  * Math.PI / 180);
+    var m = Math.hypot(x, y);
+    if (m > 1) { x /= m; y /= m; }               // nunca mais forte que 1g
+    inclinacao = { x: x, y: y };
+  }
+
+  function ouvirTombo() {
+    if (ouvindoTombo || !window.DeviceOrientationEvent) return;
+
+    /* O iOS 13+ só entrega leitura depois de um pedido explícito, e o
+       pedido só vale dentro de um gesto do usuário. É por isso que ele
+       mora no clique da chave e não na carga da página — ali seria
+       recusado em silêncio. Nos outros basta escutar (com HTTPS). */
+    var pedir = window.DeviceOrientationEvent.requestPermission;
+    if (typeof pedir === 'function') {
+      try {
+        pedir().then(function (resposta) {
+          if (resposta !== 'granted') return;
+          window.addEventListener('deviceorientation', lerTombo);
+          ouvindoTombo = true;
+        }).catch(function () {});
+      } catch (erro) { /* recusado: segue com a gravidade para baixo */ }
+    } else {
+      window.addEventListener('deviceorientation', lerTombo);
+      ouvindoTombo = true;
+    }
+  }
+
   /* --- o interruptor da gravidade ---------------------------- */
   function virarGravidade(ligar) {
     caindo = (ligar === undefined) ? !caindo : Boolean(ligar);
@@ -501,15 +567,10 @@ var VEL_MIN       = 20 * brisa;   // piso: em gravidade zero nada para
     var botao = document.querySelector('[data-gravidade]');
     if (botao) botao.setAttribute('aria-pressed', String(caindo));
 
-    if (!caindo) {
-      // ao desligar, tudo sobe de volta: sem esse empurrão os objetos
-      // ficariam parados no rodapé, parecendo travados e não flutuando
-      corpos.forEach(function (c) {
-        var ang = Math.random() * Math.PI * 2;
-        c.vx = Math.cos(ang) * 110;
-        c.vy = -Math.abs(Math.sin(ang)) * 150 - 60;
-      });
-    }
+    /* Ao desligar, ninguém é arremessado de volta: o peso simplesmente
+       deixa de existir e cada objeto sai do repouso pela corrente,
+       como quem se solta do chão. Lançar todos para cima parecia
+       truque; deixar o vácuo reagir sozinho parece física. */
   }
 
   window.addEventListener('keydown', function (e) {
@@ -522,7 +583,10 @@ var VEL_MIN       = 20 * brisa;   // piso: em gravidade zero nada para
   });
 
   var botaoG = document.querySelector('[data-gravidade]');
-  if (botaoG) botaoG.addEventListener('click', function () { virarGravidade(); });
+  if (botaoG) botaoG.addEventListener('click', function () {
+    if (!caindo) ouvirTombo();                   // dentro do gesto, como o iOS exige
+    virarGravidade();
+  });
 
   /* --- partida ---------------------------------------------- */
   function iniciar() {

@@ -843,7 +843,7 @@ body {
 
 /* o balanço em @keyframes some quando há peso: ele empurra o objeto
    para cima e desfaz a pilha que a física acabou de montar */
-:root.gravidade .orbe__flutua { animation: none; }
+:root.com-peso .orbe__flutua { animation: none; }
 
 @supports not (color: color-mix(in srgb, red 50%, blue)) {
   :root.gravidade .chave-g,
