@@ -47,8 +47,16 @@ trabalha em cima delas, em deslocamento. Por isso os breakpoints continuam manda
 no arranjo inicial, e o `resize` remede tudo.
 
 Constantes de ajuste ficam no topo do arquivo (`ATRITO`, `RESTITUICAO`, `CORRENTE`,
-`VEL_DERIVA`…). Em `prefers-reduced-motion: reduce` a deriva e a corrente são
-desligadas, mas o arrasto continua funcionando.
+`VEL_DERIVA`, `VEL_MIN`…).
+
+Sobre `prefers-reduced-motion: reduce`: essa preferência deixa a deriva ambiente mais
+lenta (fator `brisa`), mas **não desliga a física**. Arrastar e arremessar são resposta
+ao gesto do próprio usuário, não animação que roda sozinha — matá-los quebrava a página
+para quem tem a preferência ligada, sem ganho nenhum de acessibilidade. O que essa
+preferência desliga é o balanço decorativo em `@keyframes`, pelo CSS.
+
+`VEL_MIN` é um piso de velocidade: sem ele a caminhada aleatória da corrente
+eventualmente cancela a si mesma e o objeto fica parado no vácuo.
 
 ## Plugando os modais
 

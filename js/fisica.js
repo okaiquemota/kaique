@@ -29,18 +29,24 @@
   var orbes = Array.prototype.slice.call(document.querySelectorAll('.orbe'));
   if (!orbes.length || !window.requestAnimationFrame) return;
 
+  /* "Reduzir movimento" existe para poupar quem se incomoda com
+     animação que roda sozinha. Ela NÃO deve matar a resposta ao gesto
+     do próprio usuário: arrastar e arremessar seguem idênticos nos
+     dois casos. O que essa preferência faz aqui é deixar a deriva
+     ambiente mais lenta — e o CSS já desliga o balanço decorativo. */
   var calmo = window.matchMedia &&
               window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var brisa = calmo ? 0.4 : 1;
 
   /* --- constantes do "líquido" ------------------------------ */
   var MARGEM        = 8;      // respiro até a borda da tela (px)
   var ATRITO        = 0.9993; // por quadro a 60fps: quase nada
   var RESTITUICAO   = 0.82;   // energia devolvida na batida
-  var VEL_INICIAL   = calmo ? 0 : 30;   // px/s
-  var CORRENTE      = calmo ? 0 : 26;   // empurrão aleatório, px/s²
+  var VEL_INICIAL   = 30 * brisa;   // px/s
+  var CORRENTE      = 26 * brisa;   // empurrão aleatório, px/s²
   var VEL_MAX       = 900;    // teto do arremesso, px/s
   var VEL_DERIVA    = 105;    // teto da deriva livre, px/s
-var VEL_MIN       = calmo ? 0 : 20;   // piso: em gravidade zero nada para
+var VEL_MIN       = 20 * brisa;   // piso: em gravidade zero nada para
   var LIMIAR_ARRASTO = 5;     // px percorridos que já contam como arrasto
 
   /* --- estado de cada card ---------------------------------- */
@@ -228,8 +234,6 @@ var VEL_MIN       = calmo ? 0 : 20;   // piso: em gravidade zero nada para
       c.ponteiro = null;
       el.classList.remove('a-arrastar');
       escutarJanela(false);
-
-      if (calmo) { c.vx = c.vy = 0; }
 
       var v = Math.hypot(c.vx, c.vy);
       if (v > VEL_MAX) { c.vx *= VEL_MAX / v; c.vy *= VEL_MAX / v; }
