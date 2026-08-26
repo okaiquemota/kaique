@@ -258,6 +258,8 @@ esqueleto seguem valendo.
 
 - **Links**: Instagram em `@kiq.ham`; GitHub e Behance ainda em `okaiquemota` — confirme o Behance.
 - **Posições iniciais**: bloco *08* do CSS, junto com o `--tom` de cada peça.
+  **Toda regra de posição declara `left` E `right`**, mesmo quando um dos dois é
+  `auto` — veja abaixo por quê.
 - **Cores**: a tabela acima. Trocar uma cor é trocar o token; nenhum valor de cor
   está escrito dentro de uma regra.
 - **Passatempo**: o controle inteiro é o SVG do ícone; o bloco *7.1* só o dimensiona
@@ -292,6 +294,32 @@ o escopo `.painel` e as três raízes viram o próprio `.painel`.
 node tools/gera-painel.mjs
 ```
 
+## `left` e `right`, sempre os dois
+
+Os breakpoints se empilham: num celular de 393px valem, ao mesmo tempo, o bloco de
+1180px, o de 860px e o de 600px. Se um deles põe a peça na direita (`left: auto;
+right: 6%`) e o seguinte só a devolve para a esquerda (`left: 5%`), o `right` do
+anterior **fica**. E um elemento absoluto com `left` e `right` ao mesmo tempo e
+largura automática não fica no meio: ele estica de uma borda à outra.
+
+Foi o que aconteceu com o Movcode no celular — placa de 71px dentro de uma caixa
+de 189px, com o anel de foco desenhado em volta da caixa inteira — e com o
+Instagram no celular deitado, que já estava assim antes de o Movcode existir. Nada
+disso aparece parado: só quando a peça está selecionada ou em foco, que é quando o
+anel é pintado.
+
+Por isso a regra virou: **toda linha de posição escreve os dois lados**. Custa uma
+palavra e torna a classe de bug impossível.
+
+## Os painéis são centralizados por `margin: auto`
+
+`.painel` é flex e a folha leva `margin: auto`. A escolha é essa, e não um
+`align-items: center` no pai, porque a folha pode ser mais alta que a tela: com
+centralização pelo pai o topo sairia da área visível e **não haveria rolagem que
+chegasse nele**. Com margem automática em item de flex, sobra vertical negativa faz
+a margem valer zero por especificação — a folha encosta no topo e continua
+alcançável. Testado a 380x380, onde a folha tem 517px.
+
 ## O carrossel e o `?v=`
 
 Duas coisas que já quebraram a página e são fáceis de quebrar de novo.
@@ -305,6 +333,11 @@ há erro nenhum no console para avisar.
 Na mesma linha, o estado da bolinha é o `aria-current` que o JS escreve — não uma
 classe. Um estado só, que o leitor de tela e o CSS leem juntos; com dois, o visual
 podia discordar do que era anunciado, e foi o que aconteceu.
+
+**O `<kbd>G</kbd>` da chave de gravidade some em `(hover: none)`.** Onde não há
+cursor também não há tecla: no celular a chave é o único jeito de ligar a
+gravidade, e mostrar o atalho ao lado dela é instrução para um teclado que não
+existe.
 
 **Os `<link>` e `<script>` carregam com `?v=N`.** É um site estático em cache de
 CDN: sem a versão na URL, o navegador de quem já visitou continua com o CSS antigo
