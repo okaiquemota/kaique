@@ -375,6 +375,40 @@ body {
 
 .orbe:active .orbe__face { transform: scale(1.06) translateY(-2px); }
 
+/* ------------------------------------------------------------
+   SELECIONADO — um clique só marca o objeto; quem abre é o
+   clique duplo. De propósito o selecionado acende mas NÃO cresce
+   nem trava o balanço: se copiasse o hover, o card ficaria preso
+   ampliado depois de um arremesso.
+   ------------------------------------------------------------ */
+.orbe.esta-selecionado { z-index: 30; }
+
+.orbe.esta-selecionado .orbe__face {
+  border-color: color-mix(in srgb, var(--tom) 62%, transparent);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--tom) 34%, transparent),
+    0 0 32px -6px color-mix(in srgb, var(--tom) 62%, transparent),
+    0 20px 44px -26px #000,
+    inset 0 1px 0 rgba(255, 255, 255, .14);
+}
+
+.orbe.esta-selecionado .orbe__face::after { opacity: 1; }
+
+/* nos ícones soltos não há moldura: sobra só o halo */
+.orbe--nu.esta-selecionado .orbe__face {
+  border: 0;
+  box-shadow: none;
+}
+
+/* no papel do Mural a luz é quente, não neon */
+.orbe--mural.esta-selecionado .orbe__face {
+  border-color: rgba(255, 255, 255, .8);
+  box-shadow:
+    0 0 36px -6px rgba(255, 230, 192, .55),
+    0 22px 40px -24px #000,
+    inset 0 0 30px rgba(190, 170, 130, .28);
+}
+
 /* nenhum contorno ao clicar: o anel é só para quem navega pelo teclado.
    :focus pega qualquer foco; :focus-visible vem depois e reacende o anel
    no caso do teclado (mesma especificidade, ganha a última regra). */
@@ -936,6 +970,15 @@ body {
   }
 
   .orbe__face::after { background: radial-gradient(120% 90% at 50% 0%, rgba(255,255,255,.14), transparent 70%); }
+
+  .orbe.esta-selecionado .orbe__face {
+    border-color: rgba(255, 255, 255, .45);
+    box-shadow:
+      0 0 0 1px rgba(255, 255, 255, .2),
+      0 0 32px -6px rgba(255, 255, 255, .4),
+      0 20px 44px -26px #000,
+      inset 0 1px 0 rgba(255, 255, 255, .14);
+  }
   .orbe--nu .orbe__face::after { background: radial-gradient(circle at 50% 50%, rgba(255,255,255,.28), transparent 68%); }
   .orbe--nu:hover .orbe__face { box-shadow: none; }
   .orbe:focus-visible { outline-color: var(--halo); }

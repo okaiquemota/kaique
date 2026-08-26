@@ -124,6 +124,18 @@
     }
   }
 
+  /* --- seleção ---------------------------------------------- */
+  function selecionar(alvo) {
+    corpos.forEach(function (o) {
+      o.el.classList.toggle('esta-selecionado', o === alvo);
+    });
+  }
+
+  // clicar no vácuo tira a seleção
+  document.addEventListener('pointerdown', function (e) {
+    if (!e.target || !e.target.closest || !e.target.closest('.orbe')) selecionar(null);
+  });
+
   /* --- arrasto ----------------------------------------------
      Duas lições que custaram caro:
 
@@ -200,6 +212,7 @@
       c.tUltimo = e.timeStamp;
       c.vx = c.vy = 0;
       el.classList.add('a-arrastar');
+      selecionar(c);
 
       try { el.setPointerCapture(e.pointerId); } catch (erro) { /* opcional */ }
       escutarJanela(true);
@@ -212,19 +225,32 @@
 
     el.addEventListener('dragstart', function (e) { e.preventDefault(); });
 
-    /* Captura: roda antes de qualquer listener de modal, inclusive
-       delegado no document. */
+    /* Um clique só seleciona. Quem abre é o clique duplo.
+       Em fase de captura, para rodar antes de qualquer listener de
+       modal — inclusive um delegado no document. */
     el.addEventListener('click', function (e) {
-      if (e.detail === 0) return;                  // veio do teclado: sempre vale
-      if (c.origemX === null) return;              // não houve pointerdown aqui
-
-      var longe = Math.hypot(e.clientX - c.origemX, e.clientY - c.origemY);
-      if (c.percorrido <= LIMIAR_ARRASTO && longe <= LIMIAR_ARRASTO) return;
-
-      c.origemX = c.origemY = null;
+      if (e.detail === 0) return;      // click() programático ou teclado: vale
       e.preventDefault();
       e.stopPropagation();
     }, true);
+
+    /* Dois cliques rápidos ativam de verdade. O el.click() nasce com
+       detail 0, então atravessa o filtro acima sozinho: o <a> navega e
+       os listeners de [data-abre] recebem um click normal, sem que o
+       contrato deles precise saber que existe um duplo clique aqui. */
+    el.addEventListener('dblclick', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      // se o gesto foi arrasto, não é ativação
+      if (c.origemX !== null) {
+        var longe = Math.hypot(e.clientX - c.origemX, e.clientY - c.origemY);
+        if (c.percorrido > LIMIAR_ARRASTO || longe > LIMIAR_ARRASTO) return;
+      }
+
+      selecionar(c);
+      el.click();
+    });
   });
 
   /* --- laço ------------------------------------------------- */

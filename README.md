@@ -87,6 +87,21 @@ não no card.
 
 Cliques de teclado (`detail === 0`) nunca são cancelados.
 
+### Um clique seleciona, dois abrem
+
+Este é o contrato de interação da página, e ele é deliberado: no meio de objetos que
+boiam e podem ser arrastados, um clique simples é ambíguo demais — muitas vezes é o
+começo de um arrasto. Então:
+
+- **um clique** apenas seleciona o objeto (`.esta-selecionado`, que acende o halo na cor
+  dele). Clicar no vácuo tira a seleção;
+- **dois cliques rápidos** ativam de verdade — o `<a>` navega, o `[data-abre]` abre o modal;
+- **arrastar** nunca ativa nada.
+
+Repare que **o seu script não precisa saber disso**. Todo clique simples é cancelado em
+fase de captura; no duplo clique a física chama `el.click()`, que nasce com `detail === 0`
+e por isso atravessa o próprio filtro. O que chega no seu listener é um `click` comum.
+
 **A física não atrapalha esse clique.** Um toque sem arrasto dispara o `click`
 normalmente; só o clique que nasce de um arrasto é cancelado — senão largar um card
 em cima de outro lugar abriria o modal sem querer. O cancelamento usa um listener em
