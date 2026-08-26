@@ -55,7 +55,9 @@ var VEL_MIN       = 20 * brisa;   // piso: em gravidade zero nada para
      de tudo quicar para sempre. Abaixo de PARA_DE_QUICAR o objeto
      desiste e descansa — sem esse corte ele treme no chão eterno,
      quicando um pixel de cada vez. */
-  var GRAVIDADE      = 1500;  // px/s²
+  var GRAVIDADE      = 3600;  // px/s² — bem acima dos 9,8m/s² reais:
+                              //   a tela tem meio metro de queda, e no
+                              //   valor real a coisa parece pena caindo
   var QUICA_CHAO     = 0.34;
   var ATRITO_CHAO    = 0.72;
   var PARA_DE_QUICAR = 46;    // px/s
@@ -387,6 +389,12 @@ var VEL_MIN       = 20 * brisa;   // piso: em gravidade zero nada para
       e.preventDefault();
       e.stopPropagation();
 
+      /* Com a gravidade ligada, dois toques não abrem nada. Ali a
+         pessoa está empurrando as coisas, não navegando — e no celular
+         dois toques seguidos num objeto que está escorregando são
+         fáceis de dar sem querer. Desliga a gravidade para abrir. */
+      if (caindo) return;
+
       // se o gesto foi arrasto, não é ativação
       if (c.origemX !== null) {
         var longe = Math.hypot(e.clientX - c.origemX, e.clientY - c.origemY);
@@ -447,8 +455,11 @@ var VEL_MIN       = 20 * brisa;   // piso: em gravidade zero nada para
       var v = Math.hypot(c.vx, c.vy);
 
       // teto só para a deriva — um arremesso pode passar disso e
-      // vai desacelerando sozinho até voltar para a faixa calma
-      if (v > VEL_DERIVA) {
+      // vai desacelerando sozinho até voltar para a faixa calma.
+      // Sob peso ele sai de cena: frear uma queda é justamente o que
+      // fazia a coisa parecer lenta.
+      if (comPeso) { /* em queda livre não há teto */ }
+      else if (v > VEL_DERIVA) {
         var alvo = Math.max(VEL_DERIVA, v * atrito);
         c.vx *= alvo / v;
         c.vy *= alvo / v;
@@ -458,7 +469,7 @@ var VEL_MIN       = 20 * brisa;   // piso: em gravidade zero nada para
          eventualmente cancela a si mesma e o objeto fica parado no
          vácuo — que é justamente o que não deve acontecer aqui.
          Com gravidade ligada o piso sai de cena: lá parar é o certo. */
-      else if (!comPeso && v < VEL_MIN) {
+      else if (v < VEL_MIN) {
         if (v < 0.01) {                        // parou de vez: escolhe um rumo
           var ang = Math.random() * Math.PI * 2;
           c.vx = Math.cos(ang);
