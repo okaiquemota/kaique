@@ -36,6 +36,7 @@
   --rosa:         #ff6ec7;
   --azul:         #6d8bff;
   --ciano:        #5ef2ff;
+  --verde:        #8cc63f;
   --lampada:      #ffe6c0;
 
   /* vidro */
@@ -511,11 +512,13 @@ body {
    08. POSIÇÕES & TEMPOS
    Assimetria proposital: nenhum par divide eixo, duração ou fase.
    ============================================================ */
-.orbe--github     { --tom: var(--ouro);    top: 18%; left: 15%; --curva: flutuar-a; --dur: 7s; --fase: -1.2s; }
-.orbe--instagram  { --tom: var(--rosa);    top: 11%; left: 56%; --curva: flutuar-b; --dur: 5s; --fase: -.6s; }
-.orbe--mural      { --tom: var(--lampada); top: 28%; left: 78%; --curva: flutuar-c; --dur: 8s; --fase: -4.1s; }
-.orbe--behance    { --tom: var(--azul);    top: 64%; left: 13%; --curva: flutuar-d; --dur: 9s; --fase: -3s; }
-.orbe--passatempo { --tom: var(--ciano);   top: 64%; left: 64%; --curva: flutuar-e; --dur: 6s; --fase: -2.4s; }
+.orbe--github     { --tom: var(--ouro);    top: 13%; left: 12%; --curva: flutuar-a; --dur: 7s;   --fase: -1.2s; }
+.orbe--instagram  { --tom: var(--rosa);    top: 8%;  left: 47%; --curva: flutuar-b; --dur: 5s;   --fase: -.6s; }
+.orbe--mural      { --tom: var(--lampada); top: 22%; left: 76%; --curva: flutuar-c; --dur: 8s;   --fase: -4.1s; }
+.orbe--kiwi       { --tom: var(--verde);   top: 45%; left: 5%;  --curva: flutuar-d; --dur: 10s;  --fase: -6.2s; }
+.orbe--estrela    { --tom: var(--gelo);    top: 44%; left: 85%; --curva: flutuar-b; --dur: 6.5s; --fase: -5.4s; }
+.orbe--behance    { --tom: var(--azul);    top: 70%; left: 17%; --curva: flutuar-d; --dur: 9s;   --fase: -3s; }
+.orbe--passatempo { --tom: var(--ciano);   top: 69%; left: 57%; --curva: flutuar-e; --dur: 6s;   --fase: -2.4s; }
 
 /* satélites: mais lentos e mais tortos que os cards */
 
@@ -593,11 +596,13 @@ body {
   :root { --amp: 18px; --amp-x: 8px; }
 
   .orbe { width: clamp(164px, 18.5vw, 206px); }
-  .orbe--github     { top: 15%; left: 6%; }
-  .orbe--instagram  { top: 7%;  left: 59%; }
-  .orbe--mural      { top: 29%; left: 75%; }
-  .orbe--behance    { top: 68%; left: 5%; }
-  .orbe--passatempo { top: 74%; left: 61%; }
+  .orbe--github     { top: 12%; left: 6%; }
+  .orbe--instagram  { top: 6%;  left: 46%; }
+  .orbe--mural      { top: 24%; left: 73%; }
+  .orbe--kiwi       { top: 46%; left: 3%; }
+  .orbe--estrela    { top: 44%; left: 87%; }
+  .orbe--behance    { top: 72%; left: 12%; }
+  .orbe--passatempo { top: 71%; left: 56%; }
 
 }
 
@@ -608,11 +613,13 @@ body {
   .orbe { width: clamp(146px, 25vw, 182px); }
   .orbe__face { border-radius: 18px; gap: .7rem; }
 
-  .orbe--github     { top: 11%; left: 5%; }
-  .orbe--instagram  { top: 6%;  left: auto; right: 5%; }
-  .orbe--mural      { top: 26%; left: auto; right: 4%; }
-  .orbe--behance    { top: 74%; left: 5%; }
-  .orbe--passatempo { top: 83%; left: auto; right: 6%; }
+  .orbe--github     { top: 9%;  left: 5%; }
+  .orbe--instagram  { top: 5%;  left: auto; right: 6%; }
+  .orbe--mural      { top: 21%; left: auto; right: 4%; }
+  .orbe--kiwi       { top: 40%; left: 4%; }
+  .orbe--estrela    { top: 38%; left: auto; right: 7%; }
+  .orbe--behance    { top: 72%; left: 6%; }
+  .orbe--passatempo { top: 82%; left: auto; right: 6%; }
 
 }
 
@@ -657,11 +664,13 @@ body {
   .orbe--mural .orbe__rotulo { font-size: 1.32rem; }
   .orbe--mural .orbe__icone { top: -10px; right: 10px; width: 26px; height: 26px; }
 
-  .orbe--github     { top: 9%;  left: 4%; }
-  .orbe--instagram  { top: 5%;  left: auto; right: 4%; }
-  .orbe--mural      { top: 21%; left: auto; right: 7%; }
-  .orbe--behance    { top: 72%; left: 4%; }
-  .orbe--passatempo { top: 80%; left: auto; right: 4%; }
+  .orbe--github     { top: 7%;  left: 4%; }
+  .orbe--instagram  { top: 4%;  left: auto; right: 5%; }
+  .orbe--mural      { top: 18%; left: auto; right: 6%; }
+  .orbe--kiwi       { top: 33%; left: 4%; }
+  .orbe--estrela    { top: 31%; left: auto; right: 8%; }
+  .orbe--behance    { top: 71%; left: 4%; }
+  .orbe--passatempo { top: 81%; left: auto; right: 4%; }
 
   .orbe:hover .orbe__face,
   .orbe:focus-visible .orbe__face .orbe__face { transform: scale(1.07) translateY(-4px); }
@@ -714,11 +723,13 @@ body {
   .orbe--mural .orbe__rotulo { font-size: 1.3rem; }
   .orbe--mural .orbe__icone { top: -9px; right: 10px; width: 24px; height: 24px; }
 
-  .orbe--github     { top: 8%;  left: 3%; }
-  .orbe--instagram  { top: 5%;  left: auto; right: 3%; }
-  .orbe--mural      { top: 43%; left: auto; right: 2%; }
-  .orbe--behance    { top: 70%; left: 3%; }
-  .orbe--passatempo { top: 76%; left: auto; right: 5%; }
+  .orbe--github     { top: 7%;  left: 3%; }
+  .orbe--instagram  { top: 5%;  left: 30%; }
+  .orbe--mural      { top: 8%;  left: auto; right: 3%; }
+  .orbe--kiwi       { top: 44%; left: 2%; }
+  .orbe--estrela    { top: 42%; left: auto; right: 3%; }
+  .orbe--behance    { top: 72%; left: 8%; }
+  .orbe--passatempo { top: 74%; left: auto; right: 8%; }
 
 }
 
