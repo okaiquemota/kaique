@@ -225,14 +225,26 @@ var VEL_MIN       = 20 * brisa;   // piso: em gravidade zero nada para
   /* As páginas de casa (Passatempo e Mural) abrem em janela própria,
      não em aba: são coisas para usar ao lado do portfólio, não para
      substituí-lo. Quem marca isso é o data-abre, que só elas têm. */
+  /* Dentro do iframe de outra pessoa (a prévia do Claude, um embed),
+     janela própria não é nossa para abrir: ou o sandbox recusa, ou —
+     pior — devolve uma janela que nunca carrega nada. Nos dois casos o
+     código dava a abertura por feita e nunca caía para o link, e o
+     duplo clique não fazia nada. Enquadrado, quem navega é o host. */
+  var enquadrado = (function () {
+    try { return window.self !== window.top; } catch (erro) { return true; }
+  })();
+
   function janelinha(c) {
+    if (enquadrado) return null;
+
     var largura = Math.min(1120, Math.max(360, (screen.availWidth || 1280) - 80));
     var altura  = Math.min(860,  Math.max(420, (screen.availHeight || 800) - 80));
     var esq = Math.round(((screen.availWidth  || 1280) - largura) / 2);
     var topo = Math.round(((screen.availHeight || 800) - altura) / 2);
 
+    var janela;
     try {
-      return window.open(
+      janela = window.open(
         c.destino,
         'kiq-' + c.el.dataset.abre,
         'popup=yes,width=' + largura + ',height=' + altura +
@@ -241,6 +253,10 @@ var VEL_MIN       = 20 * brisa;   // piso: em gravidade zero nada para
     } catch (erro) {
       return null;
     }
+
+    // bloqueador que devolve janela já fechada também conta como recusa
+    if (!janela || janela.closed) return null;
+    return janela;
   }
 
   /* Ativação de verdade: devolve o href, dispara um click e tira o

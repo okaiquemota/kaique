@@ -144,9 +144,12 @@ começo de um arrasto. Então:
   dele). Clicar no vácuo tira a seleção;
 - **dois cliques rápidos** ativam de verdade: os links de rede abrem normalmente, e o
   Passatempo e o Mural abrem em **janela própria** (`window.open` com features de
-  pop-up), não em aba — são coisas para usar ao lado do portfólio, não no lugar dele.
+  pop-up) quando a página está no topo, não em aba — são coisas para usar ao lado do portfólio, não no lugar dele.
   Se o navegador bloquear o pop-up, cai para a navegação comum: melhor abrir em aba do
-  que não abrir;
+  que não abrir. **Dentro do iframe de outra pessoa** (a prévia do Claude, um embed) o
+  pop-up nem é tentado: ali `window.open` costuma devolver uma janela que nunca carrega
+  nada — e como ela não é nula, o código dava a abertura por feita e nunca caía para o
+  link. `window.self !== window.top` decide isso antes de tentar;
 - **arrastar** nunca ativa nada.
 
 Nesses dois, o `click` é disparado **antes** da janela abrir: se o seu script de modal
