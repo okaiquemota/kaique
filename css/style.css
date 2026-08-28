@@ -52,6 +52,7 @@
   --violeta:      #7c3aff;
   --verde:        #6ca029;   /* o verde da Loja do Kiwi, sem retoque */
   --movcode:      #fe6603;   /* o laranja da Movcode, idem */
+  --forlabs:      #4a92ff;   /* o azul da Forlabs, idem */
 
   /* a tinta que vai por cima das placas claras */
   --tinta:        #111111;
@@ -460,43 +461,33 @@ body {
 .orbe--passatempo:focus-visible { border-radius: calc(var(--canto) + 6px); }
 
 /* ------------------------------------------------------------
-   7.2 MURAL — é uma placa como as outras.
+   7.2 MURAL — a palavra é a peça.
    ------------------------------------------------------------
-   Era folha de fichário: régua azul, margem vermelha, furos e
-   papel torto. Bonito, e fora do sistema — do lado de sete placas
-   retas, era a única peça que se explicava por textura em vez de
-   cor. Agora é o mesmo retângulo de cor cheia dos cartuchos do
-   Passatempo, e quem diz que ali é recado é o percevejo espetado
-   no canto.
+   Já foi folha de fichário, e depois placa com percevejo e uma
+   legenda embaixo. Os dois acessórios diziam a mesma coisa que a
+   palavra já dizia, e numa peça de dois quadrados eles roubavam o
+   espaço dela: o rótulo ficava pequeno no meio de enfeite.
 
-   É a segunda peça deitada, junto com o controle: dois quadrados
-   lado a lado, exatamente o mesmo tamanho. Por isso a largura vem
-   do token e a altura da face é fixa — sem isso a placa crescia
-   com o texto e ficava fora da grade das outras.
+   Agora não há ícone nem legenda. A placa é a palavra, centrada e
+   grande o bastante para ocupar a largura — do mesmo jeito que os
+   outros objetos são a marca deles e nada mais.
    ------------------------------------------------------------ */
 .orbe.orbe--mural { width: var(--deitado); }
 
 .orbe--mural .orbe__face {
   height: var(--quadrado);
+  padding: 0;
   border-radius: var(--canto);
+  align-items: center;
   justify-content: center;
-  gap: .3em;
 }
 
 .orbe--mural .orbe__rotulo {
-  font-size: clamp(1.5rem, 2.1vw, 1.9rem);
-}
-
-.orbe--mural .orbe__meta { opacity: .55; }
-
-/* O percevejo espeta a placa pela borda de cima: metade da cabeça
-   fica para fora, contra o vácuo, que é onde o vermelho acende.
-   Ele é grande de propósito — em 34px virava um respingo de tinta
-   no canto, e é ele que diz que a placa é um recado pregado. */
-.orbe--mural .orbe__icone {
-  position: absolute;
-  top: -19px; right: 20px;
-  width: 46px; height: 46px;
+  /* 34% do lado do quadrado: em peça de 2x1 isso enche a largura
+     sem encostar nas bordas, e acompanha a grade em vez de ter um
+     px próprio por breakpoint */
+  font-size: calc(var(--quadrado) * .34);
+  line-height: 1;
 }
 
 /* ============================================================
@@ -525,7 +516,8 @@ body {
 .orbe--behance    { --tom: var(--azulao);   top: 70%; left: 17%; right: auto; --curva: flutuar-d; --dur: 9s;   --fase: -3s; }
 .orbe--passatempo { --tom: var(--creme);    top: 69%; left: 57%; right: auto; --curva: flutuar-e; --dur: 6s;   --fase: -2.4s; }
 .orbe--movcode    { --tom: var(--movcode);  top: 76%; left: 82%; right: auto; --curva: flutuar-c; --dur: 7.5s; --fase: -2.8s; }
-.orbe--forlabs    { --tom: var(--vermelho); top: 29%; left: 29%; right: auto; --curva: flutuar-a; --dur: 8.5s; --fase: -5.8s; }
+.orbe--forlabs    { --tom: var(--forlabs);  top: 29%; left: 29%; right: auto; --curva: flutuar-a; --dur: 8.5s; --fase: -5.8s; }
+.orbe--foto       { --tom: var(--vermelho); top: 57%; left: 24%; right: auto; --curva: flutuar-e; --dur: 9.5s; --fase: -7.4s; }
 
 /* ============================================================
    09. FÍSICA — @keyframes
@@ -605,6 +597,7 @@ body {
   .orbe--passatempo { top: 71%; left: 56%; right: auto; }
   .orbe--movcode    { top: 78%; left: 80%; right: auto; }
   .orbe--forlabs    { top: 30%; left: 27%; right: auto; }
+  .orbe--foto       { top: 58%; left: 22%; right: auto; }
 
 }
 
@@ -626,6 +619,7 @@ body {
   .orbe--passatempo { top: 82%; left: auto; right: 6%; }
   .orbe--movcode    { top: 56%; left: auto; right: 6%; }
   .orbe--forlabs    { top: 55%; left: 5%;  right: auto; }
+  .orbe--foto       { top: 62%; left: auto; right: 5%; }
 
 }
 
@@ -662,13 +656,6 @@ body {
 
   .orbe__meta { display: none; }
 
-  .orbe--mural .orbe__rotulo { font-size: 1.24rem; }
-
-  /* Na pílula o rótulo ocupa a placa inteira, e o percevejo caía em
-     cima da última letra. A folga à direita é a coluna dele. */
-  .orbe--mural .orbe__face { padding-right: 1.7rem; }
-  .orbe--mural .orbe__icone { top: -12px; right: 5px; width: 28px; height: 28px; }
-
   .orbe--github     { top: 7%;  left: 4%; right: auto; }
   .orbe--instagram  { top: 4%;  left: auto; right: 5%; }
   .orbe--mural      { top: 18%; left: auto; right: 6%; }
@@ -678,6 +665,7 @@ body {
   .orbe--passatempo { top: 81%; left: auto; right: 4%; }
   .orbe--movcode    { top: 60%; left: 5%; right: auto; }
   .orbe--forlabs    { top: 60%; left: auto; right: 6%; }
+  .orbe--foto       { top: 24%; left: 6%;  right: auto; }
 
   .orbe:hover .orbe__face,
   .orbe:focus-visible .orbe__face .orbe__face { transform: scale(1.07) translateY(-4px); }
@@ -695,7 +683,6 @@ body {
   .orbe__face { padding: .55rem .68rem; }
   .orbe__icone { width: 30px; height: 30px; }
   .orbe__rotulo { font-size: 1rem; }
-  .orbe--mural .orbe__rotulo { font-size: 1.12rem; }
 }
 
 /* --- celular deitado --- */
@@ -719,10 +706,6 @@ body {
   .orbe__icone { width: 32px; height: 32px; flex: 0 0 auto; }
 
   .orbe--nu .orbe__face { padding: 0; }
-  .orbe--mural .orbe__rotulo { font-size: 1.22rem; }
-  .orbe--mural .orbe__face { padding-right: 1.6rem; }
-  .orbe--mural .orbe__icone { top: -11px; right: 5px; width: 27px; height: 27px; }
-
   .orbe--github     { top: 7%;  left: 3%; right: auto; }
   .orbe--instagram  { top: 5%;  left: 30%; right: auto; }
   .orbe--mural      { top: 8%;  left: auto; right: 3%; }
@@ -732,6 +715,7 @@ body {
   .orbe--passatempo { top: 74%; left: auto; right: 8%; }
   .orbe--movcode    { top: 24%; left: 66%; right: auto; }
   .orbe--forlabs    { top: 68%; left: 42%; right: auto; }
+  .orbe--foto       { top: 22%; left: 48%; right: auto; }
 
 }
 

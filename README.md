@@ -33,21 +33,27 @@ Na prática:
   | token | cor | onde manda |
   | --- | --- | --- |
   | `--magenta` | `#ff2d87` | Instagram, botão de ação, 1º do ranking, seleção |
-  | `--limao` | `#d4ff3f` | Mural, Kiwi Voador |
+  | `--vermelho` | `#ff3b2f` | @okaiquemota (fotografia), contador no limite |
   | `--violeta` | `#7c3aff` | @imnotkiq |
-  | `--vermelho` | `#ff3b2f` | Forlabs, percevejo do Mural, contador no limite |
   | `--creme` | `#ece2d0` | GitHub, Passatempo, Flick, papel do Mural por dentro |
+  | `--limao` | `#d4ff3f` | Mural, Kiwi Voador |
   | `--coral` | `#ff9a76` | Cobrinha, 2º do ranking |
   | `--laranja` | `#ff6a13` | Fuga 208 |
   | `--azulao` | `#2b5cff` | Behance, Movcode (o jogo) |
-  | `--verde` | `#6ca029` | A Loja do Kiwi — é o verde da marca, sem retoque |
-  | `--movcode` | `#fe6603` | Movcode — idem, é o laranja da marca |
+  | `--verde` | `#6ca029` | A Loja do Kiwi |
+  | `--movcode` | `#fe6603` | Movcode — o laranja da marca |
+  | `--forlabs` | `#4a92ff` | Forlabs — o azul da marca |
 
-  As duas últimas são cor emprestada de fora, e é por isso que têm nome
+  As três últimas são cor emprestada de fora, e é por isso que têm nome
   próprio em vez de entrarem na paleta: elas respondem à marca de alguém,
-  não ao sistema daqui. `--laranja` e `--movcode` são quase a mesma cor, e
-  por isso nenhum objeto da capa usa `--laranja` — dois laranjas lado a
-  lado só pareceriam erro de impressão.
+  não ao sistema daqui.
+
+  **Os pares próximos são de propósito, e não descuido.** `--limao` (Mural) e
+  `--verde` (Loja do Kiwi) são dois verdes; `--azulao` (Behance) e `--forlabs`
+  são dois azuis. Em cada par, um dos lados é marca de alguém e não pode mudar,
+  e os valores estão distantes o bastante para as peças não se confundirem.
+  `--laranja` e `--movcode`, esses sim, são quase a mesma cor — por isso nenhum
+  objeto da capa usa `--laranja`: lado a lado só pareceriam erro de impressão.
 
 - **`--tom` é a cor da placa daquele objeto**, e é ela que os anéis de foco e de
   seleção assumem: cada peça acende na própria cor.
@@ -256,21 +262,29 @@ régua, margem, furos e papel torto; do lado de sete placas retas, era a única 
 que se explicava por textura em vez de cor. O que diz que ali é recado agora é o
 percevejo espetado na borda de cima, com a cabeça para fora, contra o vácuo.
 
-**O Movcode usa a marca de verdade**, de `img/movcode.svg`, vazada em branco
-sobre placa no laranja da marca. A escala `0.7` no `<g>` é o mesmo respiro que as
-outras placas têm: medida, a marca ocupa 776x1000 do viewBox e já nasce centrada
-em (500,500), então encolher em volta do centro basta.
+**Movcode e Forlabs usam a marca de verdade**, de `img/movcode.svg` e
+`img/forlabs.svg`, e cada uma chegou de um jeito:
 
-**O ícone da Forlabs é provisório.** Não tenho a marca deles; o frasco é o que
-"labs" quer dizer, e nada mais. Trocar pela logo de verdade é trocar o `<g>` de
-dentro do SVG — a placa, o `rx` e o resto do esqueleto seguem valendo, e o
-Movcode acima mostra exatamente como fica quando a marca real chega.
+- a da Movcode é **só a marca**, então ela entra vazada em branco sobre uma placa
+  no laranja dela. A escala `0.7` no `<g>` é o mesmo respiro das outras placas:
+  medida, a marca ocupa 776x1000 do viewBox e já nasce centrada em (500,500);
+- a da Forlabs **já vem como tile** — quadrado de cantos arredondados, azul e
+  branco, duas cores e nenhum degradê. Aí não há placa por baixo: o SVG é a peça
+  inteira, exatamente como o esqueleto espera.
+
+**O `--tom` de cada uma é a cor da marca**, e não uma da paleta: é ela que o anel
+de foco e o de seleção assumem, então cada peça continua acendendo na própria cor.
+
+**O @okaiquemota é uma câmera, e não a marca do Instagram**, de propósito: já
+existe uma placa do Instagram na capa (o `@kiq.ham`), e duas iguais não diriam
+qual leva a qual.
 
 ## O que ajustar
 
 - **Links**: A Loja do Kiwi aponta para o site próprio (`lojadokiwi.com.br`), não
-  mais para o Instagram da loja. Instagram pessoal em `@kiq.ham`; GitHub e Behance
-  ainda em `okaiquemota` — confirme o Behance.
+  mais para o Instagram da loja. Dois Instagram na capa: `@kiq.ham` (pessoal) e
+  `@okaiquemota` (fotografia). GitHub e Behance ainda em `okaiquemota` — confirme
+  o Behance.
 - **Posições iniciais**: bloco *08* do CSS, junto com o `--tom` de cada peça.
   **Toda regra de posição declara `left` E `right`**, mesmo quando um dos dois é
   `auto` — veja abaixo por quê.
