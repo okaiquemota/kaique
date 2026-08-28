@@ -532,6 +532,7 @@
   font-weight: 700;
   letter-spacing: .16em;
   text-transform: uppercase;
+  white-space: nowrap;      /* "seu recorde" em duas linhas desalinha a dupla */
   color: var(--suave);
 }
 
@@ -670,6 +671,10 @@
 }
 
 .painel .btn:hover { background: #ff5aa0; }
+
+/* o anel de foco sai 4px do botao: sem essa folga ele encosta na
+   ultima linha da mensagem logo acima */
+.painel .btn { margin-top: .15rem; }
 
 /* magenta sobre magenta some: na pilula de acao o anel e branco, e
    fino — grosso ele virava uma segunda borda em volta do botao */

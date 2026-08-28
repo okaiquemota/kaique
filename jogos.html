@@ -18,7 +18,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Caveat:wght@500;600&display=swap">
-<link rel="stylesheet" href="css/paginas.css?v=8">
+<link rel="stylesheet" href="css/paginas.css?v=9">
 </head>
 <body>
 
@@ -168,7 +168,7 @@
 
     <div class="hud">
       <span class="chip"><b>Rodada</b><i id="rodada">0</i></span>
-      <span class="chip"><b>Recorde</b><i id="recorde">0</i></span>
+      <span class="chip"><b>Seu recorde</b><i id="recorde" data-rec="genio">0</i></span>
       <button class="som" id="som" type="button" aria-pressed="true">Som ligado</button>
     </div>
 
@@ -200,7 +200,7 @@
 
     <div class="hud">
       <span class="chip"><b>Pontos</b><i id="c-pontos">0</i></span>
-      <span class="chip"><b>Recorde</b><i id="c-recorde">0</i></span>
+      <span class="chip"><b>Seu recorde</b><i id="c-recorde" data-rec="cobrinha">0</i></span>
     </div>
 
     <canvas id="c-tela" width="380" height="380" role="img"
@@ -234,7 +234,7 @@
 
     <div class="hud">
       <span class="chip"><b>Pontos</b><i id="r-pontos">0</i></span>
-      <span class="chip"><b>Recorde</b><i id="r-recorde">0</i></span>
+      <span class="chip"><b>Seu recorde</b><i id="r-recorde" data-rec="corrida">0</i></span>
     </div>
 
     <canvas id="r-tela" width="380" height="380" role="img"
@@ -266,7 +266,7 @@
 
     <div class="hud">
       <span class="chip"><b>Alvos</b><i id="a-pontos">0</i></span>
-      <span class="chip"><b>Recorde</b><i id="a-recorde">0</i></span>
+      <span class="chip"><b>Seu recorde</b><i id="a-recorde" data-rec="mira">0</i></span>
     </div>
 
     <!-- O "cursor: crosshair" deixa o mouse com a mira clássica de FPS -->
@@ -294,7 +294,7 @@
 
     <div class="hud">
       <span class="chip"><b>Pontos</b><i id="k-pontos">0</i></span>
-      <span class="chip"><b>Recorde</b><i id="k-recorde">0</i></span>
+      <span class="chip"><b>Seu recorde</b><i id="k-recorde" data-rec="kiwi">0</i></span>
     </div>
 
     <canvas id="k-tela" width="380" height="380" role="img"
@@ -321,7 +321,7 @@
 
     <div class="hud">
       <span class="chip"><b>Andares</b><i id="s-pontos">0</i></span>
-      <span class="chip"><b>Recorde</b><i id="s-recorde">0</i></span>
+      <span class="chip"><b>Seu recorde</b><i id="s-recorde" data-rec="stack">0</i></span>
     </div>
 
     <!-- Canvas do jogo -->
@@ -339,8 +339,8 @@
 
   </div>
 </dialog>
-<script src="js/kiq.js?v=8"></script>
-<script src="js/jogos.js?v=8"></script>
+<script src="js/kiq.js?v=9"></script>
+<script src="js/jogos.js?v=9"></script>
 
 </body>
 </html>

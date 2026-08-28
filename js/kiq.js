@@ -121,6 +121,40 @@ const Placar = {
   }
 };
 
+/* O apelido guardado — quem a pessoa e no ranking. */
+function souEu(){
+  try { return localStorage.getItem('kiq:apelido') || ''; } catch { return ''; }
+}
+
+/* O recorde do chip mora no localStorage: e do NAVEGADOR, nao da
+   pessoa. Quem joga no computador e depois abre no celular ve o
+   aparelho novo dizendo "seu recorde 0" enquanto o ranking, logo
+   abaixo, mostra o nome dele com 65 — e parece defeito, porque as
+   duas linhas falam da mesma pessoa e discordam.
+
+   Entao o ranking devolve o recorde para o aparelho: se ele traz o
+   seu apelido com nota maior que a local, a local sobe. Escreve
+   direto no armazenamento, e nao por Placar.guardar, porque guardar
+   levanta a bandeira do confete — e herdar um numero que voce fez
+   outro dia nao e bater recorde agora.
+
+   O aparelho novo tambem herda de graca: abriu o jogo, ja chega com
+   o seu numero. O preco e que dois visitantes com o mesmo apelido
+   herdam um do outro, que e a mesma troca que o ranking por apelido
+   ja faz desde sempre. */
+function herdarDoRanking(jogo, topo){
+  const eu = souEu();
+  if (!eu) return;
+  const meu = topo.find((l) => l.nome === eu);
+  if (!meu || !Number.isFinite(meu.pontos)) return;
+  if (Placar.melhor(jogo) >= meu.pontos) return;
+
+  try { localStorage.setItem('kiq:recorde:' + jogo, String(meu.pontos)); } catch {}
+  for (const el of document.querySelectorAll('[data-rec="' + jogo + '"]')){
+    el.textContent = String(meu.pontos);
+  }
+}
+
 /* Uma linha de recado dentro da lista: serve para o ranking
    vazio e para o ranking que nao carregou. */
 function recado(alvo, texto){
@@ -152,7 +186,9 @@ async function ranking(jogo, lista){
   if (!topo){ recado(alvo, 'ranking indisponível agora'); return; }
   if (!topo.length){ recado(alvo, 'ninguém jogou ainda — começa você'); return; }
 
-  const eu = (() => { try { return localStorage.getItem('kiq:apelido') || ''; } catch { return ''; } })();
+  const eu = souEu();
+  herdarDoRanking(jogo, topo);
+
   topo.forEach((linha, i) => {
     const item = document.createElement('li');
     if (eu && linha.nome === eu) item.dataset.eu = 'sim';
