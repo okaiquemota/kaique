@@ -268,7 +268,9 @@ Movcode acima mostra exatamente como fica quando a marca real chega.
 
 ## O que ajustar
 
-- **Links**: Instagram em `@kiq.ham`; GitHub e Behance ainda em `okaiquemota` — confirme o Behance.
+- **Links**: A Loja do Kiwi aponta para o site próprio (`lojadokiwi.com.br`), não
+  mais para o Instagram da loja. Instagram pessoal em `@kiq.ham`; GitHub e Behance
+  ainda em `okaiquemota` — confirme o Behance.
 - **Posições iniciais**: bloco *08* do CSS, junto com o `--tom` de cada peça.
   **Toda regra de posição declara `left` E `right`**, mesmo quando um dos dois é
   `auto` — veja abaixo por quê.
