@@ -33,13 +33,21 @@ Na prática:
   | token | cor | onde manda |
   | --- | --- | --- |
   | `--magenta` | `#ff2d87` | Instagram, botão de ação, 1º do ranking, seleção |
-  | `--laranja` | `#ff6a13` | @imnotkiq, Fuga 208 |
-  | `--coral` | `#ff9a76` | Mural, Cobrinha, 2º do ranking |
+  | `--limao` | `#d4ff3f` | Mural, Kiwi Voador |
+  | `--violeta` | `#7c3aff` | @imnotkiq |
+  | `--vermelho` | `#ff3b2f` | Forlabs, percevejo do Mural, contador no limite |
   | `--creme` | `#ece2d0` | GitHub, Passatempo, Flick, papel do Mural por dentro |
-  | `--vermelho` | `#ff3b2f` | percevejo do Mural, contador no limite |
-  | `--limao` | `#d4ff3f` | Movcode, Kiwi Voador |
+  | `--coral` | `#ff9a76` | Cobrinha, 2º do ranking |
+  | `--laranja` | `#ff6a13` | Fuga 208 |
   | `--azulao` | `#2b5cff` | Behance, Movcode (o jogo) |
   | `--verde` | `#6ca029` | A Loja do Kiwi — é o verde da marca, sem retoque |
+  | `--movcode` | `#fe6603` | Movcode — idem, é o laranja da marca |
+
+  As duas últimas são cor emprestada de fora, e é por isso que têm nome
+  próprio em vez de entrarem na paleta: elas respondem à marca de alguém,
+  não ao sistema daqui. `--laranja` e `--movcode` são quase a mesma cor, e
+  por isso nenhum objeto da capa usa `--laranja` — dois laranjas lado a
+  lado só pareceriam erro de impressão.
 
 - **`--tom` é a cor da placa daquele objeto**, e é ela que os anéis de foco e de
   seleção assumem: cada peça acende na própria cor.
@@ -248,15 +256,21 @@ régua, margem, furos e papel torto; do lado de sete placas retas, era a única 
 que se explicava por textura em vez de cor. O que diz que ali é recado agora é o
 percevejo espetado na borda de cima, com a cabeça para fora, contra o vácuo.
 
-**O ícone do Movcode é provisório.** Não tenho a marca deles, então o desenho é a
-metáfora que o próprio site já usa: o jogo de mesmo nome no Passatempo empilha
-interface bloco por bloco, e o ícone são esses blocos. Para trocar pela logo de
-verdade basta substituir o `<g>` de dentro do SVG — a placa, o `rx` e o resto do
-esqueleto seguem valendo.
+**O Movcode usa a marca de verdade**, de `img/movcode.svg`, vazada em branco
+sobre placa no laranja da marca. A escala `0.7` no `<g>` é o mesmo respiro que as
+outras placas têm: medida, a marca ocupa 776x1000 do viewBox e já nasce centrada
+em (500,500), então encolher em volta do centro basta.
+
+**O ícone da Forlabs é provisório.** Não tenho a marca deles; o frasco é o que
+"labs" quer dizer, e nada mais. Trocar pela logo de verdade é trocar o `<g>` de
+dentro do SVG — a placa, o `rx` e o resto do esqueleto seguem valendo, e o
+Movcode acima mostra exatamente como fica quando a marca real chega.
 
 ## O que ajustar
 
-- **Links**: Instagram em `@kiq.ham`; GitHub e Behance ainda em `okaiquemota` — confirme o Behance.
+- **Links**: A Loja do Kiwi aponta para o site próprio (`lojadokiwi.com.br`), não
+  mais para o Instagram da loja. Instagram pessoal em `@kiq.ham`; GitHub e Behance
+  ainda em `okaiquemota` — confirme o Behance.
 - **Posições iniciais**: bloco *08* do CSS, junto com o `--tom` de cada peça.
   **Toda regra de posição declara `left` E `right`**, mesmo quando um dos dois é
   `auto` — veja abaixo por quê.
@@ -293,6 +307,30 @@ o escopo `.painel` e as três raízes viram o próprio `.painel`.
 ```
 node tools/gera-painel.mjs
 ```
+
+## A grade: um quadrado manda em todo mundo
+
+Um número no `:root` decide o tamanho de todas as nove peças.
+
+```
+--quadrado   o lado das sete peças quadradas
+--deitado    calc(var(--quadrado) * 2)   as duas deitadas
+--canto      calc(var(--quadrado) * .25) o raio, igual para todas
+```
+
+As deitadas — o controle do Passatempo e o Mural — são **exatamente dois
+quadrados lado a lado**: `--deitado` de largura por `--quadrado` de altura. O
+viewBox do controle já é 160x80, então a proporção fecha sem esticar nada; o
+Mural precisa da altura fixa na `.orbe__face`, senão a placa cresceria com o
+texto e sairia da grade.
+
+O `--canto` não pode ser porcentagem: 25% de uma caixa 2:1 sai elíptico. Em px
+calculado, o canto do Mural e o do controle ficam idênticos ao dos quadrados —
+que é o mesmo `rx="25%"` que os SVGs quadrados usam por dentro.
+
+**Só o `--quadrado` muda por breakpoint.** Antes cada peça carregava o próprio
+px em cada media query, e elas iam saindo de proporção uma da outra a cada tela
+nova. Para mudar a escala inteira agora, muda-se um número.
 
 ## `left` e `right`, sempre os dois
 
