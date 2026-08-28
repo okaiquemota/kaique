@@ -346,6 +346,27 @@ que é o mesmo `rx="25%"` que os SVGs quadrados usam por dentro.
 px em cada media query, e elas iam saindo de proporção uma da outra a cada tela
 nova. Para mudar a escala inteira agora, muda-se um número.
 
+## O recorde do chip é do aparelho, e o ranking devolve
+
+`Placar.melhor()` lê o `localStorage`: o recorde do chip é do **navegador**, não
+da pessoa. É de propósito — ele é instantâneo e funciona sem rede. Mas quem joga
+no computador e depois abre no celular via o aparelho novo dizendo "seu recorde 0"
+com o ranking logo abaixo mostrando o próprio nome com 65, e as duas linhas falam
+da mesma pessoa e discordam.
+
+Por isso o ranking **devolve o número para o aparelho**: em `herdarDoRanking()`,
+se a lista traz o seu apelido com nota maior que a local, a local sobe. A escrita
+vai direta no armazenamento e não por `Placar.guardar` — guardar levanta a
+bandeira do confete, e herdar um número que você fez outro dia não é bater
+recorde agora. O aparelho novo também herda de graça: abriu o jogo, já chega com
+o seu número.
+
+O preço é que dois visitantes com o mesmo apelido herdam um do outro. É a mesma
+troca que o ranking por apelido já faz desde sempre.
+
+O chip diz **"seu recorde"** por isso: para não competir com a lista logo abaixo,
+que é de todo mundo.
+
 ## `left` e `right`, sempre os dois
 
 Os breakpoints se empilham: num celular de 393px valem, ao mesmo tempo, o bloco de
