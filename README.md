@@ -36,25 +36,24 @@ Na prática:
   | `--vermelho` | `#ff3b2f` | @okaiquemota (fotografia), contador no limite |
   | `--violeta` | `#7c3aff` | @imnotkiq |
   | `--creme` | `#ece2d0` | GitHub, Passatempo, Flick, papel do Mural por dentro |
-  | `--limao` | `#d4ff3f` | Kiwi Voador |
+  | `--limao` | `#d4ff3f` | Mural, Kiwi Voador |
   | `--coral` | `#ff9a76` | Cobrinha, 2º do ranking |
   | `--laranja` | `#ff6a13` | Fuga 208 |
   | `--azulao` | `#2b5cff` | Behance, Movcode (o jogo) |
-  | `--verde` | `#6ca029` | A Loja do Kiwi e o Mural |
+  | `--verde` | `#6ca029` | A Loja do Kiwi |
   | `--movcode` | `#fe6603` | Movcode — o laranja da marca |
   | `--forlabs` | `#4a92ff` | Forlabs — o azul da marca |
 
   As três últimas são cor emprestada de fora, e é por isso que têm nome
   próprio em vez de entrarem na paleta: elas respondem à marca de alguém,
-  não ao sistema daqui. `--verde` é da Loja do Kiwi e o Mural passou a
-  usá-lo também — é o verde padrão da página, e ter dois verdes diferentes
-  na mesma tela era o que fazia o conjunto parecer desalinhado.
+  não ao sistema daqui.
 
-  `--laranja` e `--movcode` são quase a mesma cor, e por isso nenhum objeto
-  da capa usa `--laranja`: dois laranjas lado a lado só pareceriam erro de
-  impressão. Vale a mesma atenção para `--azulao` e `--forlabs`, que
-  convivem na capa por serem marcas — de valores distantes o bastante para
-  não se confundirem, mas é o par mais próximo que sobrou.
+  **Os pares próximos são de propósito, e não descuido.** `--limao` (Mural) e
+  `--verde` (Loja do Kiwi) são dois verdes; `--azulao` (Behance) e `--forlabs`
+  são dois azuis. Em cada par, um dos lados é marca de alguém e não pode mudar,
+  e os valores estão distantes o bastante para as peças não se confundirem.
+  `--laranja` e `--movcode`, esses sim, são quase a mesma cor — por isso nenhum
+  objeto da capa usa `--laranja`: lado a lado só pareceriam erro de impressão.
 
 - **`--tom` é a cor da placa daquele objeto**, e é ela que os anéis de foco e de
   seleção assumem: cada peça acende na própria cor.

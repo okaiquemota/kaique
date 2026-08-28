@@ -510,7 +510,7 @@ body {
    ============================================================ */
 .orbe--github     { --tom: var(--creme);    top: 13%; left: 12%; right: auto; --curva: flutuar-a; --dur: 7s;   --fase: -1.2s; }
 .orbe--instagram  { --tom: var(--magenta);  top: 8%;  left: 47%; right: auto; --curva: flutuar-b; --dur: 5s;   --fase: -.6s; }
-.orbe--mural      { --tom: var(--verde);    top: 22%; left: 76%; right: auto; --curva: flutuar-c; --dur: 8s;   --fase: -4.1s; }
+.orbe--mural      { --tom: var(--limao);    top: 22%; left: 76%; right: auto; --curva: flutuar-c; --dur: 8s;   --fase: -4.1s; }
 .orbe--kiwi       { --tom: var(--verde);    top: 45%; left: 5%; right: auto;  --curva: flutuar-d; --dur: 10s;  --fase: -6.2s; }
 .orbe--estrela    { --tom: var(--violeta);  top: 44%; left: 85%; right: auto; --curva: flutuar-b; --dur: 6.5s; --fase: -5.4s; }
 .orbe--behance    { --tom: var(--azulao);   top: 70%; left: 17%; right: auto; --curva: flutuar-d; --dur: 9s;   --fase: -3s; }
