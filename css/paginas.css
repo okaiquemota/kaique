@@ -420,25 +420,38 @@ a { color: inherit; text-decoration: none; }
 /* ============================================================
    06. O JOGO — dialog em tela cheia
    ============================================================ */
+/* A tela do jogo nunca pode ser mais alta que o aparelho. Ela era, e
+   por isso o ranking simplesmente nao existia no celular: ficava
+   abaixo da borda inferior, sem rolagem que chegasse nele. Quem rola
+   e o .game, e nao o <dialog>, porque e ele que tem o padding — rolar
+   o dialogo cortaria a folga de baixo. */
 .tela {
   width: min(100% - 1.5rem, 560px);
+  max-height: calc(100dvh - 1.5rem);
   padding: 0;
   border: 1px solid var(--borda);
   border-radius: 18px;
   color: var(--texto);
-  overflow: visible;
+  overflow: hidden;
   background: var(--superficie);
 }
 
 .tela::backdrop { background: rgba(0, 0, 0, .9); }
 
+/* `position: static` de proposito: sem isso o botao de fechar se
+   ancorava no .game, que agora rola — e o X subia junto com o
+   conteudo. Estatico, ele se ancora no proprio <dialog> e fica. */
 .game {
-  position: relative;
+  position: static;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 1rem;
   padding: clamp(1.4rem, 4vw, 2rem);
+  max-height: calc(100dvh - 1.5rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
 }
 
 .fechar {
@@ -454,6 +467,9 @@ a { color: inherit; text-decoration: none; }
   font-size: 1.3rem;
   line-height: 1;
   cursor: pointer;
+  /* o anel da cor da tela abre uma folga entre o botao e o que passa
+     rolando por baixo dele */
+  box-shadow: 0 0 0 5px var(--superficie);
   transition: background .2s ease, color .2s ease;
 }
 
@@ -483,39 +499,56 @@ a { color: inherit; text-decoration: none; }
 
 .hud {
   display: flex;
-  align-items: center;
+  align-items: stretch;
   gap: .5rem;
   flex-wrap: wrap;
   justify-content: center;
 }
 
+/* Placar de verdade: o rotulo e legenda, o numero e o assunto. Antes
+   os dois vinham do mesmo tamanho, na mesma linha, e o resultado era
+   que nao se lia nem um nem outro de relance — que e o unico jeito
+   que se le placar no meio de uma partida. */
 .chip {
   display: inline-flex;
+  flex-direction: column;
   align-items: center;
-  gap: .45rem;
-  padding: .38rem .75rem;
+  justify-content: center;
+  gap: .1rem;
+  min-width: 5.5rem;
+  padding: .4rem .8rem .45rem;
   border: 0;
-  border-radius: 999px;
+  border-radius: 12px;
   background: var(--grafite);
-  font-size: .66rem;
-  font-weight: 600;
-  letter-spacing: .12em;
-  text-transform: uppercase;
 }
 
-.chip b { font-weight: 600; color: var(--suave); }
-.chip i { font-style: normal; font-weight: 700; font-variant-numeric: tabular-nums; }
+.chip b {
+  font-size: .55rem;
+  font-weight: 700;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--suave);
+}
+
+.chip i {
+  font-style: normal;
+  font-size: 1.2rem;
+  font-weight: 700;
+  line-height: 1.05;
+  color: var(--texto);
+  font-variant-numeric: tabular-nums;
+}
 
 .som {
-  padding: .38rem .75rem;
+  padding: .4rem .9rem;
   border: 0;
-  border-radius: 999px;
+  border-radius: 12px;
   background: var(--grafite);
   color: var(--suave);
   font: inherit;
-  font-size: .66rem;
-  font-weight: 600;
-  letter-spacing: .12em;
+  font-size: .62rem;
+  font-weight: 700;
+  letter-spacing: .14em;
   text-transform: uppercase;
   cursor: pointer;
   transition: background .2s ease, color .2s ease;
@@ -524,11 +557,14 @@ a { color: inherit; text-decoration: none; }
 .som:hover { background: var(--creme); color: var(--ink); }
 
 /* tabuleiros */
+/* O tabuleiro e preto e a tela do jogo e quase preta: sem uma aresta
+   dura entre os dois, o campo de jogo nao parecia um campo, parecia um
+   buraco no meio do painel. A borda e o que da moldura a ele. */
 canvas {
   width: 100%;
   max-width: 380px;
   height: auto;
-  border: 0;
+  border: 2px solid var(--borda);
   border-radius: 12px;
   background: var(--vacuo);
   touch-action: none;
@@ -544,20 +580,29 @@ canvas {
   width: min(100%, 300px);
 }
 
+/* Apagado a 32% sobre preto, cor chapada vira lama: o magenta saia
+   vinho, o limao saia oliva, e os quatro botoes pareciam quatro
+   defeitos. A 55% eles continuam sendo a propria cor, so mais fundos —
+   e quem faz a diferenca do aceso passa a ser tambem o salto de
+   tamanho, nao so o brilho. */
 .pad {
   aspect-ratio: 1;
   border: 0;
   border-radius: 12px;
   background: var(--c, var(--magenta));
   cursor: pointer;
-  opacity: .32;
+  opacity: .68;
   transition: opacity .12s linear, transform .12s linear;
 }
 
-.pad.on { opacity: 1; transform: scale(1.04); }
-.pad:hover { opacity: .55; }
+.pad.on { opacity: 1; transform: scale(1.07); }
+.pad:hover { opacity: .85; }
 
 /* direcional na tela, para o celular */
+/* O direcional e uma cruz, e cruz nao se monta com fluxo automatico.
+   So a primeira seta era colocada a mao; as outras tres caiam onde
+   sobrava, e o resultado era ↑ ← em cima e ↓ → embaixo. Cada uma
+   agora diz a propria celula, pelo data-dir que o HTML ja tinha. */
 .dpad {
   display: grid;
   grid-template-columns: repeat(3, 46px);
@@ -566,7 +611,10 @@ canvas {
   justify-content: center;
 }
 
-.dpad .seta:nth-child(1) { grid-column: 2; }
+.dpad .seta[data-dir="cima"]  { grid-area: 1 / 2; }
+.dpad .seta[data-dir="esq"]   { grid-area: 2 / 1; }
+.dpad .seta[data-dir="baixo"] { grid-area: 2 / 2; }
+.dpad .seta[data-dir="dir"]   { grid-area: 2 / 3; }
 
 .seta {
   display: grid;
@@ -584,8 +632,11 @@ canvas {
 .msg {
   margin: 0;
   min-height: 1.4em;
+  max-width: 34ch;
   font-size: .84rem;
+  line-height: 1.4;
   text-align: center;
+  text-wrap: balance;
   color: var(--suave);
 }
 
@@ -615,6 +666,10 @@ canvas {
 
 .btn:hover { background: #ff5aa0; }
 
+/* magenta sobre magenta some: na pilula de acao o anel e branco, e
+   fino — grosso ele virava uma segunda borda em volta do botao */
+.btn:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+
 .btn--peq { padding: .55rem 1.15rem; font-size: .72rem; }
 
 /* ------------------------------------------------------------
@@ -643,29 +698,29 @@ canvas {
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: .3rem;
+  gap: .25rem;
 }
 
 .rank li {
   display: flex;
   align-items: center;
-  gap: .7rem;
-  padding: .4rem .55rem;
+  gap: .6rem;
+  padding: .32rem .45rem;
   border-radius: 8px;
   background: var(--grafite);
-  font-size: .84rem;
+  font-size: .82rem;
   font-variant-numeric: tabular-nums;
 }
 
-/* a posição é uma placa quadrada, não um número solto */
+/* a posição é uma medalha redonda, não um número solto */
 .rank li b {
   flex: 0 0 auto;
   display: grid;
   place-items: center;
-  width: 22px; height: 22px;
-  border-radius: 6px;
+  width: 20px; height: 20px;
+  border-radius: 50%;
   background: rgba(255, 255, 255, .1);
-  font-size: .7rem;
+  font-size: .64rem;
   font-weight: 700;
 }
 
@@ -685,7 +740,9 @@ canvas {
 /* `<i>` é itálico por padrão do navegador, e aqui ele é número */
 .rank li i {
   flex: 0 0 auto;
+  padding-right: .2rem;
   font-style: normal;
+  font-size: .95rem;
   font-weight: 700;
 }
 
@@ -938,6 +995,14 @@ canvas {
 @media (max-width: 600px) {
   .top { justify-content: center; text-align: center; }
   .vaga { flex: 0 0 78vw; }
+
+  /* no celular o cartucho nasce alto demais para o que tem dentro, e
+     o miolo vira um vazio entre o texto e a pílula */
+  .cartucho { min-height: 158px; }
+  .cartucho-nome { font-size: 1.45rem; }
+
+  /* a tela do jogo e estreita: o placar ocupa a largura toda */
+  .chip { flex: 1; min-width: 0; }
   .compor { width: 100%; transform: rotate(-.8deg); }
   .notas { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
   .dpad { grid-template-columns: repeat(3, 52px); grid-template-rows: repeat(2, 52px); }

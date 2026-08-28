@@ -1301,6 +1301,21 @@ const PALETA = {
       const tela = telas.get(bt.dataset.abre);
       if (!tela) return;
       tela.showModal();
+
+      /* Duas coisas que o showModal sozinho faz errado aqui.
+
+         O foco cai no primeiro elemento focavel, que e o X — e o
+         anel de foco entao vira a coisa mais gritante da tela, em
+         cima do botao de sair. Ele pertence a acao, nao a saida.
+
+         E o preventScroll importa: sem ele o navegador rola ate o
+         botao, que fica embaixo do tabuleiro, e a tela abre com o
+         titulo ja cortado no topo. */
+      const acao = tela.querySelector('.btn');
+      if (acao) acao.focus({ preventScroll: true });
+      const corpo = tela.querySelector('.game');
+      if (corpo) corpo.scrollTop = 0;
+
       ranking(bt.dataset.abre);
     });
   }
