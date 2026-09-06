@@ -346,6 +346,27 @@ que é o mesmo `rx="25%"` que os SVGs quadrados usam por dentro.
 px em cada media query, e elas iam saindo de proporção uma da outra a cada tela
 nova. Para mudar a escala inteira agora, muda-se um número.
 
+## Passatempo e Mural estão fora da capa
+
+Os dois objetos continuam no `index.html`, com um `hidden` no `<button>`. **Para
+trazer de volta é apagar essa palavra** — nada mais foi removido: os painéis, os
+seis jogos, o worker e as páginas `jogos.html` e `mural.html` seguem inteiros e
+acessíveis pelo endereço próprio.
+
+Duas coisas que isso exigiu, e que valem para qualquer peça que você queira
+esconder no futuro:
+
+**O `[hidden]` precisou de `!important` no reset.** O `display: none` do atributo
+mora na folha do navegador, e folha de autor sempre ganha dela: bastava o
+`.orbe { display: block }` que já existia para um `<button hidden>` continuar na
+tela, focável e lido em voz alta. Sem essa linha o `hidden` não fazia nada — foi
+exatamente o que aconteceu na primeira tentativa.
+
+**A física ignora peça escondida.** Um elemento com `hidden` não tem caixa
+nenhuma, e o laço mediria 0x0 nele — o que estraga a colisão das outras, que
+passariam a bater num ponto sem tamanho no meio da tela. Com o filtro em
+`js/fisica.js`, esconder um objeto da capa é uma coisa só: `hidden` no HTML.
+
 ## O recorde do chip é do aparelho, e o ranking devolve
 
 `Placar.melhor()` lê o `localStorage`: o recorde do chip é do **navegador**, não

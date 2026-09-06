@@ -26,7 +26,14 @@
 (function () {
   'use strict';
 
-  var orbes = Array.prototype.slice.call(document.querySelectorAll('.orbe'));
+  /* Peca escondida fica de fora da fisica. Nao e detalhe de
+     desempenho: um elemento com `hidden` nao tem caixa nenhuma, e o
+     laco mediria 0x0 nele — o que estraga a colisao dos outros, que
+     passam a bater num ponto sem tamanho no meio da tela. Esconder
+     um objeto da capa e, entao, uma coisa so: `hidden` no HTML. */
+  var orbes = Array.prototype.slice
+    .call(document.querySelectorAll('.orbe'))
+    .filter(function (el) { return !el.hidden; });
   if (!orbes.length || !window.requestAnimationFrame) return;
 
   /* "Reduzir movimento" existe para poupar quem se incomoda com

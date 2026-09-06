@@ -90,6 +90,12 @@
 *::before,
 *::after { box-sizing: border-box; }
 
+/* O `display: none` do atributo `hidden` mora na folha do navegador, e
+   folha de autor sempre ganha dela: bastava `.orbe { display: block }`
+   para um `<button hidden>` continuar na tela, focavel e lido em voz
+   alta. O `!important` e o que devolve a palavra final ao atributo. */
+[hidden] { display: none !important; }
+
 html {
   color-scheme: dark;
   -webkit-text-size-adjust: 100%;
