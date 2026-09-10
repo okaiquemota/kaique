@@ -446,30 +446,30 @@ function tremer(elMsg){
   function desenharCarro(x, y) {
     pincel.save();
     pincel.translate(x, y);
-    
+
     // Corpo branco do 208
     pincel.fillStyle = PALETA.creme;
     pincel.beginPath();
     pincel.roundRect(-CAR_W/2, 0, CAR_W, CAR_H, 8);
     pincel.fill();
-    
+
     // Teto panorâmico (Griffe)
     pincel.fillStyle = PALETA.vacuo;
     pincel.fillRect(-CAR_W/2 + 4, 15, CAR_W - 8, 30);
-    
+
     // Para-brisa traseiro
     pincel.fillRect(-CAR_W/2 + 6, CAR_H - 15, CAR_W - 12, 10);
-    
+
     // DRL "dente de sabre" (assinatura do 208)
     pincel.fillStyle = PALETA.limao;
     pincel.fillRect(-CAR_W/2 + 2, 2, 4, 15);
     pincel.fillRect(CAR_W/2 - 6, 2, 4, 15);
-    
+
     // Lanternas traseiras (garras de leão)
     pincel.fillStyle = PALETA.magenta;
     pincel.fillRect(-CAR_W/2 + 2, CAR_H - 6, 8, 4);
     pincel.fillRect(CAR_W/2 - 10, CAR_H - 6, 8, 4);
-    
+
     pincel.restore();
   }
 
@@ -477,15 +477,15 @@ function tremer(elMsg){
     const size = 24;
     pincel.save();
     pincel.translate(x, y);
-    
+
     // Laranja/Amarelo do cone
-    pincel.fillStyle = PALETA.laranja; 
+    pincel.fillStyle = PALETA.laranja;
     pincel.beginPath();
     pincel.moveTo(0, -size/2);
     pincel.lineTo(-size/2, size/2);
     pincel.lineTo(size/2, size/2);
     pincel.fill();
-    
+
     // Faixa branca do cone
     pincel.fillStyle = PALETA.creme;
     pincel.beginPath();
@@ -494,7 +494,7 @@ function tremer(elMsg){
     pincel.lineTo(size/3, size/4);
     pincel.lineTo(-size/3, size/4);
     pincel.fill();
-    
+
     pincel.restore();
   }
 
@@ -508,7 +508,7 @@ function tremer(elMsg){
     pincel.lineWidth = 4;
     pincel.setLineDash([20, 20]);
     pincel.lineDashOffset = -offsetFaixa;
-    
+
     pincel.beginPath();
     pincel.moveTo(LARGURA / 3, 0); pincel.lineTo(LARGURA / 3, ALTURA);
     pincel.moveTo((LARGURA * 2) / 3, 0); pincel.lineTo((LARGURA * 2) / 3, ALTURA);
@@ -538,7 +538,7 @@ function tremer(elMsg){
     if (!rodando) return;
     frames++;
     offsetFaixa += velocidade;
-    
+
     // Aumenta a velocidade sutilmente
     if (frames % 60 === 0) velocidade += 0.05;
 
@@ -546,7 +546,7 @@ function tremer(elMsg){
     if (frames % Math.max(25, Math.floor(90 - velocidade * 4)) === 0) {
        let faixaCone = Math.floor(Math.random() * 3);
        cones.push({ x: FAIXAS[faixaCone], y: -30, faixa: faixaCone });
-       
+
        // As vezes joga dois cones (se já estiver rápido)
        if (Math.random() > 0.7 && velocidade > 6) {
          let outraFaixa = (faixaCone + 1 + Math.floor(Math.random() * 2)) % 3;
@@ -558,7 +558,7 @@ function tremer(elMsg){
     for (let i = cones.length - 1; i >= 0; i--) {
       let c = cones[i];
       c.y += velocidade;
-      
+
       // Colisão (hitbox simples)
       if (c.y > carroY && c.y < carroY + CAR_H && Math.abs(c.x - carroX) < CAR_W / 1.5) {
         bater();
@@ -700,7 +700,7 @@ function tremer(elMsg){
     if (!alvo) return;
 
     const idade = timestamp - alvo.nasceu;
-    
+
     // Se o tempo acabar, você perde
     if (idade > alvo.vida) {
       bater('Demorou demais! O alvo sumiu.');
@@ -721,7 +721,7 @@ function tremer(elMsg){
     pincel.beginPath();
     pincel.arc(alvo.x, alvo.y, alvo.r, 0, Math.PI * 2);
     pincel.fill();
-    
+
     // Miolo do alvo
     pincel.fillStyle = PALETA.creme;
     pincel.beginPath();
@@ -741,7 +741,7 @@ function tremer(elMsg){
     Placar.guardar(JOGO, pontos);
     marcar();
     Placar.enviar(JOGO, pontos).then((topo) => ranking(JOGO, topo));
-    
+
     elMsg.textContent = pontos === 0 ? motivo : motivo + ' Acertou ' + pontos + '.';
     tremer(elMsg);
     btComecar.textContent = 'De novo';
@@ -796,7 +796,7 @@ function tremer(elMsg){
       btComecar.disabled = false;
       btComecar.textContent = 'Continuar';
       // Ajusta o tempo do alvo para não morrer injustamente ao voltar
-      if (alvo) alvo.nasceu = performance.now() - (alvo.vida * 0.5); 
+      if (alvo) alvo.nasceu = performance.now() - (alvo.vida * 0.5);
     }
   });
 
@@ -838,7 +838,7 @@ function tremer(elMsg){
 
   // Passarinho (Kiwi)
   const KIWI = { x: 60, y: 150, r: 14, v: 0, gravidade: 0.28, pulo: -5.8 };
-  
+
   // Canos
   let canos = [];
   const LARGURA_CANO = 44;
@@ -853,28 +853,28 @@ function tremer(elMsg){
   function desenharKiwi(x, y) {
     pincel.save();
     pincel.translate(x, y);
-    
+
     // Inclina o passarinho baseado na velocidade da queda
     const rotacao = Math.min(Math.PI / 4, Math.max(-Math.PI / 4, (KIWI.v * 0.1)));
     pincel.rotate(rotacao);
-    
+
     // Corpo (marrom por fora, verde por dentro simulando a fruta cortada)
     pincel.fillStyle = PALETA.casca;
     pincel.beginPath();
     pincel.arc(0, 0, KIWI.r, 0, Math.PI * 2);
     pincel.fill();
-    
+
     pincel.fillStyle = PALETA.limao;   // polpa
     pincel.beginPath();
     pincel.arc(0, 0, KIWI.r - 3, 0, Math.PI * 2);
     pincel.fill();
-    
+
     // Olho
     pincel.fillStyle = PALETA.vacuo;
     pincel.beginPath();
     pincel.arc(4, -4, 2.5, 0, Math.PI * 2);
     pincel.fill();
-    
+
     // Biquinho longo do kiwi
     pincel.fillStyle = PALETA.laranja;
     pincel.beginPath();
@@ -895,12 +895,12 @@ function tremer(elMsg){
     canos.forEach(cano => {
       // Muda a cor do cano depois que você passa por ele pra dar um feedback visual
       pincel.fillStyle = cano.passou ? PALETA.magenta : PALETA.azul;
-      
+
       // Topo
       pincel.fillRect(cano.x, 0, LARGURA_CANO, cano.topo);
       // Base
       pincel.fillRect(cano.x, cano.topo + BURACO, LARGURA_CANO, tela.height - (cano.topo + BURACO));
-      
+
       // Detalhe na ponta dos canos pra dar estilo
       pincel.fillStyle = PALETA.vacuo;
       pincel.fillRect(cano.x, cano.topo - 6, LARGURA_CANO, 6);
@@ -921,7 +921,7 @@ function tremer(elMsg){
     Placar.guardar(JOGO, pontos);
     marcar();
     Placar.enviar(JOGO, pontos).then((topo) => ranking(JOGO, topo));
-    
+
     elMsg.textContent = pontos === 0 ? 'Não decolou!' : 'Caiu. Fez ' + pontos + ' pontos.';
     tremer(elMsg);
     btComecar.textContent = 'De novo';
@@ -958,7 +958,7 @@ function tremer(elMsg){
       // Hitbox simples (caixa vs círculo)
       let bateuX = KIWI.x + KIWI.r > c.x && KIWI.x - KIWI.r < c.x + LARGURA_CANO;
       let bateuY = KIWI.y - KIWI.r < c.topo || KIWI.y + KIWI.r > c.topo + BURACO;
-      
+
       if (bateuX && bateuY) {
         bater();
         return;
@@ -1006,7 +1006,7 @@ function tremer(elMsg){
       pular();
     }
   });
-  
+
   // Toque na área do jogo pra pular no mobile
   tela.addEventListener('pointerdown', (e) => {
     if (rodando) {
@@ -1068,7 +1068,7 @@ function tremer(elMsg){
      fora: o contorno de cada bloco tambem e creme, e um bloco creme
      nascia sem contorno nenhum. */
   const CORES = [PALETA.azul, PALETA.magenta, PALETA.laranja, PALETA.limao, PALETA.coral];
-  
+
   let blocos = [];
   let blocoAtual = null;
   let offsetAlvo = 0;
@@ -1082,7 +1082,7 @@ function tremer(elMsg){
   function desenharBloco(b) {
     pincel.fillStyle = b.cor;
     pincel.fillRect(b.x, b.y, b.w, ALTURA_BLOCO);
-    
+
     // Contorno brutalista em cada bloco de UI
     pincel.strokeStyle = PALETA.creme;
     pincel.lineWidth = 2;
@@ -1091,11 +1091,11 @@ function tremer(elMsg){
 
   function desenhar() {
     // Fundo da prancheta
-    pincel.fillStyle = PALETA.vacuo; 
+    pincel.fillStyle = PALETA.vacuo;
     pincel.fillRect(0, 0, tela.width, tela.height);
 
     pincel.save();
-    
+
     // Câmera dinâmica: sobe a tela suavemente conforme a torre cresce
     offsetAtual += (offsetAlvo - offsetAtual) * 0.1;
     pincel.translate(0, offsetAtual);
@@ -1112,7 +1112,7 @@ function tremer(elMsg){
 
     // Pilha de blocos fixos
     blocos.forEach(desenharBloco);
-    
+
     // Bloco que está se movendo agora
     if (blocoAtual) desenharBloco(blocoAtual);
 
@@ -1125,7 +1125,7 @@ function tremer(elMsg){
     Placar.guardar(JOGO, pontos);
     marcar();
     Placar.enviar(JOGO, pontos).then((topo) => ranking(JOGO, topo));
-    
+
     elMsg.textContent = pontos === 0 ? motivo : motivo + ' Fez ' + pontos + ' andares.';
     tremer(elMsg);
     btComecar.textContent = 'De novo';
@@ -1134,9 +1134,9 @@ function tremer(elMsg){
 
   function soltar() {
     if (!rodando) return;
-    
+
     let topo = blocos[blocos.length - 1];
-    
+
     // "Imã" / Snap: Se acertou muito perto da beirada, gruda perfeito
     let dif = Math.abs(blocoAtual.x - topo.x);
     if (dif < 8) {
@@ -1157,14 +1157,14 @@ function tremer(elMsg){
     pontos++;
     marcar();
     elMsg.textContent = dif < 8 ? 'Perfeito!' : 'Na medida!';
-    
+
     // Corta o bloco e adiciona o pedaço válido à pilha
     blocos.push({ x: esquerda, y: blocoAtual.y, w: overlap, cor: blocoAtual.cor });
-    
+
     // Prepara o próximo bloco a surgir
     let novaCor = CORES[pontos % CORES.length];
     let novaVel = Math.min(10, 3 + pontos * 0.35); // Acelera gradualmente
-    
+
     blocoAtual = {
       // Nasce do lado oposto
       x: blocoAtual.dir === 1 ? 0 : tela.width - overlap,
@@ -1186,7 +1186,7 @@ function tremer(elMsg){
 
     // Faz o bloco deslizar
     blocoAtual.x += blocoAtual.vel * blocoAtual.dir;
-    
+
     // Bateu nas paredes do canvas e rebateu
     if (blocoAtual.x <= 0) {
       blocoAtual.x = 0;
@@ -1204,15 +1204,15 @@ function tremer(elMsg){
     pontos = 0;
     offsetAlvo = 0;
     offsetAtual = 0;
-    
+
     // Bloco fundação (A base larga de UI)
     blocos = [{
-      x: 30, 
-      y: tela.height - ALTURA_BLOCO, 
-      w: tela.width - 60, 
-      cor: PALETA.azul 
+      x: 30,
+      y: tela.height - ALTURA_BLOCO,
+      w: tela.width - 60,
+      cor: PALETA.azul
     }];
-    
+
     blocoAtual = {
       x: 0,
       y: tela.height - ALTURA_BLOCO * 2,
