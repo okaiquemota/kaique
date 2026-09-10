@@ -23,6 +23,25 @@ const PALETA = {
   veu:      (a) => `rgba(236, 226, 208, ${a})`
 };
 
+/* ------------------------------------------------------------------
+   O "nao!" do fim de partida: a linha de recado estremece.
+   ------------------------------------------------------------------
+   Quem anima e `.msg.tremer`, no css/paginas.css — o seletor pede as
+   duas classes JUNTAS, entao o alvo e a mensagem e nao o painel do
+   jogo. Os seis jogos punham a classe no painel (`.game`), que nunca
+   casa com esse seletor: o tremor nao acontecia em nenhum deles.
+
+   Aqui num lugar so porque eram seis copias da mesma coisa, e elas
+   ja tinham desencontrado — o Genio tremia sem olhar a preferencia
+   de "reduzir movimento" e os outros cinco reliam essa preferencia
+   a cada fim de jogo, em vez de usar a que kiq.js ja mediu.
+   ------------------------------------------------------------------ */
+function tremer(elMsg){
+  if (!elMsg || semMovimento) return;
+  elMsg.classList.add('tremer');
+  setTimeout(() => elMsg.classList.remove('tremer'), 420);
+}
+
 /* ---------------------------- Genio ---------------------------- */
 (() => {
   'use strict';
@@ -110,8 +129,7 @@ const PALETA = {
     elMsg.textContent = chegou === 0
       ? 'Logo de cara. Tenta de novo.'
       : 'Errou na rodada ' + seq.length + '. Chegou a ' + chegou + '.';
-    painel.classList.add('tremer');
-    setTimeout(() => painel.classList.remove('tremer'), 420);
+    tremer(elMsg);
     btComecar.textContent = 'De novo';
     btComecar.disabled = false;
   }
@@ -260,10 +278,7 @@ const PALETA = {
     elMsg.textContent = pontos === 0
       ? 'Zero. Tenta de novo.'
       : 'Bateu. Ficou com ' + pontos + '.';
-    if (!semMovimento){
-      painel.classList.add('tremer');
-      setTimeout(() => painel.classList.remove('tremer'), 420);
-    }
+    tremer(elMsg);
     btComecar.textContent = 'De novo';
     btComecar.disabled = false;
   }
@@ -514,11 +529,7 @@ const PALETA = {
     marcar();
     Placar.enviar(JOGO, pontos).then((topo) => ranking(JOGO, topo));
     elMsg.textContent = pontos === 0 ? 'Bateu no primeiro cone!' : 'Fim de prova. Desviou de ' + pontos + '.';
-    const semMovimento = matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (!semMovimento) {
-      painel.classList.add('tremer');
-      setTimeout(() => painel.classList.remove('tremer'), 420);
-    }
+    tremer(elMsg);
     btComecar.textContent = 'De novo';
     btComecar.disabled = false;
   }
@@ -732,11 +743,7 @@ const PALETA = {
     Placar.enviar(JOGO, pontos).then((topo) => ranking(JOGO, topo));
     
     elMsg.textContent = pontos === 0 ? motivo : motivo + ' Acertou ' + pontos + '.';
-    const semMovimento = matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (!semMovimento) {
-      painel.classList.add('tremer');
-      setTimeout(() => painel.classList.remove('tremer'), 420);
-    }
+    tremer(elMsg);
     btComecar.textContent = 'De novo';
     btComecar.disabled = false;
   }
@@ -916,11 +923,7 @@ const PALETA = {
     Placar.enviar(JOGO, pontos).then((topo) => ranking(JOGO, topo));
     
     elMsg.textContent = pontos === 0 ? 'Não decolou!' : 'Caiu. Fez ' + pontos + ' pontos.';
-    const semMovimento = matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (!semMovimento) {
-      painel.classList.add('tremer');
-      setTimeout(() => painel.classList.remove('tremer'), 420);
-    }
+    tremer(elMsg);
     btComecar.textContent = 'De novo';
     btComecar.disabled = false;
   }
@@ -1124,11 +1127,7 @@ const PALETA = {
     Placar.enviar(JOGO, pontos).then((topo) => ranking(JOGO, topo));
     
     elMsg.textContent = pontos === 0 ? motivo : motivo + ' Fez ' + pontos + ' andares.';
-    const semMovimento = matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (!semMovimento) {
-      painel.classList.add('tremer');
-      setTimeout(() => painel.classList.remove('tremer'), 420);
-    }
+    tremer(elMsg);
     btComecar.textContent = 'De novo';
     btComecar.disabled = false;
   }

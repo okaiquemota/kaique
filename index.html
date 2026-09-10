@@ -16,8 +16,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Caveat:wght@500;600&display=swap">
 
-  <link rel="stylesheet" href="css/style.css?v=10">
-  <link rel="stylesheet" href="css/painel.css?v=10">
+  <link rel="stylesheet" href="css/style.css?v=11">
+  <link rel="stylesheet" href="css/painel.css?v=11">
 </head>
 <body>
 
@@ -305,17 +305,6 @@
       <kbd>G</kbd>
     </button>
   </main>
-
-  <!-- Fisica dos cards: deriva livre, colisao e arrasto.
-       Vanilla, sem biblioteca. Nao toca nos [data-abre]: um toque
-       sem arrasto continua disparando o click normalmente. -->
-  <!-- Os painéis são as páginas de verdade, embutidas: por isso os
-       mesmos scripts delas rodam aqui. -->
-  <script src="js/kiq.js?v=10" defer></script>
-  <script src="js/jogos.js?v=10" defer></script>
-  <script src="js/mural.js?v=10" defer></script>
-  <script src="js/fisica.js?v=10" defer></script>
-
 
     <!-- Passatempo: o mesmo conteudo de jogos.html, aqui como modal -->
     <div class="painel" id="painel-jogos" role="dialog" aria-modal="true" aria-label="Passatempo">
@@ -650,6 +639,20 @@
       </div>
     </div>
 
-  <!-- Os scripts de modal entram aqui depois, escutando [data-abre] -->
+  <!-- Os quatro scripts da pagina, no fim e com `defer`: eles rodam
+       depois do documento inteiro estar lido, entao encontram tanto
+       os objetos da capa quanto os paineis acima.
+
+       kiq.js vem primeiro porque os outros leem dele o Placar, o
+       Dono e o `semMovimento`. fisica.js vem por ultimo: e ele que
+       mede os objetos ja com o CSS aplicado.
+
+       jogos.js e mural.js sao os MESMOS arquivos das paginas com
+       endereco proprio — os paineis acima repetem o conteudo delas,
+       por isso os scripts delas tambem rodam aqui. -->
+  <script src="js/kiq.js?v=11" defer></script>
+  <script src="js/jogos.js?v=11" defer></script>
+  <script src="js/mural.js?v=11" defer></script>
+  <script src="js/fisica.js?v=11" defer></script>
 </body>
 </html>

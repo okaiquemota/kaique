@@ -109,9 +109,19 @@ O código não muda.
 node worker/teste.mjs
 ```
 
+São 39 verificações e elas terminam em `nenhuma falha`.
+
 O D1 tem a mesma forma de `prepare().bind().first()/.all()/.run()` que o
 `node:sqlite`, então um adaptador de vinte linhas roda **o Worker de verdade
 contra SQLite de verdade** — as consultas SQL são exercitadas, não fingidas.
+
+**Se a saída for um `ENOENT` em vez de contagem, é o teste que quebrou e não a
+API.** O último bloco abre `js/jogos.js` para conferir que o site e o servidor
+conhecem os mesmos seis jogos, e essa leitura é por caminho de arquivo: quando os
+scripts saíram da raiz para `js/`, o caminho aqui ficou apontando para o lugar
+antigo e a suíte inteira morria na primeira linha desse bloco — sem rodar nenhuma
+das 39 verificações e sem dizer que não tinha rodado. Um teste que lê arquivo por
+caminho falha assim, calado; ao mover arquivo, rode a suíte antes de confiar nela.
 
 ## O que a API faz e o que ela não faz
 

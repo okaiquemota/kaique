@@ -53,7 +53,7 @@
   var CORRENTE      = 26 * brisa;   // empurrão aleatório, px/s²
   var VEL_MAX       = 900;    // teto do arremesso, px/s
   var VEL_DERIVA    = 105;    // teto da deriva livre, px/s
-var VEL_MIN       = 20 * brisa;   // piso: em gravidade zero nada para
+  var VEL_MIN       = 20 * brisa;   // piso: em gravidade zero nada para
   var LIMIAR_ARRASTO = 5;     // mouse: px percorridos que já contam como arrasto
 
   /* O dedo não pousa parado. Um toque que a pessoa jura ter sido
@@ -99,8 +99,11 @@ var VEL_MIN       = 20 * brisa;   // piso: em gravidade zero nada para
   /* --- os painéis ------------------------------------------------
      Passatempo e Mural são telas sobre a capa, não outra aba: o espaço
      continua atrás, e fechar devolve a pessoa exatamente onde estava.
-     O conteúdo é o mesmo das páginas com endereço próprio — quem monta
-     é o build, para as duas versões nunca desencontrarem.
+
+     O conteúdo é o mesmo das páginas com endereço próprio, mas atenção:
+     ele está COPIADO à mão no index.html. Não há build que monte isso —
+     só o css/painel.css é gerado. Mexer numa das páginas internas é
+     mexer nos dois lugares; ver README, "O conteúdo dos painéis é cópia".
      ------------------------------------------------------------ */
   var painelAberto = null;
   var quemAbriu = null;

@@ -27,8 +27,12 @@ Na prática:
 - **Cada objeto da capa é uma placa de cor** com o desenho vazado em branco ou
   preto por cima. O SVG é a peça inteira — placa e marca —, então o contêiner só
   dá tamanho.
-- **A paleta são sete cores**, no `:root` de `css/style.css`, e as mesmas sete
-  no `:root` de `css/paginas.css`:
+- **A paleta são oito cores do sistema** mais três emprestadas de marca, no `:root`
+  de `css/style.css`. Sete delas — `--magenta`, `--vermelho`, `--creme`, `--limao`,
+  `--coral`, `--laranja` e `--azulao` — se repetem valor por valor no `:root` de
+  `css/paginas.css`, que é a folha das páginas internas. As outras quatro
+  (`--violeta`, `--verde`, `--movcode`, `--forlabs`) **só existem na capa**, porque
+  só a capa tem os objetos que as pedem:
 
   | token | cor | onde manda |
   | --- | --- | --- |
@@ -47,6 +51,19 @@ Na prática:
   As três últimas são cor emprestada de fora, e é por isso que têm nome
   próprio em vez de entrarem na paleta: elas respondem à marca de alguém,
   não ao sistema daqui.
+
+  **Um nome, uma cor — inclusive dentro do painel.** As duas folhas são carregadas
+  juntas no `index.html`, então um token declarado nas duas com valores diferentes
+  passa a significar uma coisa na capa e outra dentro do painel, no mesmo documento.
+  Foi o que houve com `--verde`: a capa dava a ele o `#6ca029` da Loja do Kiwi e
+  `paginas.css` tinha um apelido antigo apontando para o limão. O apelido saiu — não
+  tinha um único uso — e hoje `var(--verde)` devolve `#6ca029` em qualquer lugar da
+  página. Quem quer o limão pede `var(--limao)`.
+
+  Os apelidos que **ficaram** em `paginas.css` (`--roxo`, `--rosa`, `--amarelo`,
+  `--lilas`) são o contrato com os jogos e o mural, que os pedem pelo nome, e nenhum
+  deles existe em `style.css` — por isso não há conflito. Ao criar um apelido novo ali,
+  confira antes se o nome já está tomado na capa.
 
   **Os pares próximos são de propósito, e não descuido.** `--limao` (Mural) e
   `--verde` (Loja do Kiwi) são dois verdes; `--azulao` (Behance) e `--forlabs`
@@ -185,18 +202,21 @@ começo de um arrasto. Então:
 
 - **um clique** apenas seleciona o objeto (`.esta-selecionado`, que acende o halo na cor
   dele). Clicar no vácuo tira a seleção;
-- **dois cliques rápidos** ativam de verdade: os links de rede abrem normalmente, e o
-  Passatempo e o Mural abrem em **janela própria** (`window.open` com features de
-  pop-up) quando a página está no topo, não em aba — são coisas para usar ao lado do portfólio, não no lugar dele.
-  Se o navegador bloquear o pop-up, cai para a navegação comum: melhor abrir em aba do
-  que não abrir. **Dentro do iframe de outra pessoa** (a prévia do Claude, um embed) o
-  pop-up nem é tentado: ali `window.open` costuma devolver uma janela que nunca carrega
-  nada — e como ela não é nula, o código dava a abertura por feita e nunca caía para o
-  link. `window.self !== window.top` decide isso antes de tentar;
+- **dois cliques rápidos** ativam de verdade: os links de rede abrem normalmente (em
+  aba nova, que é o `target="_blank"` do próprio HTML), e o Passatempo e o Mural abrem
+  o **painel embutido** — `abrirPainel()`, em `js/fisica.js`, que acha o
+  `#painel-<nome>` correspondente ao `data-abre` e lhe põe a classe `.aberto`. O espaço
+  continua atrás e fechar devolve a pessoa exatamente onde ela estava;
 - **arrastar** nunca ativa nada.
 
-Nesses dois, o `click` é disparado **antes** da janela abrir: se o seu script de modal
-chamar `preventDefault`, quem manda é ele e o pop-up não aparece.
+No caso do painel o `click` é disparado **antes** de ele abrir: se o seu script chamar
+`preventDefault`, quem manda é ele e o painel não aparece.
+
+> Já foi `window.open` com features de pop-up, para o Passatempo e o Mural virarem
+> janela ao lado do portfólio. Saiu: o pop-up era bloqueado sem aviso em parte dos
+> navegadores e, dentro do iframe de outra pessoa, `window.open` devolvia uma janela
+> que nunca carregava nada — e, por não ser nula, o código dava a abertura por feita e
+> nunca caía para o link. O painel embutido não tem nenhum desses dois modos de falhar.
 
 Repare que **o seu script não precisa saber disso**. Todo clique simples é cancelado em
 fase de captura; na ativação a física chama `el.click()`, que nasce com `detail === 0`
@@ -257,10 +277,18 @@ o mesmo `rx` que os SVGs usam. O Passatempo é a exceção deitada — o control
 quadrado, então o raio dele é fixo em px.
 
 O Mural é o único card com rótulo, e ele é a mesma placa dos outros — um
-retângulo de cor cheia, sem borda e sem textura. Já foi folha de fichário, com
-régua, margem, furos e papel torto; do lado de sete placas retas, era a única peça
-que se explicava por textura em vez de cor. O que diz que ali é recado agora é o
-percevejo espetado na borda de cima, com a cabeça para fora, contra o vácuo.
+retângulo de cor cheia, sem borda e sem textura. **A palavra é a peça**: nada de
+ícone, legenda ou acessório, só "Mural" centrado e grande o bastante para ocupar
+a largura dos dois quadrados, do mesmo jeito que os outros objetos são a marca
+deles e nada mais.
+
+Ele passou por dois estágios antes deste, e os dois foram embora pelo mesmo
+motivo. Primeiro foi folha de fichário, com régua, margem, furos e papel torto:
+do lado de sete placas retas, era a única peça que se explicava por textura em
+vez de cor. Depois foi placa com percevejo e uma legenda embaixo — e os dois
+acessórios diziam a mesma coisa que a palavra já dizia, roubando o espaço dela
+numa peça que precisa do rótulo grande. O percevejo continua existindo, mas
+dentro da página do Mural, nos recados; na capa, não.
 
 **Movcode e Forlabs usam a marca de verdade**, de `img/movcode.svg` e
 `img/forlabs.svg`, e cada uma chegou de um jeito:
@@ -292,8 +320,9 @@ qual leva a qual.
   está escrito dentro de uma regra.
 - **Passatempo**: o controle inteiro é o SVG do ícone; o bloco *7.1* só o dimensiona
   (é a única peça deitada — as outras são quadradas).
-- **Mural**: não é placa lisa como os outros — é papel de fichário, com régua,
-  margem e furos desenhados em traço cheio, no bloco *7.2*.
+- **Mural**: placa lisa como as outras, e o rótulo é o desenho inteiro — no bloco
+  *7.2*, que só dimensiona a peça e a palavra. Não há mais fichário, percevejo nem
+  legenda ali; se for mexer, mexa no tamanho do `.orbe__rotulo`.
 
 ## Acessibilidade
 
@@ -321,6 +350,35 @@ o escopo `.painel` e as três raízes viram o próprio `.painel`.
 ```
 node tools/gera-painel.mjs
 ```
+
+### O conteúdo dos painéis é cópia, e não build
+
+O `index.html` carrega dentro dos `.painel` o mesmo markup de `jogos.html` e
+`mural.html`, **copiado à mão**. Só o CSS é gerado; para o HTML não existe
+gerador nenhum, apesar de comentários antigos no código sugerirem que existia.
+
+Então, ao mexer numa das páginas internas, **mexa nos dois lugares** e confira
+que continuam iguais:
+
+```sh
+diff <(sed -n '/<section class="play"/,/^<\/section>/p' jogos.html) \
+     <(sed -n '/<section class="play"/,/^<\/section>/p' index.html)
+```
+
+A única diferença legítima é a tinta dos cartuchos: a página pede `var(--ink)`,
+que é o nome do token em `paginas.css`, e o painel pede `var(--tinta)`, que é o
+nome dele na capa. São o mesmo `#111111`.
+
+### O tremor do fim de partida mora na mensagem
+
+Quem anima é `.msg.tremer`, e o seletor pede **as duas classes no mesmo
+elemento**. Os seis jogos punham `tremer` no painel do jogo (`.game`), que nunca
+casa com esse seletor — o tremor não acontecia em nenhum deles, sem erro no
+console e sem nada na tela que denunciasse. Hoje quem põe a classe é a função
+`tremer()`, uma só no topo de `js/jogos.js`, e ela mira no `elMsg` de cada jogo.
+
+Se um dia o tremor tiver de sacudir o painel inteiro em vez da linha de recado, o
+que muda é o seletor no CSS — não o alvo no JS, ou os seis voltam a divergir.
 
 ## A grade: um quadrado manda em todo mundo
 
