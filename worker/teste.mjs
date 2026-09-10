@@ -271,7 +271,7 @@ async function rodar() {
     /* Este e o teste que pega a classe de bug que ja aconteceu: jogos
        novos entraram no site e o servidor continuou aceitando so dois,
        entao o ranking deles nunca aparecia. */
-    const site = [...readFileSync(join(aqui, '..', 'jogos.js'), 'utf8')
+    const site = [...readFileSync(join(aqui, '..', 'js', 'jogos.js'), 'utf8')
       .matchAll(/const JOGO = '([a-z]+)'/g)].map((m) => m[1]);
 
     const servidor = [...readFileSync(join(aqui, 'src', 'index.js'), 'utf8')

@@ -49,12 +49,23 @@
   /* Nomes herdados do projeto antigo. Não são cor nova: são o
      contrato com os 45KB de jogos e com o mural, que pedem
      `var(--rosa)` e companhia pelo nome. Mudou para onde eles
-     apontam, não como se chamam. */
+     apontam, não como se chamam.
+
+     `--azul` não tem uso em CSS: ele existe para casar com a chave
+     `azul` do PALETA em js/jogos.js, que é a mesma cor do lado do
+     canvas. Apagar um sem o outro desencontra os dois.
+
+     `--verde` NÃO entra aqui, e é decisão. Esta folha é carregada
+     junto de css/style.css dentro do painel, e lá `--verde` já
+     existe com outro valor: é o #6ca029 da Loja do Kiwi. Um apelido
+     daqui apontando para o limão deixava o mesmo nome com duas
+     cores no mesmo documento, dependendo de onde se lê — e sem
+     nenhum uso que justificasse o risco. Quem quer o limão pede
+     `var(--limao)`. */
   --roxo:        var(--magenta);
   --rosa:        var(--coral);
   --amarelo:     var(--laranja);
   --lilas:       var(--creme);
-  --verde:       var(--limao);
   --azul:        var(--azulao);
 
   /* papel: é o mesmo do Mural na capa */
@@ -62,7 +73,6 @@
   --ink:         #111111;
   --regua:       #9fb4d6;
   --margem:      var(--vermelho);
-  --cream:       var(--papel);
 
   --titulo: "Anton", "Archivo Black", "Haettenschweiler", Impact, sans-serif;
   --mao:    "Caveat", "Segoe Script", cursive;
@@ -831,9 +841,11 @@
 /* ============================================================
    07. MURAL — aqui o papel é de verdade
    ============================================================ */
-/* O percevejo vermelho é o mesmo objeto do Mural na capa: agora um
-   círculo de cor cheia, sem esfera nem sombra. É ele que diz que
-   isto é um quadro de recados e não um formulário. */
+/* O percevejo vermelho: um círculo de cor cheia, sem esfera nem
+   sombra. É ele que diz que isto é um quadro de recados e não um
+   formulário — e por isso ele é daqui, e só daqui. O card do Mural
+   na capa já teve o seu, e perdeu: lá a palavra "Mural" faz esse
+   trabalho sozinha, e o percevejo só roubava espaço do rótulo. */
 .painel .compor::before,
 .painel .nota::before {
   content: "";

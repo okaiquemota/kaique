@@ -858,7 +858,8 @@ body {
    ------------------------------------------------------------
    Não é outra aba: o espaço continua atrás, e fechar devolve a
    pessoa exatamente onde estava. O conteúdo é o mesmo das
-   páginas com endereço próprio; quem monta é o build.
+   páginas com endereço próprio, copiado à mão no index.html —
+   quem é gerado aqui é só o css/painel.css, nunca o HTML.
 
    Por que `visibility` e não `hidden`: o carrossel dos jogos se
    mede na carga, e um elemento com `hidden` não tem largura
